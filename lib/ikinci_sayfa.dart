@@ -15,92 +15,91 @@ class _sayfa2State extends State<sayfa2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-      body: Center(
+      appBar: AppBar(
+        title: Text('Koruyucu Sağlık Hizmetleri'),
+        backgroundColor: Colors.redAccent,
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch, // Butonları ve metinleri hizalı gösterir
           children: [
-            Spacer(),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text("Yakın zamanda kuduz açısından riskli bir temas gerçekleştirdiyseniz tıklayınız.",textAlign: TextAlign.center,style: TextStyle(fontSize: 13,fontWeight: FontWeight.w500),),
+            _buildInfoSection(
+              "Yakın zamanda kuduz açısından riskli bir temas gerçekleştirdiyseniz tıklayınız.",
+              "Kuduz Riskli Temas",
+                  () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => KuduzTemasi()));
+              },
             ),
-            SizedBox(
-              width: 175,
-              height: 40,
-              child: ElevatedButton(
-                child: Text("Kuduz Riskli Temas",style: TextStyle(color: Colors.white),),
-                style: ElevatedButton.styleFrom(
-                  shape: LinearBorder(),
-                  backgroundColor: Colors.redAccent,
-                ),
-                onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => kuduzTemasi()));
-                },
-              ),
+            SizedBox(height: 20),
+            _buildInfoSection(
+              "Hiç aşı olmadıysanız aşağıdaki butona tıklayabilirisiniz.",
+              "Hiç Aşı Olmadım",
+                  () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => asi_olmadim()));
+              },
             ),
-            Spacer(),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text("Hiç aşı olmadıysanız aşağıdaki butona tıklayabilirisiniz.",style: TextStyle(fontSize: 13,fontWeight: FontWeight.w500),),
+            SizedBox(height: 20),
+            _buildInfoSection(
+              "KSH hakkında genel bilgi sahibi olmak için",
+              "Genel Olarak KHS",
+                  () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => DataPage()));
+              },
             ),
-            SizedBox(
-              height: 40,
-              width: 175,
-              child: ElevatedButton(
-                child: Text("Hiç Aşı Olmadım",style: TextStyle(color: Colors.white),),
-                style: ElevatedButton.styleFrom(
-                  shape: LinearBorder(),
-                  backgroundColor: Colors.redAccent,
-                ),
-                onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => asi_olmadim()));
-                },
-              ),
+            SizedBox(height: 20),
+            _buildInfoSection(
+              "Kişisel bilgilerinizi girmek için aşağıdaki butona tıklayınız.",
+              "Devam Et",
+                  () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => anaSayfa()));
+              },
             ),
-            Spacer(),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text("KHS hakkında genel bilgi sahibi olmak için",style: TextStyle(fontSize: 13,fontWeight: FontWeight.w500)),
-            ),
-            SizedBox(
-              width: 175,
-              height: 40,
-              child: ElevatedButton(
-                child: Text("Genel Olarak KHS",style: TextStyle(color: Colors.white)),
-                style: ElevatedButton.styleFrom(
-                  shape: LinearBorder(),
-                  backgroundColor: Colors.redAccent,
-                ),
-                onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => DataPage()));
-                },
-              ),
-            ),
-            Spacer(),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text("Kişisel bilgilerinizi girmek için aşağıadki butona tıkalayın",style: TextStyle(fontSize: 13,fontWeight: FontWeight.w500)),
-            ),
-            SizedBox(
-              width: 175,
-              height: 40,
-              child: ElevatedButton(
-                child: Text("Devam Et",style: TextStyle(color: Colors.white)),
-                style: ElevatedButton.styleFrom(
-                  shape: LinearBorder(),
-                  backgroundColor: Colors.redAccent,
-                ),
-                onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => anaSayfa()));
-                },
-              ),
-            ),
-            Spacer(),
-
           ],
         ),
       ),
+    );
+  }
+
+  // Bilgilendirme ve buton yapısını oluşturan widget
+  Widget _buildInfoSection(String text, String buttonText, VoidCallback onPressed) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          text,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w500,
+            color: Colors.black87,
+          ),
+        ),
+        SizedBox(height: 10),
+        SizedBox(
+          height: 50,
+          child: ElevatedButton(
+            onPressed: onPressed,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.redAccent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12), // Buton köşeleri yuvarlatıldı
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            ),
+            child: Text(
+              buttonText,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

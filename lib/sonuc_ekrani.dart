@@ -56,19 +56,62 @@ class degerlendirme extends StatelessWidget {
             ),
             SizedBox(height: 10),
             _getHealthRecommendations(),
+            if (height != null && weight != null) ...[
+              SizedBox(height: 20),
+              Divider(),
+              Text(
+                'Obezite Durumu:',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
+              _getBMIResult(),
+            ]
           ],
         ),
       ),
     );
   }
 
+  // Vücut Kitle İndeksi (BMI) hesaplama ve sonuç gösterme
+  Widget _getBMIResult() {
+    if (height == null || weight == null) {
+      return Text('Boy ve kilo bilgisi eksik.');
+    }
+
+    double heightInMeters = height! / 100; // Boyu metreye çevirme
+    double bmi = weight! / (heightInMeters * heightInMeters); // BMI hesaplama
+
+    String bmiCategory;
+    if (bmi < 18.5) {
+      bmiCategory = 'Zayıf';
+    } else if (bmi >= 18.5 && bmi < 25.0) {
+      bmiCategory = 'Normal kilolu';
+    } else if (bmi >= 25.0 && bmi < 30.0) {
+      bmiCategory = 'Fazla kilolu';
+    } else if (bmi >= 30.0 && bmi < 40.0) {
+      bmiCategory = 'Obez';
+    } else {
+      bmiCategory = 'İleri derecede obez (morbid obez)';
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('BMI: ${bmi.toStringAsFixed(1)} kg/m²'),
+        Text('Durum: $bmiCategory'),
+      ],
+    );
+  }
+
   Widget _getHealthRecommendations() {
     List<Widget> recommendations = [];
 
-    // 0-2 yaş bebek için ay bazlı Asilar ve taramalar
+    // 0-2 yaş bebek için ay bazlı Asilar ve taramalar (sıralı)
     if (isBaby && ageInMonths != null) {
       if (ageInMonths! >= 0) {
         recommendations.add(_buildAsiWidget("Hepatit B (1. Doz)", "Doğumda", "Hastane"));
+    recommendations.add(_buildTaramaWidget("Göz muayenesi ve Kırmızı Refle Testi", "0-3 Ay", "Aile Hekimliği"));
+    recommendations.add(_buildTaramaWidget("Neonatal Tarama Programı (Topuk Kanı)", "Doğumdan Sonraki 24 Saat", "Hastane"));
     }
     if (ageInMonths! >= 1) {
     recommendations.add(_buildAsiWidget("Hepatit B (2. Doz)", "1. Ayın Sonu", "Aile Hekimliği"));
@@ -81,11 +124,18 @@ class degerlendirme extends StatelessWidget {
     if (ageInMonths! >= 4) {
     recommendations.add(_buildAsiWidget("KPA (2. Doz)", "4. Ayın Sonu", "Aile Hekimliği"));
     recommendations.add(_buildAsiWidget("DaBT-İPA-Hib (5’li karma Asi) (2. Doz)", "4. Ayın Sonu", "Aile Hekimliği"));
+    recommendations.add(_buildTaramaWidget("Gelişimsel Kalça Displazisi (Manuel Muayene)", "30-55 Gün Arası", "Aile Hekimliği"));
+    recommendations.add(_buildTaramaWidget("Gelişimsel Kalça Displazisi (USG)", "İlk 4-6 Hafta", "Hastane"));
     }
     if (ageInMonths! >= 6) {
     recommendations.add(_buildAsiWidget("Hepatit B (3. Doz)", "6. Ayın Sonu", "Aile Hekimliği"));
     recommendations.add(_buildAsiWidget("DaBT-İPA-Hib (5’li karma Asi) (3. Doz)", "6. Ayın Sonu", "Aile Hekimliği"));
     recommendations.add(_buildAsiWidget("OPA (1. Doz)", "6. Ayın Sonu", "Aile Hekimliği"));
+    recommendations.add(_buildTaramaWidget("Demir Profilaksisi", "1 mg/kg/Gün, 4-12 Ay Bebek", "Aile Hekimliği"));
+    recommendations.add(_buildTaramaWidget("D Vitamini Profilaksisi", "400 Iu, 0-12 Ay Bebek", "Aile Hekimliği"));
+    if (gender == 'Erkek') {
+    recommendations.add(_buildTaramaWidget("İnmeyen Testis Muayenesi", "Her Muayenede, 6 Ay-1 Yaş", "Aile Hekimliği"));
+    }
     }
     if (ageInMonths! >= 12) {
     recommendations.add(_buildAsiWidget("KPA (Rapel)", "12. Ayın Sonu", "Aile Hekimliği"));
@@ -107,9 +157,14 @@ class degerlendirme extends StatelessWidget {
     recommendations.add(_buildTaramaWidget("Arteriyel Tansiyon Ölçümü", "Yılda En Az 1 Kere", "Aile Hekimliği, Hastane"));
     }
 
-    // 6-18 yaş arası obezite taraması
+    // 6-18 yaş arası obezite taraması ve ağız-diş sağlığı
     if (age != null && age! >= 6 && age! <= 18) {
     recommendations.add(_buildTaramaWidget("Obezite Taraması (BKİ / Kilo/Boy Ölçümü)", "Yılda 1 Kez", "Aile Hekimliği"));
+    }
+
+    // Ağız-Diş Sağlığı Taraması
+    if (age != null && age! == 3) {
+    recommendations.add(_buildTaramaWidget("Flor Vernik", "Anasınıfı/İlkokul 1. sınıf, yılda 2 kez", "TSM"));
     }
 
     // 6-19 yaş çocuk izlem ve Hb/Htc ölçümü
@@ -185,6 +240,11 @@ class degerlendirme extends StatelessWidget {
     recommendations.add(_buildTaramaWidget("Gebelik İzlem", "İlk 14 hafta içinde, 18-24. hafta, 28-32. hafta, 36-38. hafta", "Aile Hekimliği"));
     recommendations.add(_buildTaramaWidget("D Vitamini Takviyesi", "12 Haftadan itibaren gebelikte", "Aile Hekimliği"));
     recommendations.add(_buildTaramaWidget("Demir Takviyesi", "16 Haftadan itibaren gebelikte", "Aile Hekimliği"));
+    }
+
+    // Hac/Umre için meningokok Asisı
+    if (isGoingToHajjUmrah) {
+    recommendations.add(_buildAsiWidget("Meningokok Asisı", "Hac/Umreden Yaklaşık 1 Ay Önce", "Toplum Sağlığı Merkezi"));
     }
 
     return recommendations.isEmpty
