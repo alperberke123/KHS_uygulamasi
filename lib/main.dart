@@ -44,7 +44,7 @@ class _bilgilendirmeSayfasiState extends State<bilgilendirmeSayfasi> {
     // Özel günlerin olduğu tarihleri tanımlıyoruz
     if (today.month == 10 && today.day == 29) {
       _showSpecialDayDialog("29 Ekim Cumhuriyet Bayramı", "Bugün Cumhuriyet Bayramı'nı kutluyoruz!");
-    } else if (today.month == 9 && today.day == 20) {
+    } else if (today.month == 9 && today.day == 21) {
       _showSpecialDayDialog("23 Nisan Ulusal Egemenlik ve Çocuk Bayramı", "Bugün 23 Nisan Ulusal Egemenlik ve Çocuk Bayramı'nı kutluyoruz!");
     } else if (today.month == 5 && today.day == 19) {
       _showSpecialDayDialog("19 Mayıs Atatürk'ü Anma, Gençlik ve Spor Bayramı", "Bugün 19 Mayıs Atatürk'ü Anma, Gençlik ve Spor Bayramı'nı kutluyoruz!");
