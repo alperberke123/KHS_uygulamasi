@@ -16,15 +16,15 @@ class _sayfa2State extends State<sayfa2> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Koruyucu Sağlık Hizmetleri'),
-        backgroundColor: Colors.redAccent,
+        title: const Text('Koruyucu Sağlık Hizmetleri'),
+        backgroundColor: Colors.blueAccent, // Mavi tonlu AppBar
         centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch, // Butonları ve metinleri hizalı gösterir
+          crossAxisAlignment: CrossAxisAlignment.stretch, // Buton ve metinleri hizalı gösterir
           children: [
             _buildInfoSection(
               "Yakın zamanda kuduz açısından riskli bir temas gerçekleştirdiyseniz tıklayınız.",
@@ -33,28 +33,28 @@ class _sayfa2State extends State<sayfa2> {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => KuduzTemasi()));
               },
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _buildInfoSection(
-              "Hiç aşı olmadıysanız aşağıdaki butona tıklayabilirisiniz.",
+              "Hiç aşı olmadıysanız aşağıdaki butona tıklayabilirsiniz.",
               "Hiç Aşı Olmadım",
                   () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => asi_olmadim()));
               },
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _buildInfoSection(
               "KSH hakkında genel bilgi sahibi olmak için",
-              "Genel Olarak KHS",
+              "Genel Olarak KSH",
                   () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => DataPage()));
               },
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _buildInfoSection(
-              "Kişisel bilgilerinizi girmek için aşağıdaki butona tıklayınız.",
+              "Kişisel özelliklerinizi girmek için aşağıdaki butona tıklayınız.",
               "Devam Et",
                   () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => anaSayfa()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => anasayfa()));
               },
             ),
           ],
@@ -71,27 +71,27 @@ class _sayfa2State extends State<sayfa2> {
         Text(
           text,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 15,
-            fontWeight: FontWeight.w500,
-            color: Colors.black87,
+            fontWeight: FontWeight.w800,
+            color: Colors.blueGrey, // Metin rengi olarak mavinin daha yumuşak bir tonu
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         SizedBox(
           height: 50,
           child: ElevatedButton(
             onPressed: onPressed,
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.redAccent,
+              backgroundColor: Colors.blueAccent, // Butonun arka planı mavi tonlu
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12), // Buton köşeleri yuvarlatıldı
               ),
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             ),
             child: Text(
               buttonText,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,

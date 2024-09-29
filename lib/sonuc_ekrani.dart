@@ -29,41 +29,54 @@ class degerlendirme extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sonuçlar'),
+        title: const Text('Sonuçlar'),
+        backgroundColor: Colors.blueAccent, // Mavi AppBar rengi
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: <Widget>[
             Text(
               'Merhaba, $name!',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.blueAccent, // Başlık rengi mavi
+              ),
             ),
-            SizedBox(height: 10),
-            if (!isBaby) Text('Yaş: $age'),
-            if (isBaby) Text('Ay olarak yaş: $ageInMonths ay'),
-            Text('Cinsiyet: $gender'),
-            if (gender == 'Kadın' && isPregnant) Text('Gebelik Durumu: Evet'),
-            if (!isBaby && height != null) Text('Boy: ${height?.toStringAsFixed(1)} cm'),
-            if (!isBaby && weight != null) Text('Kilo: ${weight?.toStringAsFixed(1)} kg'),
-            if (isGoingToHajjUmrah) Text('Hac/Umre: Gidecek'),
-            if (!isBaby && profession != 'Ev hanımı') Text('Meslek: $profession'),
-            SizedBox(height: 20),
-            Divider(),
-            Text(
+            const SizedBox(height: 10),
+            if (!isBaby) Text('Yaş: $age', style: _infoTextStyle()),
+            if (isBaby) Text('Ay olarak yaş: $ageInMonths ay', style: _infoTextStyle()),
+            Text('Cinsiyet: $gender', style: _infoTextStyle()),
+            if (gender == 'Kadın' && isPregnant) Text('Gebelik Durumu: Evet', style: _infoTextStyle()),
+            if (!isBaby && height != null) Text('Boy: ${height?.toStringAsFixed(1)} cm', style: _infoTextStyle()),
+            if (!isBaby && weight != null) Text('Kilo: ${weight?.toStringAsFixed(1)} kg', style: _infoTextStyle()),
+            if (isGoingToHajjUmrah) Text('Hac/Umre: Gidecek', style: _infoTextStyle()),
+            if (!isBaby && profession != 'Ev hanımı') Text('Meslek: $profession', style: _infoTextStyle()),
+            const SizedBox(height: 20),
+            const Divider(color: Colors.blueAccent),
+            const Text(
               'Yapmanız Gerekenler:',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.blueAccent, // Alt başlık rengi mavi
+              ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             _getHealthRecommendations(),
             if (height != null && weight != null) ...[
-              SizedBox(height: 20),
-              Divider(),
-              Text(
+              const SizedBox(height: 20),
+              const Divider(color: Colors.blueAccent),
+              const Text(
                 'Obezite Durumu:',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blueAccent, // Alt başlık rengi mavi
+                ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               _getBMIResult(),
             ]
           ],
@@ -72,10 +85,17 @@ class degerlendirme extends StatelessWidget {
     );
   }
 
+  TextStyle _infoTextStyle() {
+    return const TextStyle(
+      fontSize: 16,
+      color: Colors.blueGrey, // Bilgilendirme metinleri mavi-gri
+    );
+  }
+
   // Vücut Kitle İndeksi (BMI) hesaplama ve sonuç gösterme
   Widget _getBMIResult() {
     if (height == null || weight == null) {
-      return Text('Boy ve kilo bilgisi eksik.');
+      return const Text('Boy ve kilo bilgisi eksik.', style: TextStyle(color: Colors.redAccent));
     }
 
     double heightInMeters = height! / 100; // Boyu metreye çevirme
@@ -97,8 +117,8 @@ class degerlendirme extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('BMI: ${bmi.toStringAsFixed(1)} kg/m²'),
-        Text('Durum: $bmiCategory'),
+        Text('BMI: ${bmi.toStringAsFixed(1)} kg/m²', style: _infoTextStyle()),
+        Text('Durum: $bmiCategory', style: _infoTextStyle()),
       ],
     );
   }
@@ -106,168 +126,155 @@ class degerlendirme extends StatelessWidget {
   Widget _getHealthRecommendations() {
     List<Widget> recommendations = [];
 
-    // 0-2 yaş bebek için ay bazlı Asilar ve taramalar (sıralı)
+    // 0-2 yaş bebek için aşı ve taramalar
     if (isBaby && ageInMonths != null) {
       if (ageInMonths! >= 0) {
         recommendations.add(_buildAsiWidget("Hepatit B (1. Doz)", "Doğumda", "Hastane"));
-    recommendations.add(_buildTaramaWidget("Göz muayenesi ve Kırmızı Refle Testi", "0-3 Ay", "Aile Hekimliği"));
-    recommendations.add(_buildTaramaWidget("Neonatal Tarama Programı (Topuk Kanı)", "Doğumdan Sonraki 24 Saat", "Hastane"));
-    }
-    if (ageInMonths! >= 1) {
-    recommendations.add(_buildAsiWidget("Hepatit B (2. Doz)", "1. Ayın Sonu", "Aile Hekimliği"));
-    }
-    if (ageInMonths! >= 2) {
-    recommendations.add(_buildAsiWidget("BCG (1. Doz)", "2. Ayın Sonu", "Aile Hekimliği"));
-    recommendations.add(_buildAsiWidget("KPA (1. Doz)", "2. Ayın Sonu", "Aile Hekimliği"));
-    recommendations.add(_buildAsiWidget("DaBT-İPA-Hib (5’li karma Asi) (1. Doz)", "2. Ayın Sonu", "Aile Hekimliği"));
-    }
-    if (ageInMonths! >= 4) {
-    recommendations.add(_buildAsiWidget("KPA (2. Doz)", "4. Ayın Sonu", "Aile Hekimliği"));
-    recommendations.add(_buildAsiWidget("DaBT-İPA-Hib (5’li karma Asi) (2. Doz)", "4. Ayın Sonu", "Aile Hekimliği"));
-    recommendations.add(_buildTaramaWidget("Gelişimsel Kalça Displazisi (Manuel Muayene)", "30-55 Gün Arası", "Aile Hekimliği"));
-    recommendations.add(_buildTaramaWidget("Gelişimsel Kalça Displazisi (USG)", "İlk 4-6 Hafta", "Hastane"));
-    }
-    if (ageInMonths! >= 6) {
-    recommendations.add(_buildAsiWidget("Hepatit B (3. Doz)", "6. Ayın Sonu", "Aile Hekimliği"));
-    recommendations.add(_buildAsiWidget("DaBT-İPA-Hib (5’li karma Asi) (3. Doz)", "6. Ayın Sonu", "Aile Hekimliği"));
-    recommendations.add(_buildAsiWidget("OPA (1. Doz)", "6. Ayın Sonu", "Aile Hekimliği"));
-    recommendations.add(_buildTaramaWidget("Demir Profilaksisi", "1 mg/kg/Gün, 4-12 Ay Bebek", "Aile Hekimliği"));
-    recommendations.add(_buildTaramaWidget("D Vitamini Profilaksisi", "400 Iu, 0-12 Ay Bebek", "Aile Hekimliği"));
-    if (gender == 'Erkek') {
-    recommendations.add(_buildTaramaWidget("İnmeyen Testis Muayenesi", "Her Muayenede, 6 Ay-1 Yaş", "Aile Hekimliği"));
-    }
-    }
-    if (ageInMonths! >= 12) {
-    recommendations.add(_buildAsiWidget("KPA (Rapel)", "12. Ayın Sonu", "Aile Hekimliği"));
-    recommendations.add(_buildAsiWidget("Su Çiçeği (1. Doz)", "12. Ayın Sonu", "Aile Hekimliği"));
-    recommendations.add(_buildAsiWidget("KKK (1. Doz)", "12. Ayın Sonu", "Aile Hekimliği"));
-    }
-    if (ageInMonths! >= 18) {
-    recommendations.add(_buildAsiWidget("DaBT-İPA-Hib (5’li karma Asi) (Rapel)", "18. Ayın Sonu", "Aile Hekimliği"));
-    recommendations.add(_buildAsiWidget("OPA (2. Doz)", "18. Ayın Sonu", "Aile Hekimliği"));
-    recommendations.add(_buildAsiWidget("Hepatit A (1. Doz)", "18. Ayın Sonu", "Aile Hekimliği"));
-    }
-    if (ageInMonths! >= 24) {
-    recommendations.add(_buildAsiWidget("Hepatit A (2. Doz)", "24. Ayın Sonu", "Aile Hekimliği"));
-    }
+        recommendations.add(_buildTaramaWidget("Göz muayenesi ve Kırmızı Refle Testi", "0-3 Ay", "Aile Hekimliği"));
+        recommendations.add(_buildTaramaWidget("Neonatal Tarama Programı (Topuk Kanı)", "Doğumdan Sonraki 24 Saat", "Hastane"));
+      }
+      if (ageInMonths! >= 1) {
+        recommendations.add(_buildAsiWidget("Hepatit B (2. Doz)", "1. Ayın Sonu", "Aile Hekimliği"));
+      }
+      if (ageInMonths! >= 2) {
+        recommendations.add(_buildAsiWidget("BCG (1. Doz)", "2. Ayın Sonu", "Aile Hekimliği"));
+        recommendations.add(_buildAsiWidget("KPA (1. Doz)", "2. Ayın Sonu", "Aile Hekimliği"));
+        recommendations.add(_buildAsiWidget("DaBT-İPA-Hib (5’li karma Asi) (1. Doz)", "2. Ayın Sonu", "Aile Hekimliği"));
+      }
+      if (ageInMonths! >= 4) {
+        recommendations.add(_buildAsiWidget("KPA (2. Doz)", "4. Ayın Sonu", "Aile Hekimliği"));
+        recommendations.add(_buildAsiWidget("DaBT-İPA-Hib (5’li karma Asi) (2. Doz)", "4. Ayın Sonu", "Aile Hekimliği"));
+        recommendations.add(_buildTaramaWidget("Gelişimsel Kalça Displazisi (Manuel Muayene)", "30-55 Gün Arası", "Aile Hekimliği"));
+        recommendations.add(_buildTaramaWidget("Gelişimsel Kalça Displazisi (USG)", "İlk 4-6 Hafta", "Hastane"));
+      }
+      if (ageInMonths! >= 6) {
+        recommendations.add(_buildAsiWidget("Hepatit B (3. Doz)", "6. Ayın Sonu", "Aile Hekimliği"));
+        recommendations.add(_buildAsiWidget("DaBT-İPA-Hib (5’li karma Asi) (3. Doz)", "6. Ayın Sonu", "Aile Hekimliği"));
+        recommendations.add(_buildAsiWidget("OPA (1. Doz)", "6. Ayın Sonu", "Aile Hekimliği"));
+        recommendations.add(_buildTaramaWidget("Demir Profilaksisi", "1 mg/kg/Gün, 4-12 Ay Bebek", "Aile Hekimliği"));
+        recommendations.add(_buildTaramaWidget("D Vitamini Profilaksisi", "400 Iu, 0-12 Ay Bebek", "Aile Hekimliği"));
+        if (gender == 'Erkek') {
+          recommendations.add(_buildTaramaWidget("İnmeyen Testis Muayenesi", "Her Muayenede, 6 Ay-1 Yaş", "Aile Hekimliği"));
+        }
+      }
+      if (ageInMonths! >= 12) {
+        recommendations.add(_buildAsiWidget("KPA (Rapel)", "12. Ayın Sonu", "Aile Hekimliği"));
+        recommendations.add(_buildAsiWidget("Su Çiçeği (1. Doz)", "12. Ayın Sonu", "Aile Hekimliği"));
+        recommendations.add(_buildAsiWidget("KKK (1. Doz)", "12. Ayın Sonu", "Aile Hekimliği"));
+      }
+      if (ageInMonths! >= 18) {
+        recommendations.add(_buildAsiWidget("DaBT-İPA-Hib (5’li karma Asi) (Rapel)", "18. Ayın Sonu", "Aile Hekimliği"));
+        recommendations.add(_buildAsiWidget("OPA (2. Doz)", "18. Ayın Sonu", "Aile Hekimliği"));
+        recommendations.add(_buildAsiWidget("Hepatit A (1. Doz)", "18. Ayın Sonu", "Aile Hekimliği"));
+      }
+      if (ageInMonths! >= 24) {
+        recommendations.add(_buildAsiWidget("Hepatit A (2. Doz)", "24. Ayın Sonu", "Aile Hekimliği"));
+      }
     }
 
-    // 3-18 yaş arası arteriyel tansiyon ölçümü
+    // Diğer yaşlara göre tarama programları ve aşılar
     if (age != null && age! >= 3 && age! <= 18) {
-    recommendations.add(_buildTaramaWidget("Arteriyel Tansiyon Ölçümü", "Yılda En Az 1 Kere", "Aile Hekimliği, Hastane"));
+      recommendations.add(_buildTaramaWidget("Arteriyel Tansiyon Ölçümü", "Yılda En Az 1 Kere", "Aile Hekimliği, Hastane"));
     }
 
-    // 6-18 yaş arası obezite taraması ve ağız-diş sağlığı
     if (age != null && age! >= 6 && age! <= 18) {
-    recommendations.add(_buildTaramaWidget("Obezite Taraması (BKİ / Kilo/Boy Ölçümü)", "Yılda 1 Kez", "Aile Hekimliği"));
+      recommendations.add(_buildTaramaWidget("Obezite Taraması (BKİ / Kilo/Boy Ölçümü)", "Yılda 1 Kez", "Aile Hekimliği"));
     }
 
-    // Ağız-Diş Sağlığı Taraması
     if (age != null && age! == 3) {
-    recommendations.add(_buildTaramaWidget("Flor Vernik", "Anasınıfı/İlkokul 1. sınıf, yılda 2 kez", "TSM"));
+      recommendations.add(_buildTaramaWidget("Flor Vernik", "Anasınıfı/İlkokul 1. sınıf, yılda 2 kez", "TSM"));
     }
 
-    // 6-19 yaş çocuk izlem ve Hb/Htc ölçümü
     if (age != null && age! >= 6 && age! <= 19) {
-    recommendations.add(_buildTaramaWidget("Çocuk İzlem", "6, 7-9, 10-14, 15-18 yaşlar", "Aile Hekimliği"));
+      recommendations.add(_buildTaramaWidget("Çocuk İzlem", "6, 7-9, 10-14, 15-18 yaşlar", "Aile Hekimliği"));
     }
+
     if (age != null && age! >= 10 && age! <= 21) {
-    recommendations.add(_buildTaramaWidget("Hb/Htc Ölçümü", "10-14, 15-18, 19-21 Yaşlar", "Aile Hekimliği"));
+      recommendations.add(_buildTaramaWidget("Hb/Htc Ölçümü", "10-14, 15-18, 19-21 Yaşlar", "Aile Hekimliği"));
     }
 
-    // 18 yaş ve üzeri için arteriyel tansiyon ölçümü
     if (age != null && age! >= 18) {
-    recommendations.add(_buildTaramaWidget("Arteriyel Tansiyon Ölçümü", "Yılda En Az 1 Kere", "Aile Hekimliği, Hastane"));
+      recommendations.add(_buildTaramaWidget("Arteriyel Tansiyon Ölçümü", "Yılda En Az 1 Kere", "Aile Hekimliği, Hastane"));
     }
 
-    // 35 yaş ve üzeri için serum lipid profil taraması ve tiroid fonksiyon taraması
     if (age != null && age! >= 35) {
-    recommendations.add(_buildTaramaWidget("Serum Lipid Profil (TG, LDL, HDL)", "5 Yılda Bir", "Aile Hekimliği"));
-    recommendations.add(_buildTaramaWidget("Tiroid Fonksiyon Taraması (TSH)", "5 Yılda Bir", "Aile Hekimliği"));
+      recommendations.add(_buildTaramaWidget("Serum Lipid Profil (TG, LDL, HDL)", "5 Yılda Bir", "Aile Hekimliği"));
+      recommendations.add(_buildTaramaWidget("Tiroid Fonksiyon Taraması (TSH)", "5 Yılda Bir", "Aile Hekimliği"));
     }
 
-    // 45 yaş ve üzeri için diyabet taraması
     if (age != null && age! >= 45) {
-    recommendations.add(_buildTaramaWidget("Diyabet Taraması (AKŞ, HbA1c)", "45 Yaş Üzeri", "Aile Hekimliği"));
+      recommendations.add(_buildTaramaWidget("Diyabet Taraması (AKŞ, HbA1c)", "45 Yaş Üzeri", "Aile Hekimliği"));
     }
 
-    // 18-65 yaş arası için obezite taraması
     if (age != null && age! >= 18 && age! <= 65) {
-    recommendations.add(_buildTaramaWidget("Obezite Taraması (BKİ / Bel Çevresi Ölçümü)", "Yılda 1 Kez", "Aile Hekimliği"));
+      recommendations.add(_buildTaramaWidget("Obezite Taraması (BKİ / Bel Çevresi Ölçümü)", "Yılda 1 Kez", "Aile Hekimliği"));
     }
 
-    // Kanser taramaları (Kadınlar için)
     if (gender == 'Kadın' && age != null) {
-    if (age! >= 35) {
-    recommendations.add(_buildTaramaWidget("KKMM (Kendi Kendine Meme Muayenesi)", "Ayda 1 Kere", "35 Yaş ve Üzeri Kadınlar, KETEM"));
-    }
-    if (age! >= 40) {
-    recommendations.add(_buildTaramaWidget("Klinik Meme Muayenesi", "Yılda Bir", "40 Yaş ve Üzeri Kadınlar, Hastane"));
-    recommendations.add(_buildTaramaWidget("Mamografi", "2 Yılda Bir", "40-69 Yaş Kadınlar, KETEM, Hastane"));
-    }
-    if (age! >= 30 && age! <= 65) {
-    recommendations.add(_buildTaramaWidget("Serviks Kanser Taraması (HPV-DNA ve Smear)", "5 Yılda Bir", "30-65 Yaş Kadınlar, KETEM, Hastane"));
-    }
+      if (age! >= 35) {
+        recommendations.add(_buildTaramaWidget("KKMM (Kendi Kendine Meme Muayenesi)", "Ayda 1 Kere", "35 Yaş ve Üzeri Kadınlar, KETEM"));
+      }
+      if (age! >= 40) {
+        recommendations.add(_buildTaramaWidget("Klinik Meme Muayenesi", "Yılda Bir", "40 Yaş ve Üzeri Kadınlar, Hastane"));
+        recommendations.add(_buildTaramaWidget("Mamografi", "2 Yılda Bir", "40-69 Yaş Kadınlar, KETEM, Hastane"));
+      }
+      if (age! >= 30 && age! <= 65) {
+        recommendations.add(_buildTaramaWidget("Serviks Kanser Taraması (HPV-DNA ve Smear)", "5 Yılda Bir", "30-65 Yaş Kadınlar, KETEM, Hastane"));
+      }
     }
 
-    // Kolon kanser taraması (50-70 yaş arası)
     if (age != null && age! >= 50 && age! <= 70) {
-    recommendations.add(_buildTaramaWidget("Kolon Kanser Taraması (GGK)", "2 Yılda Bir", "50-70 Yaş, KETEM, Aile Hekimliği"));
-    recommendations.add(_buildTaramaWidget("Kolon Kanser Taraması (Kolonoskopi)", "10 Yılda Bir", "50-70 Yaş, Hastane"));
+      recommendations.add(_buildTaramaWidget("Kolon Kanser Taraması (GGK)", "2 Yılda Bir", "50-70 Yaş, KETEM, Aile Hekimliği"));
+      recommendations.add(_buildTaramaWidget("Kolon Kanser Taraması (Kolonoskopi)", "10 Yılda Bir", "50-70 Yaş, Hastane"));
     }
 
-    // Koroner arter hastalık risk taraması (40 yaş ve üzeri)
     if (age != null && age! >= 40) {
-    recommendations.add(_buildTaramaWidget("Koroner Arter Hastalık Risk Taraması", "1 Defa", "40 Yaş Üzeri, Aile Hekimliği"));
-    recommendations.add(_buildTaramaWidget("Düşük KV Risk Taraması", "2 Yılda Bir", "40 Yaş Üzeri, Aile Hekimliği"));
+      recommendations.add(_buildTaramaWidget("Koroner Arter Hastalık Risk Taraması", "1 Defa", "40 Yaş Üzeri, Aile Hekimliği"));
+      recommendations.add(_buildTaramaWidget("Düşük KV Risk Taraması", "2 Yılda Bir", "40 Yaş Üzeri, Aile Hekimliği"));
     }
 
-    // Aile hikayesinde 55 yaş ve altı KV hastalık öyküsü olanlar için
     if (age != null && age! < 40) {
-    recommendations.add(_buildTaramaWidget("Koroner Arter Hastalık Risk Taraması", "1 Defa", "40 Yaş Altı, Aile Hekimliği"));
+      recommendations.add(_buildTaramaWidget("Koroner Arter Hastalık Risk Taraması", "1 Defa", "40 Yaş Altı, Aile Hekimliği"));
     }
 
-    // Aspirin kullanımı (Erkekler 40-65 yaş, Kadınlar 55-65 yaş)
     if (gender == 'Erkek' && age != null && age! >= 40 && age! <= 65) {
-    recommendations.add(_buildTaramaWidget("Aspirin Kullanımı", "81 mg, 40-65 Yaş Erkekler", "Aile Hekimliği"));
+      recommendations.add(_buildTaramaWidget("Aspirin Kullanımı", "81 mg, 40-65 Yaş Erkekler", "Aile Hekimliği"));
     }
     if (gender == 'Kadın' && age != null && age! >= 55 && age! <= 65) {
-    recommendations.add(_buildTaramaWidget("Aspirin Kullanımı", "81 mg, 55-65 Yaş Kadınlar", "Aile Hekimliği"));
+      recommendations.add(_buildTaramaWidget("Aspirin Kullanımı", "81 mg, 55-65 Yaş Kadınlar", "Aile Hekimliği"));
     }
 
-    // Gebelik durumu
     if (isPregnant) {
-    recommendations.add(_buildTaramaWidget("Gebelik İzlem", "İlk 14 hafta içinde, 18-24. hafta, 28-32. hafta, 36-38. hafta", "Aile Hekimliği"));
-    recommendations.add(_buildTaramaWidget("D Vitamini Takviyesi", "12 Haftadan itibaren gebelikte", "Aile Hekimliği"));
-    recommendations.add(_buildTaramaWidget("Demir Takviyesi", "16 Haftadan itibaren gebelikte", "Aile Hekimliği"));
+      recommendations.add(_buildTaramaWidget("Gebelik İzlem", "İlk 14 hafta içinde, 18-24. hafta, 28-32. hafta, 36-38. hafta", "Aile Hekimliği"));
+      recommendations.add(_buildTaramaWidget("D Vitamini Takviyesi", "12 Haftadan itibaren gebelikte", "Aile Hekimliği"));
+      recommendations.add(_buildTaramaWidget("Demir Takviyesi", "16 Haftadan itibaren gebelikte", "Aile Hekimliği"));
     }
 
-    // Hac/Umre için meningokok Asisı
     if (isGoingToHajjUmrah) {
-    recommendations.add(_buildAsiWidget("Meningokok Asisı", "Hac/Umreden Yaklaşık 1 Ay Önce", "Toplum Sağlığı Merkezi"));
+      recommendations.add(_buildAsiWidget("Meningokok Asisı", "Hac/Umreden Yaklaşık 1 Ay Önce", "Toplum Sağlığı Merkezi"));
     }
 
     return recommendations.isEmpty
-    ? Text('Yapmanız gereken bir işlem bulunmamaktadır.')
+        ? const Text('Yapmanız gereken bir işlem bulunmamaktadır.', style: TextStyle(color: Colors.blueGrey))
         : Column(children: recommendations);
-    }
+  }
 
-  // Asi Widget'ı
   Widget _buildAsiWidget(String name, String zaman, String yer) {
     return Card(
+      color: Colors.lightBlue.shade50, // Mavi tonlu kart
       child: ListTile(
-        title: Text(name),
-        subtitle: Text('Zaman: $zaman\nYer: $yer'),
+        title: Text(name, style: const TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.bold)),
+        subtitle: Text('Zaman: $zaman\nYer: $yer', style: const TextStyle(color: Colors.blueGrey)),
       ),
     );
   }
 
-  // Tarama Widget'ı
   Widget _buildTaramaWidget(String name, String zaman, String yer) {
     return Card(
+      color: Colors.lightBlue.shade50, // Mavi tonlu kart
       child: ListTile(
-        title: Text(name),
-        subtitle: Text('Zaman: $zaman\nYer: $yer'),
+        title: Text(name, style: const TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.bold)),
+        subtitle: Text('Zaman: $zaman\nYer: $yer', style: const TextStyle(color: Colors.blueGrey)),
       ),
     );
   }

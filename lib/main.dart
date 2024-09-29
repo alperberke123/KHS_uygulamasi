@@ -15,103 +15,97 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        scaffoldBackgroundColor: Colors.orangeAccent,
+        scaffoldBackgroundColor: Colors.lightBlue.shade50, // Açık mavi arka plan
         useMaterial3: true,
+        primarySwatch: Colors.blue, // Genel tema rengi
       ),
-      home: bilgilendirmeSayfasi(),
+      home: const BilgilendirmeSayfasi(),
     );
   }
 }
 
-class bilgilendirmeSayfasi extends StatefulWidget {
-  const bilgilendirmeSayfasi({super.key});
+class BilgilendirmeSayfasi extends StatefulWidget {
+  const BilgilendirmeSayfasi({super.key});
 
   @override
-  State<bilgilendirmeSayfasi> createState() => _bilgilendirmeSayfasiState();
+  State<BilgilendirmeSayfasi> createState() => _BilgilendirmeSayfasiState();
 }
 
-class _bilgilendirmeSayfasiState extends State<bilgilendirmeSayfasi> {
+class _BilgilendirmeSayfasiState extends State<BilgilendirmeSayfasi> {
   @override
   void initState() {
     super.initState();
     checkSpecialDays(); // Özel gün kontrolünü başlat
   }
 
-  // Özel günleri kontrol eden fonksiyon
   void checkSpecialDays() {
     DateTime today = DateTime.now(); // Bugünün tarihi
 
-    // Özel günlerin olduğu tarihleri tanımlıyoruz
     if (today.month == 10 && today.day == 29) {
       _showSpecialDayDialog("29 Ekim Cumhuriyet Bayramı", "Bugün Cumhuriyet Bayramı'nı kutluyoruz!");
-    } else if (today.month == 9 && today.day == 21) {
+    } else if (today.month == 9 && today.day == 24) {
       _showSpecialDayDialog("23 Nisan Ulusal Egemenlik ve Çocuk Bayramı", "Bugün 23 Nisan Ulusal Egemenlik ve Çocuk Bayramı'nı kutluyoruz!");
     } else if (today.month == 5 && today.day == 19) {
       _showSpecialDayDialog("19 Mayıs Atatürk'ü Anma, Gençlik ve Spor Bayramı", "Bugün 19 Mayıs Atatürk'ü Anma, Gençlik ve Spor Bayramı'nı kutluyoruz!");
     }
   }
 
-  // Şık pop-up dialog'u gösteren fonksiyon
   void _showSpecialDayDialog(String title, String message) {
     Future.delayed(Duration.zero, () {
       showDialog(
         context: context,
         builder: (BuildContext context) {
           double screenWidth = MediaQuery.of(context).size.width;
-          double titleFontSize = screenWidth * 0.06; // Ekranın %6'sı kadar
+          double titleFontSize = screenWidth * 0.06;
 
           return Dialog(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20.0), // Köşeleri yuvarlat
+              borderRadius: BorderRadius.circular(20.0),
             ),
             backgroundColor: Colors.white,
             child: Container(
-              padding: EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(20.0),
               child: Column(
-                mainAxisSize: MainAxisSize.min, // İçeriğe göre boyutlan
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Başlık
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.celebration, color: Colors.orange, size: 30),
-                      SizedBox(width: 10),
-                      // Başlık kısmında Expanded kullanarak taşmayı önlüyoruz
+                      const Icon(Icons.celebration, color: Colors.blueAccent, size: 30),
+                      const SizedBox(width: 10),
                       Expanded(
                         child: Text(
                           title,
                           style: TextStyle(
                             fontSize: titleFontSize,
                             fontWeight: FontWeight.bold,
-                            color: Colors.orange,
+                            color: Colors.blueAccent,
                           ),
                           textAlign: TextAlign.center,
-                          overflow: TextOverflow.ellipsis, // Taşma durumunda üç nokta ekle
-                          maxLines: 2, // Maksimum satır sayısı
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
-                  // İçerik
+                  const SizedBox(height: 20),
                   Text(
                     message,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18,
                       color: Colors.black54,
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 20),
-                  // Kapat Butonu
+                  const SizedBox(height: 20),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
+                      backgroundColor: Colors.blue, // Mavi buton
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                     ),
-                    child: Text("Kapat", style: TextStyle(color: Colors.white)),
+                    child: const Text("Kapat", style: TextStyle(color: Colors.white)),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
@@ -132,25 +126,25 @@ class _bilgilendirmeSayfasiState extends State<bilgilendirmeSayfasi> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Spacer(),
-            Text(
+            const Spacer(),
+            const Text(
               "UYGULAMAMIZ HAKKINDA",
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.blueAccent),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Text(
-                "Uygulamamız Koruyucu Sağlık Hizmetleri hakkında insanları bilgilendirmeyi amaçlamaktadır. "
-                    "Bu şekilde insanlar hem ileride oluşabilecek hastalıklara erken önlem almış olacaklar hem de "
-                    "şuan halihazırda var olabilecek hastalıklara karşı bilgilendirilmiş olacaklar.",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+              child: const Text(
+                "Koruyucu Sağlık Hizmetleri (KSH) uygulaması sağlığınızı korumak "
+                    "için kişisel özelliklerinize göre yaşam boyu almanız gereken "
+                    "sağlık hizmetleri hakkında bilgilendirmeyi amaçlamaktadır.",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Colors.blueGrey),
                 textAlign: TextAlign.center,
               ),
             ),
-            Spacer(),
+            const Spacer(),
             ElevatedButton(
-              child: Text(
+              child: const Text(
                 "Diğer sayfa için tıklayınız",
                 style: TextStyle(color: Colors.white),
               ),
@@ -158,13 +152,13 @@ class _bilgilendirmeSayfasiState extends State<bilgilendirmeSayfasi> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                backgroundColor: Colors.red,
+                backgroundColor: Colors.lightBlue, // Açık mavi buton
               ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => sayfa2()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const sayfa2()));
               },
             ),
-            Spacer(),
+            const Spacer(),
           ],
         ),
       ),

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:ksh_uygulamasi/sonuc_ekrani.dart';
 
-class anaSayfa extends StatefulWidget {
+class anasayfa extends StatefulWidget {
   @override
-  _anaSayfaState createState() => _anaSayfaState();
+  _anasayfaState createState() => _anasayfaState();
 }
 
-class _anaSayfaState extends State<anaSayfa> {
+class _anasayfaState extends State<anasayfa> {
   final _formKey = GlobalKey<FormState>();
 
   // Form verileri
@@ -23,23 +23,29 @@ class _anaSayfaState extends State<anaSayfa> {
   int? _ageInMonths; // Ay cinsinden yaş
   int? _age; // Yaş, ay girilmezse bu kullanılacak
 
-  // Kadın seçilirse hamilelik durumu sorulacak
-  bool get showPregnancyField => _gender == 'Kadın';
+  // Kadın ve 15 yaşından büyükse hamilelik durumu sorulacak
+  bool get showPregnancyField {
+    return _gender == 'Kadın' && (_age != null && _age! >= 15);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bilgi Girişi'),
+        title: const Text('Bilgi Girişi'),
+        backgroundColor: Colors.blueAccent, // Mavi AppBar rengi
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: ListView(
             children: <Widget>[
               TextFormField(
-                decoration: InputDecoration(labelText: 'İsim Soyisim'),
+                decoration: const InputDecoration(
+                  labelText: 'İsim Soyisim',
+                  labelStyle: TextStyle(color: Colors.blueGrey),
+                ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Lütfen isim soyisim giriniz';
@@ -51,7 +57,8 @@ class _anaSayfaState extends State<anaSayfa> {
                 },
               ),
               CheckboxListTile(
-                title: Text('0-2 Yaş Bebek'),
+                title: const Text('0-2 Yaş Bebek'),
+                activeColor: Colors.blueAccent,
                 value: _isBaby,
                 onChanged: (value) {
                   setState(() {
@@ -62,7 +69,10 @@ class _anaSayfaState extends State<anaSayfa> {
               ),
               if (_isBaby)
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Ay olarak yaş'),
+                  decoration: const InputDecoration(
+                    labelText: 'Ay olarak yaş',
+                    labelStyle: TextStyle(color: Colors.blueGrey),
+                  ),
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value == null || int.tryParse(value) == null) {
@@ -76,7 +86,10 @@ class _anaSayfaState extends State<anaSayfa> {
                 ),
               if (!_isBaby)
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Yaş'),
+                  decoration: const InputDecoration(
+                    labelText: 'Yaş',
+                    labelStyle: TextStyle(color: Colors.blueGrey),
+                  ),
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (_isBaby) {
@@ -89,9 +102,17 @@ class _anaSayfaState extends State<anaSayfa> {
                   onSaved: (value) {
                     _age = int.tryParse(value!);
                   },
+                  onChanged: (value) {
+                    setState(() {
+                      _age = int.tryParse(value);
+                    });
+                  },
                 ),
               DropdownButtonFormField<String>(
-                decoration: InputDecoration(labelText: 'Cinsiyet'),
+                decoration: const InputDecoration(
+                  labelText: 'Cinsiyet',
+                  labelStyle: TextStyle(color: Colors.blueGrey),
+                ),
                 value: _gender,
                 items: ['Kadın', 'Erkek']
                     .map((gender) => DropdownMenuItem(
@@ -111,9 +132,11 @@ class _anaSayfaState extends State<anaSayfa> {
                   return null;
                 },
               ),
+              // Hamilelik alanı, sadece kadın ve yaş 15 veya üzeri olduğunda gösterilecek
               if (showPregnancyField)
                 CheckboxListTile(
-                  title: Text('Hamile misiniz?'),
+                  title: const Text('Hamile misiniz?'),
+                  activeColor: Colors.blueAccent,
                   value: _isPregnant,
                   onChanged: (value) {
                     setState(() {
@@ -123,7 +146,10 @@ class _anaSayfaState extends State<anaSayfa> {
                 ),
               if (!_isBaby)
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Boy (cm)'),
+                  decoration: const InputDecoration(
+                    labelText: 'Boy (cm)',
+                    labelStyle: TextStyle(color: Colors.blueGrey),
+                  ),
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value == null || double.tryParse(value) == null) {
@@ -137,7 +163,10 @@ class _anaSayfaState extends State<anaSayfa> {
                 ),
               if (!_isBaby)
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Kilo (kg)'),
+                  decoration: const InputDecoration(
+                    labelText: 'Kilo (kg)',
+                    labelStyle: TextStyle(color: Colors.blueGrey),
+                  ),
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value == null || double.tryParse(value) == null) {
@@ -151,13 +180,17 @@ class _anaSayfaState extends State<anaSayfa> {
                 ),
               if (!_isBaby)
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Meslek'),
+                  decoration: const InputDecoration(
+                    labelText: 'Meslek',
+                    labelStyle: TextStyle(color: Colors.blueGrey),
+                  ),
                   onSaved: (value) {
                     _profession = value;
                   },
                 ),
               CheckboxListTile(
-                title: Text('Hac/Umreye gidecek misiniz?'),
+                title: const Text('Hac/Umreye gidecek misiniz?'),
+                activeColor: Colors.blueAccent,
                 value: _isGoingToHajjUmrah,
                 onChanged: (value) {
                   setState(() {
@@ -165,7 +198,7 @@ class _anaSayfaState extends State<anaSayfa> {
                   });
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
@@ -189,7 +222,17 @@ class _anaSayfaState extends State<anaSayfa> {
                     );
                   }
                 },
-                child: Text('Sonuçları Göster'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueAccent,
+                  padding: const EdgeInsets.symmetric(vertical: 15.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: const Text(
+                  'Sonuçları Göster',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
               ),
             ],
           ),
