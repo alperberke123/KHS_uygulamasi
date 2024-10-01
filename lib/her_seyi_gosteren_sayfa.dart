@@ -5,14 +5,15 @@ class DataPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Koruyucu Sağlık Hizmetleri'),
-        backgroundColor: Colors.redAccent,
+        title: const Text('Koruyucu Sağlık Hizmetleri'),
+        backgroundColor: Colors.blueAccent, // Mavi tonuyla uyumlu hale getirildi
+        centerTitle: true, // Başlık ortalandı
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch, // İçerikleri tam genişlikte hizalar
             children: <Widget>[
               // Çocukluk Aşı Takvimi
               _buildSectionTitle("ÇOCUKLUK AŞI TAKVİMİ"),
@@ -120,19 +121,19 @@ class DataPage extends StatelessWidget {
 - Gebelikte Demir Takviyesi - 16 Haftalıktan itibaren - 40-60 mg - Aile Hekimliği
               """),
 
-              // Obezite Tarama Programı
+              // Obezite Tarama Programı (18-65 Yaş)
               _buildSectionTitle("OBEZİTE TARAMASI (18-65 YAŞ ARASI)"),
               _buildSectionContent("""
 - Boy/Kilo /BKİ/Bel çevresi ölçümü - Yılda 1 Kez - 18-65 Yaş - Aile Hekimliği
               """),
 
-              // OKUL ÇAĞI İŞİTME TARAMA PROGRAMI
+              // Okul Çağı İşitme Tarama Programı
               _buildSectionTitle("OKUL ÇAĞI İŞİTME TARAMA PROGRAMI"),
               _buildSectionContent("""
 - Her çocuk - İlkokul 1. Sınıf - 6-7 Yaş - TSM, SHM, İlçe SM
               """),
 
-              // ULUSAL GÖRME TARAMA PROGRAMI
+              // Ulusal Görme Tarama Programı
               _buildSectionTitle("ULUSAL GÖRME TARAMA PROGRAMI"),
               _buildSectionContent("""
 - Göz muayenesi ve kırmızı refle testi - 0-3 Ay Bebek - Aile Hekimliği
@@ -140,49 +141,49 @@ class DataPage extends StatelessWidget {
 - LEA sembol ve kırmızı refle testi - 6-7 Yaş Çocuk - Aile Hekimliği
               """),
 
-              // DEMİR PROFİLAKSİSİ
+              // Demir Profilaksisi
               _buildSectionTitle("DEMİR PROFİLAKSİSİ"),
               _buildSectionContent("""
 - Demir - 1 mg/kg/Gün - 4-12 Ay Bebek - Aile Hekimliği
               """),
 
-              // D VİTAMİNİ PROFİLAKSİSİ
+              // D Vitamini Profilaksisi
               _buildSectionTitle("D VİTAMİNİ PROFİLAKSİSİ"),
               _buildSectionContent("""
 - D Vitamini - 400 Iu - 0-12 Ay Bebek - Aile Hekimliği
               """),
 
-              // İNMEMİŞ TESTİS MUAYENESİ
+              // İnmemiş Testis Muayenesi
               _buildSectionTitle("İNMEMİŞ TESTİS MUAYENESİ"),
               _buildSectionContent("""
 - Testis muayenesi - Her Muayenede - 6 Ay-1 Yaş - Aile Hekimliği
               """),
 
-              // ARTERİYEL TANSİYON ÖLÇÜMÜ
+              // Arteriyel Tansiyon Ölçümü
               _buildSectionTitle("ARTERİYEL TANSİYON ÖLÇÜMÜ"),
               _buildSectionContent("""
 - Her birey - Yılda En Az 1 Kez - 18 Yaş ve Üzeri - Aile Hekimliği, Hastane
               """),
 
-              // SERUM LİPİD PROFİL (TG,LDL,HDL)
+              // Serum Lipid Profil (TG, LDL, HDL)
               _buildSectionTitle("SERUM LİPİD PROFİL (TG,LDL,HDL)"),
               _buildSectionContent("""
 - Her birey - 5 Yılda Bir - 35 Yaş ve Üzeri - Aile Hekimliği
               """),
 
-              // DİABET TARAMASI
+              // Diabet Taraması
               _buildSectionTitle("DİABET TARAMASI"),
               _buildSectionContent("""
 - Her birey (AKŞ, HbA1c) - 45 Yaş Üzeri - Aile Hekimliği
               """),
 
-              // TİROİD FONKSİYON TARAMASI
+              // Tiroit Fonksiyon Taraması
               _buildSectionTitle("TİROİD FONKSİYON TARAMASI"),
               _buildSectionContent("""
 - TSH - 5 Yılda Bir - 35 Yaş Üzeri - Aile Hekimliği
               """),
 
-              // GEBE İZLEM
+              // Gebe İzlem
               _buildSectionTitle("GEBE İZLEM"),
               _buildSectionContent("""
 - İlk 14 hafta içinde
@@ -191,21 +192,19 @@ class DataPage extends StatelessWidget {
 - 36-38. hafta - Gebelik boyunca 4 kez - 15-49 Yaş Üreme Çağı - Aile Hekimliği
               """),
 
-              // YAŞLILIKTA OSTEOPOROZ
+              // Yaşlılıkta Osteoporoz
               _buildSectionTitle("YAŞLILIKTA OSTEOPOROZ"),
               _buildSectionContent("""
 - Biyokimyasal testler - Yılda 1 kez - 65 Yaş ve Üzeri - Aile Hekimliği, Hastane
 - DEXA - 1 kez - 65 Yaş Üstü Kadın/70 Yaş Üstü Erkek
               """),
 
-              // AĞIZ-DİŞ SAĞLIĞI TARAMALARI
+              // Ağız-Diş Sağlığı Tarama Programı
               _buildSectionTitle("AĞIZ-DİŞ SAĞLIĞI TARAMALARI"),
               _buildSectionContent("""
 - Flor vernik - Anasınıfı/İlkokul 1/Yılda 2 kez - 60 ay - TSM
 - Flor jel - İlkokul 2-3-4/Yılda 2 kez - 6-9 Yaş - TSM
               """),
-
-              // Diğer başlıklar ve içerikler bu yapıya uygun olarak eklenebilir...
             ],
           ),
         ),
@@ -219,7 +218,12 @@ class DataPage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Text(
         title,
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        style: const TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Colors.blueAccent, // Başlıklara mavi renk uygulandı
+        ),
+        textAlign: TextAlign.center, // Başlıkları ortaladım
       ),
     );
   }
@@ -228,7 +232,8 @@ class DataPage extends StatelessWidget {
   Widget _buildSectionContent(String content) {
     return Text(
       content,
-      style: TextStyle(fontSize: 16),
+      style: const TextStyle(fontSize: 16, color: Colors.black87),
+      textAlign: TextAlign.start, // İçerikleri sola hizalı bıraktım
     );
   }
 }

@@ -16,6 +16,8 @@ class _anasayfaState extends State<anasayfa> {
   double? _height;
   double? _weight;
   bool _isGoingToHajjUmrah = false;
+  bool _isGoingToMilitary = false; // Askerlik seçimi
+  bool _isGoingToTravel = false; // Seyahat seçimi
   String? _profession;
 
   // Yaş ve 0-2 yaş bebek seçimi
@@ -26,6 +28,11 @@ class _anasayfaState extends State<anasayfa> {
   // Kadın ve 15 yaşından büyükse hamilelik durumu sorulacak
   bool get showPregnancyField {
     return _gender == 'Kadın' && (_age != null && _age! >= 15);
+  }
+
+  // 18 yaşından büyük erkekler için askerlik durumu gösterilecek
+  bool get showMilitaryField {
+    return _gender == 'Erkek' && (_age != null && _age! >= 18);
   }
 
   @override
@@ -198,6 +205,28 @@ class _anasayfaState extends State<anasayfa> {
                   });
                 },
               ),
+              // 18 yaş üstü erkekler için askerlik butonunu göster
+              if (showMilitaryField)
+                CheckboxListTile(
+                  title: const Text('Askerlik aşısı gerekli mi?'),
+                  activeColor: Colors.blueAccent,
+                  value: _isGoingToMilitary,
+                  onChanged: (value) {
+                    setState(() {
+                      _isGoingToMilitary = value!;
+                    });
+                  },
+                ),
+              CheckboxListTile(
+                title: const Text('Seyahat için aşı gerekli mi?'),
+                activeColor: Colors.blueAccent,
+                value: _isGoingToTravel,
+                onChanged: (value) {
+                  setState(() {
+                    _isGoingToTravel = value!;
+                  });
+                },
+              ),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
@@ -216,6 +245,8 @@ class _anasayfaState extends State<anasayfa> {
                           height: _height,
                           weight: _weight,
                           isGoingToHajjUmrah: _isGoingToHajjUmrah,
+                          isGoingToMilitary: _isGoingToMilitary, // Askerlik durumu
+                          isGoingToTravel: _isGoingToTravel, // Seyahat durumu
                           profession: _profession,
                         ),
                       ),

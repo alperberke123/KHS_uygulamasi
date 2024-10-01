@@ -46,59 +46,63 @@ class _asi_olmadimState extends State<asi_olmadim> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Hiç Aşı Olmadım"),
-        backgroundColor: Colors.orangeAccent,
+        title: const Text("Hiç Aşı Olmadım"),
+        backgroundColor: Colors.blueAccent, // Mavi tonlu AppBar
+        centerTitle: true,
       ),
-      // Klavye açıldığında ekranın boyutunu ayarlamak için:
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Center(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
+              const Text(
                 "Yaşınızı Giriniz",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.blueAccent), // Mavi metin rengi
+                textAlign: TextAlign.center,
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               TextField(
                 controller: tfController,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   hintText: "Yaşınızı Giriniz",
                   filled: true,
-                  fillColor: Colors.grey[100],
+                  fillColor: Colors.blue[50], // Metin kutusunun arka planı mavi tonunda
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.0),
                     borderSide: BorderSide.none,
                   ),
-                  contentPadding: EdgeInsets.symmetric(
+                  contentPadding: const EdgeInsets.symmetric(
                     vertical: 20,
                     horizontal: 16,
                   ),
                 ),
-                style: TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16),
               ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: updateText,
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-                  backgroundColor: Colors.orangeAccent,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+              const SizedBox(height: 20),
+              SizedBox(
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: updateText,
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                    backgroundColor: Colors.blueAccent, // Butonun arka plan rengi mavi
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: const Text(
+                    "Devam Et",
+                    style: TextStyle(fontSize: 16, color: Colors.white),
                   ),
                 ),
-                child: Text(
-                  "Devam Et",
-                  style: TextStyle(fontSize: 16, color: Colors.white),
-                ),
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               if (_asiPlan.isNotEmpty)
                 Card(
-                  color: Colors.orange[50],
+                  color: Colors.blue[50], // Kartın arka planı mavi
                   elevation: 4,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -107,7 +111,7 @@ class _asi_olmadimState extends State<asi_olmadim> {
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
                       _asiPlan,
-                      style: TextStyle(fontSize: 18, color: Colors.black87),
+                      style: const TextStyle(fontSize: 18, color: Colors.black87),
                     ),
                   ),
                 ),

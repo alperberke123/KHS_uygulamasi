@@ -12,33 +12,33 @@ class _KuduzTemasiState extends State<KuduzTemasi> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Kuduz Riskli Temas'),
-        backgroundColor: Colors.redAccent,
+        title: const Text('Kuduz Riskli Temas'),
+        backgroundColor: Colors.blueAccent, // İlk sayfadaki renk temasına uygun hale getirildi
         centerTitle: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20.0), // Tüm kenarlara 20 birim boşluk
+        padding: const EdgeInsets.all(16.0), // Genel kenar boşlukları
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start, // Metinleri sola hizalar
+          crossAxisAlignment: CrossAxisAlignment.stretch, // Buton ve metinleri hizalı gösterir
           children: [
             Text(
               "KUDUZ RİSKLİ TEMAS:",
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
-                color: Colors.redAccent,
+                color: Colors.blueAccent, // İlk sayfadaki mavi tema
               ),
-              textAlign: TextAlign.start,
+              textAlign: TextAlign.center,
             ),
-            SizedBox(height: 20), // Başlık ve içerik arasında boşluk
+            const SizedBox(height: 20), // Başlık ve içerik arasında boşluk
             Container(
               padding: const EdgeInsets.all(15.0),
               decoration: BoxDecoration(
-                color: Colors.red[50], // Arka plan rengi
+                color: Colors.blue[50], // Arka plan rengi olarak mavi ton kullanıldı
                 borderRadius: BorderRadius.circular(10), // Köşeleri yuvarlat
               ),
-              child: Text(
+              child: const Text(
                 """
 0., 3., 7. günlerde birer doz ve 14 ile 28. günler arasında dördüncü doz veya
 0. gün 2 doz, 7. ve 21. günlerde birer doz uygulanmalıdır.
@@ -53,20 +53,21 @@ class _KuduzTemasiState extends State<KuduzTemasi> {
                 textAlign: TextAlign.center,
               ),
             ),
-            SizedBox(height: 40), // Alt kısımla metin arasında boşluk
-            Center(
+            const SizedBox(height: 40), // Alt kısımla metin arasında boşluk
+            SizedBox(
+              height: 50,
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context); // Geri dön butonu
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.redAccent,
+                  backgroundColor: Colors.blueAccent, // İlk sayfadaki buton rengiyle aynı
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10), // Butonun köşelerini yuvarlat
+                    borderRadius: BorderRadius.circular(12), // Butonun köşeleri yuvarlatıldı
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15), // Buton boyutları
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 ),
-                child: Text(
+                child: const Text(
                   "Geri Dön",
                   style: TextStyle(
                     color: Colors.white,
