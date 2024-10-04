@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ksh_uygulamasi/sigara_sorulari.dart';
 import 'package:ksh_uygulamasi/sonuc_ekrani.dart';
 
 class anasayfa extends StatefulWidget {
@@ -20,6 +21,9 @@ class _anasayfaState extends State<anasayfa> {
   bool _isGoingToTravel = false; // Seyahat seçimi
   String? _profession;
 
+  // Sigara bağımlılığı puanı
+  int _smokingScore = 0;
+
   // Yaş ve 0-2 yaş bebek seçimi
   bool _isBaby = false;
   int? _ageInMonths; // Ay cinsinden yaş
@@ -40,7 +44,7 @@ class _anasayfaState extends State<anasayfa> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Bilgi Girişi'),
-        backgroundColor: Colors.blueAccent, // Mavi AppBar rengi
+        backgroundColor: Colors.blueAccent,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -53,6 +57,8 @@ class _anasayfaState extends State<anasayfa> {
                   labelText: 'İsim Soyisim',
                   labelStyle: TextStyle(color: Colors.blueGrey),
                 ),
+                keyboardType: TextInputType.text,  // Genel metin girişi için
+                textCapitalization: TextCapitalization.sentences,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Lütfen isim soyisim giriniz';
@@ -139,7 +145,6 @@ class _anasayfaState extends State<anasayfa> {
                   return null;
                 },
               ),
-              // Hamilelik alanı, sadece kadın ve yaş 15 veya üzeri olduğunda gösterilecek
               if (showPregnancyField)
                 CheckboxListTile(
                   title: const Text('Hamile misiniz?'),
@@ -205,7 +210,6 @@ class _anasayfaState extends State<anasayfa> {
                   });
                 },
               ),
-              // 18 yaş üstü erkekler için askerlik butonunu göster
               if (showMilitaryField)
                 CheckboxListTile(
                   title: const Text('Askerlik aşısı gerekli mi?'),
@@ -228,6 +232,34 @@ class _anasayfaState extends State<anasayfa> {
                 },
               ),
               const SizedBox(height: 20),
+
+              // Sigara Bağımlılığı Butonu
+              ElevatedButton(
+                onPressed: () async {
+                  final score = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SigaraSorulariEkrani(),
+                    ),
+                  );
+                  setState(() {
+                    _smokingScore = score;
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.redAccent,
+                  padding: const EdgeInsets.symmetric(vertical: 15.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: const Text(
+                  'Sigara Bağımlılığı Testi',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+              ),
+
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
@@ -245,9 +277,10 @@ class _anasayfaState extends State<anasayfa> {
                           height: _height,
                           weight: _weight,
                           isGoingToHajjUmrah: _isGoingToHajjUmrah,
-                          isGoingToMilitary: _isGoingToMilitary, // Askerlik durumu
-                          isGoingToTravel: _isGoingToTravel, // Seyahat durumu
+                          isGoingToMilitary: _isGoingToMilitary,
+                          isGoingToTravel: _isGoingToTravel,
                           profession: _profession,
+                          smokingScore: _smokingScore, // Sigara bağımlılığı puanı
                         ),
                       ),
                     );

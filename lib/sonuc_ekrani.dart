@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 
 class degerlendirme extends StatelessWidget {
   final String name;
-  final int? age; // Yaş
-  final int? ageInMonths; // Ay olarak yaş
+  final int? age;
+  final int? ageInMonths;
   final bool isBaby;
   final String gender;
   final bool isPregnant;
   final double? height;
   final double? weight;
   final bool isGoingToHajjUmrah;
-  final bool isGoingToMilitary; // Askerlik durumu
-  final bool isGoingToTravel; // Seyahat durumu
+  final bool isGoingToMilitary;
+  final bool isGoingToTravel;
   final String? profession;
+  final int? smokingScore; // Sigara bağımlılık puanı
 
   degerlendirme({
     required this.name,
@@ -24,28 +25,51 @@ class degerlendirme extends StatelessWidget {
     this.height,
     this.weight,
     required this.isGoingToHajjUmrah,
-    required this.isGoingToMilitary, // Askerlik durumu
-    required this.isGoingToTravel, // Seyahat durumu
+    required this.isGoingToMilitary,
+    required this.isGoingToTravel,
     this.profession,
+    this.smokingScore, // Puanı alıyoruz
   });
+
+  String capitalizeFirstLetter(String name) {
+    if (name.isEmpty) return name;
+    return name.trim()[0].toUpperCase() + name.trim().substring(1).toLowerCase();
+  }
+
+  // Sigara bağımlılığı seviyesini hesaplama
+  String getSmokingDependencyLevel() {
+    if (smokingScore == null) return "Sigara bağımlılığı bilgisi yok.";
+
+    if (smokingScore! <= 2) {
+      return "Çok az bağımlılık";
+    } else if (smokingScore! == 3 || smokingScore! == 4) {
+      return "Az bağımlılık";
+    } else if (smokingScore! == 5) {
+      return "Orta derecede bağımlı";
+    } else if (smokingScore! == 6 || smokingScore! == 7) {
+      return "Yüksek bağımlılık";
+    } else {
+      return "Çok yüksek bağımlılık";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Sonuçlar'),
-        backgroundColor: Colors.blueAccent, // Mavi AppBar rengi
+        backgroundColor: Colors.blueAccent,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: <Widget>[
             Text(
-              'Merhaba, $name!',
+              'Merhaba, ${capitalizeFirstLetter(name)}!',
               style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
-                color: Colors.blueAccent, // Başlık rengi mavi
+                color: Colors.blueAccent,
               ),
             ),
             const SizedBox(height: 10),
@@ -56,9 +80,80 @@ class degerlendirme extends StatelessWidget {
             if (!isBaby && height != null) Text('Boy: ${height?.toStringAsFixed(1)} cm', style: _infoTextStyle()),
             if (!isBaby && weight != null) Text('Kilo: ${weight?.toStringAsFixed(1)} kg', style: _infoTextStyle()),
             if (isGoingToHajjUmrah) Text('Hac/Umre: Gidecek', style: _infoTextStyle()),
-            if (isGoingToMilitary) Text('Askerlik: Aşı Gerekli', style: _infoTextStyle()), // Askerlik bilgisi eklendi
-            if (isGoingToTravel) Text('Seyahat: Aşı Gerekli', style: _infoTextStyle()), // Seyahat bilgisi eklendi
+            if (isGoingToMilitary) Text('Askerlik: Aşı Gerekli', style: _infoTextStyle()),
+            if (isGoingToTravel) Text('Seyahat: Aşı Gerekli', style: _infoTextStyle()),
             if (!isBaby && profession != 'Ev hanımı') Text('Meslek: $profession', style: _infoTextStyle()),
+
+            // Sigara bağımlılığı testi sonucu
+            if (smokingScore != null) ...[
+              const SizedBox(height: 20),
+              const Divider(color: Colors.blueAccent),
+              const Text(
+                'Sigara Bağımlılık Düzeyi:',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blueAccent,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                getSmokingDependencyLevel(), // Bağımlılık seviyesi
+                style: _infoTextStyle(),
+              ),
+            ],
+
+            // Sağlık çalışanı kontrolü
+            if (profession != null && profession!.toLowerCase() == 'sağlık çalışanı') ...[
+              const SizedBox(height: 20),
+              const Divider(color: Colors.blueAccent),
+              const Text(
+                'Sağlık Çalışanları İçin Aşılar:',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blueAccent,
+                ),
+              ),
+              const SizedBox(height: 10),
+              _buildAsiWidget(
+                  "Erişkin Tip Tetanoz-Difteri (Td)",
+                  "3 Doz, Primer immünizasyon (1. doz ile 2. doz arasında en az 1 ay, 2. doz ile 3. doz arasında en az 6 ay). 10 yılda bir tekrarlanmalı.",
+                  "Aile Hekimliği"
+              ),
+              _buildAsiWidget(
+                  "Kızamık-Kızamıkçık-Kabakulak (KKK)",
+                  "En az 1 ay ara ile 2 doz. Bağışıklık durumu bilinmiyorsa yapılmalı.",
+                  "Aile Hekimliği"
+              ),
+              _buildAsiWidget(
+                  "Mevsimsel İnfluenza (Grip aşısı)",
+                  "Her yıl 1 doz.",
+                  "Aile Hekimliği"
+              ),
+              _buildAsiWidget(
+                  "Hepatit B",
+                  "0, 1, 6 ay olmak üzere 3 doz. Antikor yanıtı kontrol edilmeli.",
+                  "Aile Hekimliği"
+              ),
+              _buildAsiWidget(
+                  "Hepatit A",
+                  "6 ay ara ile 2 doz. Antikor düzeyi değerlendirilmelidir.",
+                  "Aile Hekimliği"
+              ),
+              _buildAsiWidget(
+                  "Suçiçeği",
+                  "En az 4 hafta ara ile 2 doz. Aşı kaydı yoksa antikor düzeyi kontrol edilmeli.",
+                  "Aile Hekimliği"
+              ),
+              _buildAsiWidget(
+                  "Meningokok",
+                  "Mikrobiyoloji laboratuvarında çalışanlar için 2 ay arayla 2 doz (55 yaş altı için), her iki aşı 5 yılda bir tekrarlanmalı.",
+                  "Laboratuvar"
+              ),
+            ],
+
+
             const SizedBox(height: 20),
             const Divider(color: Colors.blueAccent),
             const Text(
@@ -66,7 +161,7 @@ class degerlendirme extends StatelessWidget {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.blueAccent, // Alt başlık rengi mavi
+                color: Colors.blueAccent,
               ),
             ),
             const SizedBox(height: 10),
@@ -79,7 +174,7 @@ class degerlendirme extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.blueAccent, // Alt başlık rengi mavi
+                  color: Colors.blueAccent,
                 ),
               ),
               const SizedBox(height: 10),
@@ -94,18 +189,19 @@ class degerlendirme extends StatelessWidget {
   TextStyle _infoTextStyle() {
     return const TextStyle(
       fontSize: 16,
-      color: Colors.blueGrey, // Bilgilendirme metinleri mavi-gri
+      color: Colors.blueGrey,
     );
   }
 
-  // Vücut Kitle İndeksi (BMI) hesaplama ve sonuç gösterme
+
+
   Widget _getBMIResult() {
     if (height == null || weight == null) {
       return const Text('Boy ve kilo bilgisi eksik.', style: TextStyle(color: Colors.redAccent));
     }
 
-    double heightInMeters = height! / 100; // Boyu metreye çevirme
-    double bmi = weight! / (heightInMeters * heightInMeters); // BMI hesaplama
+    double heightInMeters = height! / 100;
+    double bmi = weight! / (heightInMeters * heightInMeters);
 
     String bmiCategory;
     if (bmi < 18.5) {
@@ -125,10 +221,33 @@ class degerlendirme extends StatelessWidget {
       children: [
         Text('BMI: ${bmi.toStringAsFixed(1)} kg/m²', style: _infoTextStyle()),
         Text('Durum: $bmiCategory', style: _infoTextStyle()),
+        const SizedBox(height: 10),
+        const Text(
+          'BMI (Body Mass Index) Değer Aralıkları:',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blueAccent),
+        ),
+        const SizedBox(height: 5),
+        _buildBMIRange('Zayıf', '< 18.5 kg/m²', Colors.lightBlue.shade50),
+        _buildBMIRange('Normal Kilolu', '18.5 - 24.9 kg/m²', Colors.green.shade100),
+        _buildBMIRange('Fazla Kilolu', '25.0 - 29.9 kg/m²', Colors.yellow.shade100),
+        _buildBMIRange('Obez', '30.0 - 39.9 kg/m²', Colors.orange.shade100),
+        _buildBMIRange('İleri Derecede Obez (Morbid Obez)', '≥ 40.0 kg/m²', Colors.red.shade100),
       ],
     );
   }
 
+  Widget _buildBMIRange(String category, String range, Color color) {
+    return Card(
+      color: color,
+      child: ListTile(
+        title: Text(
+          category,
+          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+        ),
+        subtitle: Text(range, style: const TextStyle(color: Colors.black)),
+      ),
+    );
+  }
   Widget _getHealthRecommendations() {
     List<Widget> recommendations = [];
 
@@ -233,19 +352,19 @@ class degerlendirme extends StatelessWidget {
       recommendations.add(_buildTaramaWidget("Obezite Taraması (BKİ (Beden Kitle İndeksi) / Bel Çevresi Ölçümü)", "Yılda 1 Kez", "Aile Hekimliği"));
     }
 
+    // Meme kanseri taramaları ve muayeneleri
     if (gender == 'Kadın' && age != null) {
       if (age! >= 35) {
-        recommendations.add(_buildTaramaWidget("KKMM (Kendi Kendine Meme Muayenesi)", "Ayda 1 Kere", "35 Yaş ve Üzeri Kadınlar, KETEM (Kanser Erken Teşhis, Tarama ve Eğitim Merkezi)"));
+        recommendations.add(_buildPembeTaramaWidget("KKMM (Kendi Kendine Meme Muayenesi)", "Ayda 1 Kere", "35 Yaş ve Üzeri Kadınlar, KETEM"));
       }
       if (age! >= 40) {
-        recommendations.add(_buildTaramaWidget("Klinik Meme Muayenesi", "Yılda Bir", "40 Yaş ve Üzeri Kadınlar, Hastane"));
-        recommendations.add(_buildTaramaWidget("Mamografi", "2 Yılda Bir", "40-69 Yaş Kadınlar, KETEM, Hastane"));
-      }
-      if (age! >= 30 && age! <= 65) {
-        recommendations.add(_buildTaramaWidget("Serviks Kanser Taraması (HPV-DNA (Human Papilloma Virüs-Deoksiribo Nükleik Asit) ve Smear)", "5 Yılda Bir", "30-65 Yaş Kadınlar, KETEM, Hastane"));
+        recommendations.add(_buildPembeTaramaWidget("Klinik Meme Muayenesi", "Yılda Bir", "40 Yaş ve Üzeri Kadınlar, Hastane"));
+        recommendations.add(_buildPembeTaramaWidget("Mamografi", "2 Yılda Bir", "40-69 Yaş Kadınlar, KETEM, Hastane"));
       }
     }
-
+    if (age! >= 30 && age! <= 65) {
+      recommendations.add(_buildTaramaWidget("Serviks Kanser Taraması (HPV-DNA (Human Papilloma Virüs-Deoksiribo Nükleik Asit) ve Smear)", "5 Yılda Bir", "30-65 Yaş Kadınlar, KETEM, Hastane"));
+    }
     if (age != null && age! >= 50 && age! <= 70) {
       recommendations.add(_buildTaramaWidget("Kolon Kanser Taraması (GGK (Gaitada Gizli Kan))", "2 Yılda Bir", "50-70 Yaş, KETEM, Aile Hekimliği"));
       recommendations.add(_buildTaramaWidget("Kolon Kanser Taraması (Kolonoskopi)", "10 Yılda Bir", "50-70 Yaş, Hastane"));
@@ -274,31 +393,50 @@ class degerlendirme extends StatelessWidget {
     }
 
     if (isGoingToHajjUmrah) {
-      recommendations.add(_buildAsiWidget("Meningokok Asisı", "Hac/Umreden Yaklaşık 1 Ay Önce", "Toplum Sağlığı Merkezi"));
+      recommendations.add(_buildAsiWidget("Meningokok Aşısı", "Hac/Umreden Yaklaşık 1 Ay Önce", "Toplum Sağlığı Merkezi"));
     }
+
+
+    // Diğer sağlık önerileri...
 
     return recommendations.isEmpty
         ? const Text('Yapmanız gereken bir işlem bulunmamaktadır.', style: TextStyle(color: Colors.blueGrey))
         : Column(children: recommendations);
   }
 
+
+
   Widget _buildAsiWidget(String name, String zaman, String yer) {
     return Card(
-      color: Colors.lightBlue.shade50, // Mavi tonlu kart
+      color: Colors.lightBlue.shade50,
       child: ListTile(
         title: Text(name, style: const TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.bold)),
-        subtitle: Text('Zaman: $zaman\nYer: $yer', style: const TextStyle(color: Colors.blueGrey)),
+        subtitle: Text('Zaman: $zaman\nYer: $yer', style: const TextStyle(color: Colors.blueGrey,fontWeight: FontWeight.bold)),
       ),
     );
   }
 
   Widget _buildTaramaWidget(String name, String zaman, String yer) {
     return Card(
-      color: Colors.lightBlue.shade50, // Mavi tonlu kart
+      color: Colors.lightBlue.shade50,
       child: ListTile(
         title: Text(name, style: const TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.bold)),
-        subtitle: Text('Zaman: $zaman\nYer: $yer', style: const TextStyle(color: Colors.blueGrey)),
+        subtitle: Text('Zaman: $zaman\nYer: $yer', style: const TextStyle(color: Colors.blueGrey,fontWeight: FontWeight.bold)),
+      ),
+    );
+  }
+
+  // Meme ile ilgili taramalar için pembe widget
+  Widget _buildPembeTaramaWidget(String name, String zaman, String yer) {
+    return Card(
+      color: Colors.pink.shade50, // Pembe arka plan
+      child: ListTile(
+        title: Text(name, style: const TextStyle(color: Colors.pink, fontWeight: FontWeight.bold)), // Pembe başlık
+        subtitle: Text('Zaman: $zaman\nYer: $yer', style: const TextStyle(color: Colors.blueGrey,fontWeight: FontWeight.bold)),
       ),
     );
   }
 }
+
+
+

@@ -17,15 +17,28 @@ class _sayfa2State extends State<sayfa2> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Koruyucu Sağlık Hizmetleri'),
-        backgroundColor: Colors.blueAccent, // Mavi tonlu AppBar
+        backgroundColor: Colors.blueAccent,
         centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch, // Buton ve metinleri hizalı gösterir
+        child: ListView( // ListView ile kaydırma özelliği
           children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 15),
+              child: _buildInfoSection(
+                "Kişisel özelliklerinizi girmek için aşağıdaki butona tıklayınız.",
+                "Devam Et",
+                    () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => anasayfa()));
+                },
+                isLarge: true, // "Devam Et" butonu büyük olacak.
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 15),
+              child: const SizedBox(height: 30),
+            ),
             _buildInfoSection(
               "Yakın zamanda kuduz açısından riskli bir temas gerçekleştirdiyseniz tıklayınız.",
               "Kuduz Riskli Temas",
@@ -33,7 +46,10 @@ class _sayfa2State extends State<sayfa2> {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => KuduzTemasi()));
               },
             ),
-            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.only(top: 15),
+              child: const SizedBox(height: 20),
+            ),
             _buildInfoSection(
               "Hiç aşı olmadıysanız aşağıdaki butona tıklayabilirsiniz.",
               "Hiç Aşı Olmadım",
@@ -41,20 +57,15 @@ class _sayfa2State extends State<sayfa2> {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => asi_olmadim()));
               },
             ),
-            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.only(top: 15),
+              child: const SizedBox(height: 20),
+            ),
             _buildInfoSection(
               "KSH hakkında genel bilgi sahibi olmak için",
               "Genel Olarak KSH",
                   () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => DataPage()));
-              },
-            ),
-            const SizedBox(height: 20),
-            _buildInfoSection(
-              "Kişisel özelliklerinizi girmek için aşağıdaki butona tıklayınız.",
-              "Devam Et",
-                  () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => anasayfa()));
               },
             ),
           ],
@@ -64,7 +75,7 @@ class _sayfa2State extends State<sayfa2> {
   }
 
   // Bilgilendirme ve buton yapısını oluşturan widget
-  Widget _buildInfoSection(String text, String buttonText, VoidCallback onPressed) {
+  Widget _buildInfoSection(String text, String buttonText, VoidCallback onPressed, {bool isLarge = false}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -74,18 +85,18 @@ class _sayfa2State extends State<sayfa2> {
           style: const TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w800,
-            color: Colors.blueGrey, // Metin rengi olarak mavinin daha yumuşak bir tonu
+            color: Colors.blueGrey,
           ),
         ),
         const SizedBox(height: 10),
         SizedBox(
-          height: 50,
+          height: isLarge ? 70 : 50, // "Devam Et" butonunu diğerlerinden büyük yapıyoruz
           child: ElevatedButton(
             onPressed: onPressed,
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blueAccent, // Butonun arka planı mavi tonlu
+              backgroundColor: Colors.blueAccent,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12), // Buton köşeleri yuvarlatıldı
+                borderRadius: BorderRadius.circular(12),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             ),
@@ -93,7 +104,7 @@ class _sayfa2State extends State<sayfa2> {
               buttonText,
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 16,
+                fontSize: 18, // "Devam Et" butonunda yazı boyutu da büyük olacak
                 fontWeight: FontWeight.bold,
               ),
             ),

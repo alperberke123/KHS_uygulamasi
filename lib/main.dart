@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         primarySwatch: Colors.blue, // Genel tema rengi
       ),
+
       home: const BilgilendirmeSayfasi(),
     );
   }
@@ -435,11 +436,14 @@ class _BilgilendirmeSayfasiState extends State<BilgilendirmeSayfasi> {
           double screenWidth = MediaQuery.of(context).size.width;
           double titleFontSize = screenWidth * 0.06;
 
+          // Meme kanseri pop-up'ları için pembe arka plan rengi belirle
+          bool isBreastCancerRelated = title.contains("Meme Kanseri") || title.contains("Meme Sağlığı");
+
           return Dialog(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20.0),
             ),
-            backgroundColor: Colors.white,
+            backgroundColor: isBreastCancerRelated ? Colors.pinkAccent : Colors.white, // Pembe arka plan
             child: Container(
               padding: const EdgeInsets.all(20.0),
               child: Column(
@@ -456,7 +460,7 @@ class _BilgilendirmeSayfasiState extends State<BilgilendirmeSayfasi> {
                           style: TextStyle(
                             fontSize: titleFontSize,
                             fontWeight: FontWeight.bold,
-                            color: Colors.blueAccent,
+                            color: isBreastCancerRelated ? Colors.white : Colors.blueAccent, // Metin rengi
                           ),
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,
@@ -468,21 +472,26 @@ class _BilgilendirmeSayfasiState extends State<BilgilendirmeSayfasi> {
                   const SizedBox(height: 20),
                   Text(
                     message,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 18,
-                      color: Colors.black54,
+                      color: isBreastCancerRelated ? Colors.white : Colors.black54, // Metin rengi
                     ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue, // Mavi buton
+                      backgroundColor: isBreastCancerRelated ? Colors.white : Colors.blue, // Pembe pop-up'ta beyaz buton
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                     ),
-                    child: const Text("Kapat", style: TextStyle(color: Colors.white)),
+                    child: Text(
+                      "Kapat",
+                      style: TextStyle(
+                        color: isBreastCancerRelated ? Colors.pinkAccent : Colors.white, // Buton yazı rengi
+                      ),
+                    ),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
@@ -495,6 +504,7 @@ class _BilgilendirmeSayfasiState extends State<BilgilendirmeSayfasi> {
       );
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
