@@ -9,6 +9,7 @@ class degerlendirme extends StatelessWidget {
   final bool isPregnant;
   final double? height;
   final double? weight;
+  final double? headCircumference;
   final bool isGoingToHajjUmrah;
   final bool isGoingToMilitary;
   final bool isGoingToTravel;
@@ -24,6 +25,7 @@ class degerlendirme extends StatelessWidget {
     required this.isPregnant,
     this.height,
     this.weight,
+    this.headCircumference,
     required this.isGoingToHajjUmrah,
     required this.isGoingToMilitary,
     required this.isGoingToTravel,
@@ -50,6 +52,216 @@ class degerlendirme extends StatelessWidget {
       return "Çok yüksek bağımlılık";
     }
   }
+  // Kız çocuklar için kilo persentil tablosu (3 ay - 18 yaş)
+  final List<List<double>> girlWeightTable = [
+    [3.01, 3.29, 3.58, 3.88, 4.10, 4.35],  // 0 ay (doğum)
+    [4.19, 4.45, 4.72, 5.00, 5.24, 5.55],  // 3 ay
+    [5.97, 6.28, 6.61, 6.96, 7.28, 7.61],  // 6 ay
+    [7.72, 8.09, 8.47, 8.87, 9.24, 9.65],  // 9 ay
+    [8.86, 9.23, 9.61, 10.02, 10.39, 10.81], // 12 ay
+    [10.79, 11.24, 11.74, 12.22, 12.74, 13.22],  // 18 ay
+    [10.99, 11.44, 11.94, 12.49, 13.03, 13.51],  // 24 ay
+    [12.06, 13.12, 14.25, 15.33, 16.47, 17.66],  // 30 ay
+    [13.05, 14.18, 15.37, 16.51, 17.72, 18.93],  // 36 ay (3 yaş)
+    [13.79, 15.01, 16.25, 17.45, 18.7, 19.91],   // 3.5 yaş
+    [14.5, 16.0, 17.35, 18.5, 19.75, 20.95],     // 4 yaş
+    [16.0, 17.3, 18.75, 19.9, 21.25, 22.4],      // 4.5 yaş
+    [17.7, 19.5, 21.6, 22.9, 24.3, 26.1],        // 5 yaş
+    [19.0, 21.5, 23.5, 25.5, 27.5, 29.5],        // 6 yaş
+    [20.9, 23.5, 25.9, 28.3, 30.7, 33.1],        // 7 yaş
+    [23.3, 26.2, 28.9, 31.6, 34.3, 36.9],        // 8 yaş
+    [25.5, 28.5, 31.4, 34.4, 37.4, 40.3],        // 9 yaş
+    [28.2, 31.4, 34.6, 37.8, 41.0, 44.1],        // 10 yaş
+    [31.3, 34.8, 38.3, 41.8, 45.3, 48.7],        // 11 yaş
+    [35.4, 39.3, 43.0, 46.7, 50.5, 54.2],        // 12 yaş
+    [40.2, 44.5, 48.5, 52.4, 56.5, 60.4],        // 13 yaş
+    [45.8, 50.2, 54.7, 59.2, 63.8, 68.2],        // 14 yaş
+    [52.0, 56.8, 61.7, 66.4, 71.0, 75.5],        // 15 yaş
+    [57.8, 62.9, 68.3, 73.4, 78.6, 83.7],        // 16 yaş
+    [62.3, 67.6, 73.2, 78.5, 83.9, 89.2],        // 17 yaş
+    [66.1, 71.6, 77.4, 83.0, 88.5, 94.0],        // 18 yaş
+  ];
+
+  // Erkek çocuklar için kilo persentil tablosu (3 ay - 18 yaş)
+  final List<List<double>> boyWeightTable = [
+    [2.58, 2.85, 3.13, 3.43, 3.73, 4.03],  // 0 ay (doğum)
+    [3.23, 3.47, 3.70, 3.95, 4.18, 4.47],  // 3 ay
+    [5.74, 6.09, 6.44, 6.81, 7.18, 7.56],  // 6 ay
+    [7.63, 8.05, 8.50, 8.97, 9.44, 9.87],  // 9 ay
+    [8.77, 9.24, 9.74, 10.24, 10.73, 11.22], // 12 ay
+    [10.78, 11.45, 12.15, 12.88, 13.6, 14.31], // 18 ay
+    [10.81, 11.87, 12.92, 13.95, 15.06, 16.17], // 24 ay
+    [12.71, 13.80, 15.04, 16.29, 17.69, 18.97], // 30 ay
+    [13.0, 14.8, 15.37, 16.52, 17.72, 18.93],   // 36 ay (3 yaş)
+    [14.45, 15.5, 16.75, 17.9, 19.25, 20.4],    // 3.5 yaş
+    [15.35, 17.5, 18.5, 19.75, 21.0, 22.2],     // 4 yaş
+    [16.5, 18.1, 19.5, 20.75, 22.3, 23.6],      // 4.5 yaş
+    [18.1, 19.95, 21.6, 23.3, 25.2, 27.0],      // 5 yaş
+    [19.7, 21.9, 23.9, 25.9, 28.0, 30.0],       // 6 yaş
+    [21.2, 23.5, 25.7, 28.0, 30.3, 32.5],       // 7 yaş
+    [23.0, 25.5, 28.0, 30.5, 33.0, 35.4],       // 8 yaş
+    [25.0, 27.7, 30.3, 32.9, 35.5, 38.1],       // 9 yaş
+    [27.5, 30.8, 33.6, 36.4, 39.3, 42.0],       // 10 yaş
+    [30.8, 34.3, 37.5, 40.7, 44.0, 47.2],       // 11 yaş
+    [34.8, 38.4, 41.9, 45.6, 49.3, 53.0],       // 12 yaş
+    [39.5, 43.3, 47.3, 51.4, 55.5, 59.7],       // 13 yaş
+    [45.0, 49.1, 53.5, 57.9, 62.3, 66.7],       // 14 yaş
+    [51.0, 55.5, 60.5, 65.5, 70.6, 75.6],       // 15 yaş
+    [56.0, 60.5, 64.5, 68.6, 72.6, 76.5],       // 16 yaş
+    [60.0, 64.6, 68.8, 73.1, 77.3, 81.5],       // 17 yaş
+    [63.7, 68.3, 72.7, 77.0, 81.4, 85.8],       // 18 yaş
+  ];
+
+  // Kız çocuklar için boy persentil tablosu (3 ay - 18 yaş)
+  final List<List<double>> girlHeightTable = [
+    [45.6, 48.1, 49.3, 50.5, 51.7, 53.0],  // 0 ay (doğum)
+    [55.6, 58.1, 59.3, 60.5, 61.7, 63.0],  // 3 ay
+    [61.2, 63.5, 64.8, 66.1, 67.4, 68.8],  // 6 ay
+    [67.8, 70.0, 71.4, 72.8, 74.2, 75.5],  // 9 ay
+    [72.5, 75.0, 76.5, 78.0, 79.5, 81.0],  // 12 ay
+    [77.5, 80.0, 81.6, 83.2, 84.8, 86.4],  // 18 ay
+    [79.0, 81.5, 83.2, 84.8, 86.4, 88.0],  // 24 ay
+    [89.0, 91.0, 92.5, 94.0, 95.5, 97.0],  // 36 ay (3 yaş)
+    [96.0, 98.5, 100.0, 101.5, 103.0, 104.5], // 3.5 yaş
+    [102.0, 105.0, 106.5, 108.0, 109.5, 111.0], // 4 yaş
+    [107.0, 110.0, 111.5, 113.0, 114.5, 116.0], // 4.5 yaş
+    [112.0, 115.0, 116.5, 118.0, 119.5, 121.0], // 5 yaş
+    [117.0, 120.0, 121.5, 123.0, 124.5, 126.0], // 6 yaş
+    [122.0, 125.0, 126.5, 128.0, 129.5, 131.0], // 7 yaş
+    [126.5, 129.5, 131.0, 132.5, 134.0, 135.5], // 8 yaş
+    [131.0, 134.0, 135.5, 137.0, 138.5, 140.0], // 9 yaş
+    [135.5, 138.5, 140.0, 141.5, 143.0, 144.5], // 10 yaş
+    [140.0, 143.0, 144.5, 146.0, 147.5, 149.0], // 11 yaş
+    [145.0, 148.0, 149.5, 151.0, 152.5, 154.0], // 12 yaş
+    [150.5, 153.5, 155.0, 156.5, 158.0, 159.5], // 13 yaş
+    [155.5, 158.5, 160.0, 161.5, 163.0, 164.5], // 14 yaş
+    [160.0, 163.0, 164.5, 166.0, 167.5, 169.0], // 15 yaş
+    [164.5, 167.5, 169.0, 170.5, 172.0, 173.5], // 16 yaş
+    [168.5, 171.5, 173.0, 174.5, 176.0, 177.5], // 17 yaş
+    [171.5, 174.5, 176.0, 177.5, 179.0, 180.5], // 18 yaş
+  ];
+
+  // Erkek çocuklar için boy persentil tablosu (3 ay - 18 yaş)
+  final List<List<double>> boyHeightTable = [
+    [46.1, 48.5, 49.7, 50.9, 52.1, 53.4],  // 0 ay (doğum)
+    [56.2, 58.6, 59.9, 61.2, 62.5, 63.8],  // 3 ay
+    [61.2, 63.5, 64.8, 66.1, 67.4, 68.8],  // 6 ay
+    [67.8, 70.0, 71.4, 72.8, 74.2, 75.5],  // 9 ay
+    [73.0, 75.5, 77.0, 78.5, 80.0, 81.5],  // 12 ay
+    [77.8, 80.5, 82.1, 83.8, 85.4, 87.0],  // 18 ay
+    [79.0, 81.5, 83.2, 84.8, 86.4, 88.0],  // 24 ay
+    [90.0, 92.0, 93.5, 95.0, 96.5, 98.0],  // 36 ay (3 yaş)
+    [96.0, 98.5, 100.0, 101.5, 103.0, 104.5], // 3.5 yaş
+    [102.0, 105.0, 106.5, 108.0, 109.5, 111.0], // 4 yaş
+    [107.0, 110.0, 111.5, 113.0, 114.5, 116.0], // 4.5 yaş
+    [112.0, 115.0, 116.5, 118.0, 119.5, 121.0], // 5 yaş
+    [117.0, 120.0, 121.5, 123.0, 124.5, 126.0], // 6 yaş
+    [122.0, 125.0, 126.5, 128.0, 129.5, 131.0], // 7 yaş
+    [126.5, 129.5, 131.0, 132.5, 134.0, 135.5], // 8 yaş
+    [131.0, 134.0, 135.5, 137.0, 138.5, 140.0], // 9 yaş
+    [135.5, 138.5, 140.0, 141.5, 143.0, 144.5], // 10 yaş
+    [140.0, 143.0, 144.5, 146.0, 147.5, 149.0], // 11 yaş
+    [145.0, 148.0, 149.5, 151.0, 152.5, 154.0], // 12 yaş
+    [150.5, 153.5, 155.0, 156.5, 158.0, 159.5], // 13 yaş
+    [155.5, 158.5, 160.0, 161.5, 163.0, 164.5], // 14 yaş
+    [160.0, 163.0, 164.5, 166.0, 167.5, 169.0], // 15 yaş
+    [164.5, 167.5, 169.0, 170.5, 172.0, 173.5], // 16 yaş
+    [168.5, 171.5, 173.0, 174.5, 176.0, 177.5], // 17 yaş
+    [171.5, 174.5, 176.0, 177.5, 179.0, 180.5], // 18 yaş
+  ];
+
+  // Kız ve erkek çocuklar için baş çevresi tabloları
+  final List<List<double>> girlHeadCircumferenceTable = [
+    [31.0, 33.5, 34.7, 36.0, 37.2, 38.5], // 0 ay
+    [37.5, 40.0, 41.2, 42.5, 43.7, 45.0], // 6 ay
+    [45.5, 47.0, 48.0, 49.0, 50.0, 51.0], // 12 ay
+    [49.5, 51.0, 52.0, 53.0, 54.0, 55.0], // 24 ay
+  ];
+
+  final List<List<double>> boyHeadCircumferenceTable = [
+    [31.5, 34.0, 35.2, 36.5, 37.7, 39.0], // 0 ay
+    [38.0, 40.5, 41.7, 43.0, 44.2, 45.5], // 6 ay
+    [46.0, 47.5, 48.5, 49.5, 50.5, 51.5], // 12 ay
+    [50.0, 51.5, 52.5, 53.5, 54.5, 55.5], // 24 ay
+  ];
+  // Verilen değerin hangi persentilde olduğunu bulan fonksiyon
+  double calculatePercentile(double value, List<double> percentiles) {
+    for (int i = 0; i < percentiles.length; i++) {
+      if (value < percentiles[i]) {
+        return (i + 1) * 10.0; // Persentil dilimi
+      }
+    }
+    return 97.0; // En üst persentil
+  }
+
+  // Cinsiyet ve yaşa göre tablo seçimi ve persentil hesaplaması
+  String calculateWeightPercentile() {
+    List<List<double>> selectedTable;
+
+    // Cinsiyet ve yaşa göre tabloyu seç
+    if (gender == 'Kız') {
+      selectedTable = girlWeightTable;
+    } else {
+      selectedTable = boyWeightTable;
+    }
+
+    // Yaşa göre tabloyu alıyoruz (örnek: 3 yaş = selectedTable[4])
+    int index = ageInMonths != null
+        ? (ageInMonths! ~/ 12) // Ay cinsinden yaşları yıl cinsine çeviriyoruz
+        : age != null ? age! - 1 : 0;
+
+    if (index < selectedTable.length && weight != null) {
+      double percentile = calculatePercentile(weight!, selectedTable[index]);
+      return '$percentile. persentil';
+    }
+    return 'Veri yetersiz';
+  }
+
+  // Boy persentil hesaplaması
+  String calculateHeightPercentile() {
+    List<List<double>> selectedTable;
+
+    // Cinsiyet ve yaşa göre tabloyu seç
+    if (gender == 'Kız') {
+      selectedTable = girlHeightTable;
+    } else {
+      selectedTable = boyHeightTable;
+    }
+
+    // Yaşa göre tabloyu alıyoruz (örnek: 3 yaş = selectedTable[4])
+    int index = ageInMonths != null
+        ? (ageInMonths! ~/ 12)
+        : age != null ? age! - 1 : 0;
+
+    if (index < selectedTable.length && height != null) {
+      double percentile = calculatePercentile(height!, selectedTable[index]);
+      return '$percentile. persentil';
+    }
+    return 'Veri yetersiz';
+  }
+
+  // Baş çevresi persentil hesaplaması
+  String calculateHeadCircumferencePercentile() {
+    List<List<double>> selectedTable;
+
+    // Cinsiyet ve yaşa göre tabloyu seç
+    if (gender == 'Kız') {
+      selectedTable = girlHeadCircumferenceTable;
+    } else {
+      selectedTable = boyHeadCircumferenceTable;
+    }
+
+    // Yaşa göre tabloyu alıyoruz
+    int index = ageInMonths != null
+        ? (ageInMonths! ~/ 12)
+        : age != null ? age! - 1 : 0;
+
+    if (index < selectedTable.length && headCircumference != null) {
+      double percentile = calculatePercentile(headCircumference!, selectedTable[index]);
+      return '$percentile. persentil';
+    }
+    return 'Veri yetersiz';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +283,24 @@ class degerlendirme extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
+
+            if (isBaby && ageInMonths != null) ...[
+              Text('Ay olarak yaş: $ageInMonths ay', style: _infoTextStyle()),
+              if (height != null)
+                Text('Boy Persentili: ${calculatePercentile(height!, [45, 50, 55, 60, 65, 70])}%', style: _infoTextStyle()),
+              if (weight != null)
+                Text('Kilo Persentili: ${calculatePercentile(weight!, [2.5, 3.0, 3.5, 4.0, 4.5])}%', style: _infoTextStyle()),
+              if (headCircumference != null)
+                Text('Baş Çevresi Persentili: ${calculatePercentile(headCircumference!, [32, 33, 34, 35, 36])}%', style: _infoTextStyle()),
+            ],
+
+            if (!isBaby && age != null && age! <= 18) ...[
+              Text('Yaş: $age', style: _infoTextStyle()),
+              if (height != null)
+                Text('Boy Persentili: ${calculatePercentile(height!, [120, 130, 140, 150, 160, 170])}%', style: _infoTextStyle()),
+              if (weight != null)
+                Text('Kilo Persentili: ${calculatePercentile(weight!, [20, 25, 30, 35, 40, 45])}%', style: _infoTextStyle()),
+            ],
 
             // Yaş ve Ay olarak yaş (Bebek veya Yetişkin kontrolü)
             if (!isBaby && age != null)
@@ -119,19 +349,22 @@ class degerlendirme extends StatelessWidget {
             // Sigara bağımlılığı testi sonucu
             const SizedBox(height: 20),
             const Divider(color: Colors.blueAccent),
-            const Text(
-              'Sigara Bağımlılık Düzeyi:',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.blueAccent,
+            // Eğer smokingScore 0 ise, sigara bağımlılık düzeyi ile ilgili bilgileri gösterme
+            if (smokingScore > 0) ...[
+              const Text(
+                'Sigara Bağımlılık Düzeyi:',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blueAccent,
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              getSmokingDependencyLevel(),
-              style: _infoTextStyle(),
-            ),
+              const SizedBox(height: 10),
+              Text(
+                getSmokingDependencyLevel(),
+                style: _infoTextStyle(),
+              ),
+            ],
 
             if (profession != null && profession!.toLowerCase() == 'sağlık çalışanı') ...[
               const SizedBox(height: 20),
@@ -195,7 +428,7 @@ class degerlendirme extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             _getHealthRecommendations(),
-            if (height != null && weight != null && ageInMonths == null) ...[
+            if (height != null && weight != null &&  ageInMonths ==null   ) ...[
               const SizedBox(height: 20),
               const Divider(color: Colors.blueAccent),
               const Text(

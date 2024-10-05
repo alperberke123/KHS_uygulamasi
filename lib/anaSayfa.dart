@@ -13,6 +13,7 @@ class _anasayfaState extends State<anasayfa> {
   String? _name;
   String? _gender;
   bool _isPregnant = false;
+  double? _headCircumference;
   double? _height;
   double? _weight;
   bool _isGoingToHajjUmrah = false;
@@ -74,22 +75,74 @@ class _anasayfaState extends State<anasayfa> {
                 },
               ),
               if (_isBaby)
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Ay olarak yaş',
-                    labelStyle: TextStyle(color: Colors.blueGrey),
+                ...[
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'Ay olarak yaş',
+                      labelStyle: TextStyle(color: Colors.blueGrey),
+                    ),
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || int.tryParse(value) == null) {
+                        return 'Lütfen geçerli bir ay giriniz';
+                      } else if (int.tryParse(value)! > 24) {
+                        return 'Lütfen 0 ile 24 arasında bir ay giriniz'; // 24 ay sınırını doğruluyoruz.
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _ageInMonths = int.tryParse(value!);
+                    },
                   ),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || int.tryParse(value) == null) {
-                      return 'Lütfen geçerli bir ay giriniz';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    _ageInMonths = int.tryParse(value!);
-                  },
-                ),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'Boy (cm)',
+                      labelStyle: TextStyle(color: Colors.blueGrey),
+                    ),
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || double.tryParse(value) == null) {
+                        return 'Lütfen geçerli bir boy giriniz';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _height = double.tryParse(value!);
+                    },
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'Kilo (kg)',
+                      labelStyle: TextStyle(color: Colors.blueGrey),
+                    ),
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || double.tryParse(value) == null) {
+                        return 'Lütfen geçerli bir kilo giriniz';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _weight = double.tryParse(value!);
+                    },
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'Baş Çevresi (cm)',
+                      labelStyle: TextStyle(color: Colors.blueGrey),
+                    ),
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || double.tryParse(value) == null) {
+                        return 'Lütfen geçerli bir baş çevresi giriniz';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _headCircumference = double.tryParse(value!);
+                    },
+                  ),
+                ],
               if (!_isBaby)
                 TextFormField(
                   decoration: const InputDecoration(
@@ -225,30 +278,31 @@ class _anasayfaState extends State<anasayfa> {
                 },
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () async {
-                  final score = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SigaraSorulariEkrani(),
+              if (!_isBaby) // Eğer bebek değilse sigara bağımlılığı testi butonu gösterilsin
+                ElevatedButton(
+                  onPressed: () async {
+                    final score = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SigaraSorulariEkrani(),
+                      ),
+                    );
+                    setState(() {
+                      _smokingScore = score ?? 0;
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.redAccent,
+                    padding: const EdgeInsets.symmetric(vertical: 15.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                  );
-                  setState(() {
-                    _smokingScore = score ?? 0;
-                  });
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.redAccent,
-                  padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Text(
+                    'Sigara Bağımlılığı Testi',
+                    style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ),
-                child: const Text(
-                  'Sigara Bağımlılığı Testi',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                ),
-              ),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
@@ -264,6 +318,7 @@ class _anasayfaState extends State<anasayfa> {
                           isBaby: _isBaby,
                           gender: _gender!,
                           isPregnant: _isPregnant,
+                          headCircumference: _headCircumference,
                           height: _height,
                           weight: _weight,
                           isGoingToHajjUmrah: _isGoingToHajjUmrah,
