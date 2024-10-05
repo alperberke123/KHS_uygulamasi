@@ -10,31 +10,24 @@ class anasayfa extends StatefulWidget {
 class _anasayfaState extends State<anasayfa> {
   final _formKey = GlobalKey<FormState>();
 
-  // Form verileri
   String? _name;
   String? _gender;
   bool _isPregnant = false;
   double? _height;
   double? _weight;
   bool _isGoingToHajjUmrah = false;
-  bool _isGoingToMilitary = false; // Askerlik seçimi
-  bool _isGoingToTravel = false; // Seyahat seçimi
+  bool _isGoingToMilitary = false;
+  bool _isGoingToTravel = false;
   String? _profession;
-
-  // Sigara bağımlılığı puanı
   int _smokingScore = 0;
-
-  // Yaş ve 0-2 yaş bebek seçimi
   bool _isBaby = false;
-  int? _ageInMonths; // Ay cinsinden yaş
-  int? _age; // Yaş, ay girilmezse bu kullanılacak
+  int? _ageInMonths;
+  int? _age;
 
-  // Kadın ve 15 yaşından büyükse hamilelik durumu sorulacak
   bool get showPregnancyField {
     return _gender == 'Kadın' && (_age != null && _age! >= 15);
   }
 
-  // 18 yaşından büyük erkekler için askerlik durumu gösterilecek
   bool get showMilitaryField {
     return _gender == 'Erkek' && (_age != null && _age! >= 18);
   }
@@ -57,7 +50,7 @@ class _anasayfaState extends State<anasayfa> {
                   labelText: 'İsim Soyisim',
                   labelStyle: TextStyle(color: Colors.blueGrey),
                 ),
-                keyboardType: TextInputType.text,  // Genel metin girişi için
+                keyboardType: TextInputType.text,
                 textCapitalization: TextCapitalization.sentences,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -76,7 +69,7 @@ class _anasayfaState extends State<anasayfa> {
                 onChanged: (value) {
                   setState(() {
                     _isBaby = value!;
-                    _age = null;  // Eğer bebek seçilirse yaş sıfırlanmalı
+                    _age = null;
                   });
                 },
               ),
@@ -232,8 +225,6 @@ class _anasayfaState extends State<anasayfa> {
                 },
               ),
               const SizedBox(height: 20),
-
-              // Sigara Bağımlılığı Butonu
               ElevatedButton(
                 onPressed: () async {
                   final score = await Navigator.push(
@@ -243,7 +234,7 @@ class _anasayfaState extends State<anasayfa> {
                     ),
                   );
                   setState(() {
-                    _smokingScore = score;
+                    _smokingScore = score ?? 0;
                   });
                 },
                 style: ElevatedButton.styleFrom(
@@ -258,7 +249,6 @@ class _anasayfaState extends State<anasayfa> {
                   style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
               ),
-
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {

@@ -13,7 +13,7 @@ class degerlendirme extends StatelessWidget {
   final bool isGoingToMilitary;
   final bool isGoingToTravel;
   final String? profession;
-  final int? smokingScore; // Sigara bağımlılık puanı
+  final int smokingScore;
 
   degerlendirme({
     required this.name,
@@ -28,7 +28,7 @@ class degerlendirme extends StatelessWidget {
     required this.isGoingToMilitary,
     required this.isGoingToTravel,
     this.profession,
-    this.smokingScore, // Puanı alıyoruz
+    required this.smokingScore,
   });
 
   String capitalizeFirstLetter(String name) {
@@ -38,15 +38,13 @@ class degerlendirme extends StatelessWidget {
 
   // Sigara bağımlılığı seviyesini hesaplama
   String getSmokingDependencyLevel() {
-    if (smokingScore == null) return "Sigara bağımlılığı bilgisi yok.";
-
-    if (smokingScore! <= 2) {
+    if (smokingScore <= 2) {
       return "Çok az bağımlılık";
-    } else if (smokingScore! == 3 || smokingScore! == 4) {
+    } else if (smokingScore == 3 || smokingScore == 4) {
       return "Az bağımlılık";
-    } else if (smokingScore! == 5) {
+    } else if (smokingScore == 5) {
       return "Orta derecede bağımlı";
-    } else if (smokingScore! == 6 || smokingScore! == 7) {
+    } else if (smokingScore == 6 || smokingScore == 7) {
       return "Yüksek bağımlılık";
     } else {
       return "Çok yüksek bağımlılık";
@@ -73,37 +71,68 @@ class degerlendirme extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            if (!isBaby) Text('Yaş: $age', style: _infoTextStyle()),
-            if (isBaby) Text('Ay olarak yaş: $ageInMonths ay', style: _infoTextStyle()),
+
+            // Yaş ve Ay olarak yaş (Bebek veya Yetişkin kontrolü)
+            if (!isBaby && age != null)
+              Text('Yaş: $age', style: _infoTextStyle()),
+
+            if (isBaby && ageInMonths != null)
+              Text('Ay olarak yaş: $ageInMonths ay', style: _infoTextStyle()),
+
+            // Eğer hem age hem de ageInMonths null ise uyarı göster
+            if ((isBaby && ageInMonths == null) || (!isBaby && age == null))
+              const Text('Yaş bilgisi eksik', style: TextStyle(color: Colors.redAccent)),
+
+            // Cinsiyet
             Text('Cinsiyet: $gender', style: _infoTextStyle()),
-            if (gender == 'Kadın' && isPregnant) Text('Gebelik Durumu: Evet', style: _infoTextStyle()),
-            if (!isBaby && height != null) Text('Boy: ${height?.toStringAsFixed(1)} cm', style: _infoTextStyle()),
-            if (!isBaby && weight != null) Text('Kilo: ${weight?.toStringAsFixed(1)} kg', style: _infoTextStyle()),
-            if (isGoingToHajjUmrah) Text('Hac/Umre: Gidecek', style: _infoTextStyle()),
-            if (isGoingToMilitary) Text('Askerlik: Aşı Gerekli', style: _infoTextStyle()),
-            if (isGoingToTravel) Text('Seyahat: Aşı Gerekli', style: _infoTextStyle()),
-            if (!isBaby && profession != 'Ev hanımı') Text('Meslek: $profession', style: _infoTextStyle()),
+
+            // Hamilelik durumu kontrolü
+            if (gender == 'Kadın' && isPregnant)
+              Text('Gebelik Durumu: Evet', style: _infoTextStyle()),
+
+            // Boy ve kilo kontrolleri
+            if (!isBaby && height != null)
+              Text('Boy: ${height?.toStringAsFixed(1)} cm', style: _infoTextStyle()),
+
+            if (!isBaby && height == null)
+              const Text('Boy bilgisi eksik', style: TextStyle(color: Colors.redAccent)),
+
+            if (!isBaby && weight != null)
+              Text('Kilo: ${weight?.toStringAsFixed(1)} kg', style: _infoTextStyle()),
+
+            if (!isBaby && weight == null)
+              const Text('Kilo bilgisi eksik', style: TextStyle(color: Colors.redAccent)),
+
+            // Diğer bilgiler
+            if (isGoingToHajjUmrah)
+              Text('Hac/Umre: Gidecek', style: _infoTextStyle()),
+
+            if (isGoingToMilitary)
+              Text('Askerlik: Aşı Gerekli', style: _infoTextStyle()),
+
+            if (isGoingToTravel)
+              Text('Seyahat: Aşı Gerekli', style: _infoTextStyle()),
+
+            if (!isBaby && profession != 'Ev hanımı' && profession != null)
+              Text('Meslek: $profession', style: _infoTextStyle()),
 
             // Sigara bağımlılığı testi sonucu
-            if (smokingScore != null) ...[
-              const SizedBox(height: 20),
-              const Divider(color: Colors.blueAccent),
-              const Text(
-                'Sigara Bağımlılık Düzeyi:',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blueAccent,
-                ),
+            const SizedBox(height: 20),
+            const Divider(color: Colors.blueAccent),
+            const Text(
+              'Sigara Bağımlılık Düzeyi:',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.blueAccent,
               ),
-              const SizedBox(height: 10),
-              Text(
-                getSmokingDependencyLevel(), // Bağımlılık seviyesi
-                style: _infoTextStyle(),
-              ),
-            ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              getSmokingDependencyLevel(),
+              style: _infoTextStyle(),
+            ),
 
-            // Sağlık çalışanı kontrolü
             if (profession != null && profession!.toLowerCase() == 'sağlık çalışanı') ...[
               const SizedBox(height: 20),
               const Divider(color: Colors.blueAccent),
@@ -166,7 +195,7 @@ class degerlendirme extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             _getHealthRecommendations(),
-            if (height != null && weight != null) ...[
+            if (height != null && weight != null && ageInMonths == null) ...[
               const SizedBox(height: 20),
               const Divider(color: Colors.blueAccent),
               const Text(
@@ -192,8 +221,6 @@ class degerlendirme extends StatelessWidget {
       color: Colors.blueGrey,
     );
   }
-
-
 
   Widget _getBMIResult() {
     if (height == null || weight == null) {
@@ -226,7 +253,7 @@ class degerlendirme extends StatelessWidget {
           'BMI (Body Mass Index) Değer Aralıkları:',
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blueAccent),
         ),
-        const SizedBox(height: 5),
+        SizedBox(height: 5),
         _buildBMIRange('Zayıf', '< 18.5 kg/m²', Colors.lightBlue.shade50),
         _buildBMIRange('Normal Kilolu', '18.5 - 24.9 kg/m²', Colors.green.shade100),
         _buildBMIRange('Fazla Kilolu', '25.0 - 29.9 kg/m²', Colors.yellow.shade100),
@@ -248,6 +275,7 @@ class degerlendirme extends StatelessWidget {
       ),
     );
   }
+
   Widget _getHealthRecommendations() {
     List<Widget> recommendations = [];
 
@@ -314,6 +342,7 @@ class degerlendirme extends StatelessWidget {
         recommendations.add(_buildAsiWidget("Hepatit A (2. Doz)", "24. Ayın Sonu", "Aile Hekimliği"));
       }
     }
+
     // Diğer yaşlara göre tarama programları ve aşılar
     if (age != null && age! >= 3 && age! <= 18) {
       recommendations.add(_buildTaramaWidget("Arteriyel Tansiyon Ölçümü", "Yılda En Az 1 Kere", "Aile Hekimliği, Hastane"));
@@ -362,7 +391,8 @@ class degerlendirme extends StatelessWidget {
         recommendations.add(_buildPembeTaramaWidget("Mamografi", "2 Yılda Bir", "40-69 Yaş Kadınlar, KETEM, Hastane"));
       }
     }
-    if (age! >= 30 && age! <= 65) {
+
+    if (age != null && age! >= 30 && age! <= 65) {
       recommendations.add(_buildTaramaWidget("Serviks Kanser Taraması (HPV-DNA (Human Papilloma Virüs-Deoksiribo Nükleik Asit) ve Smear)", "5 Yılda Bir", "30-65 Yaş Kadınlar, KETEM, Hastane"));
     }
     if (age != null && age! >= 50 && age! <= 70) {
@@ -396,22 +426,17 @@ class degerlendirme extends StatelessWidget {
       recommendations.add(_buildAsiWidget("Meningokok Aşısı", "Hac/Umreden Yaklaşık 1 Ay Önce", "Toplum Sağlığı Merkezi"));
     }
 
-
-    // Diğer sağlık önerileri...
-
     return recommendations.isEmpty
         ? const Text('Yapmanız gereken bir işlem bulunmamaktadır.', style: TextStyle(color: Colors.blueGrey))
         : Column(children: recommendations);
   }
-
-
 
   Widget _buildAsiWidget(String name, String zaman, String yer) {
     return Card(
       color: Colors.lightBlue.shade50,
       child: ListTile(
         title: Text(name, style: const TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.bold)),
-        subtitle: Text('Zaman: $zaman\nYer: $yer', style: const TextStyle(color: Colors.blueGrey,fontWeight: FontWeight.bold)),
+        subtitle: Text('Zaman: $zaman\nYer: $yer', style: const TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold)),
       ),
     );
   }
@@ -421,7 +446,7 @@ class degerlendirme extends StatelessWidget {
       color: Colors.lightBlue.shade50,
       child: ListTile(
         title: Text(name, style: const TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.bold)),
-        subtitle: Text('Zaman: $zaman\nYer: $yer', style: const TextStyle(color: Colors.blueGrey,fontWeight: FontWeight.bold)),
+        subtitle: Text('Zaman: $zaman\nYer: $yer', style: const TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold)),
       ),
     );
   }
@@ -432,11 +457,8 @@ class degerlendirme extends StatelessWidget {
       color: Colors.pink.shade50, // Pembe arka plan
       child: ListTile(
         title: Text(name, style: const TextStyle(color: Colors.pink, fontWeight: FontWeight.bold)), // Pembe başlık
-        subtitle: Text('Zaman: $zaman\nYer: $yer', style: const TextStyle(color: Colors.blueGrey,fontWeight: FontWeight.bold)),
+        subtitle: Text('Zaman: $zaman\nYer: $yer', style: const TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold)),
       ),
     );
   }
 }
-
-
-
