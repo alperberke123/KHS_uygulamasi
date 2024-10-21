@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ksh_uygulamasi/sigara_sorulari.dart';
 import 'package:ksh_uygulamasi/sonuc_ekrani.dart';
 
 class anasayfa extends StatefulWidget {
@@ -70,7 +69,14 @@ class _anasayfaState extends State<anasayfa> {
                 onChanged: (value) {
                   setState(() {
                     _isBaby = value!;
-                    _age = null;
+                    if (_isBaby) {
+                      _age = null;
+                      _headCircumference = null;
+                    } else {
+                      _ageInMonths = null;
+                    }
+                    _height = null;
+                    _weight = null;
                   });
                 },
               ),
@@ -86,7 +92,7 @@ class _anasayfaState extends State<anasayfa> {
                       if (value == null || int.tryParse(value) == null) {
                         return 'Lütfen geçerli bir ay giriniz';
                       } else if (int.tryParse(value)! > 24) {
-                        return 'Lütfen 0 ile 24 arasında bir ay giriniz'; // 24 ay sınırını doğruluyoruz.
+                        return 'Lütfen 0 ile 24 arasında bir ay giriniz';
                       }
                       return null;
                     },
@@ -151,9 +157,7 @@ class _anasayfaState extends State<anasayfa> {
                   ),
                   keyboardType: TextInputType.number,
                   validator: (value) {
-                    if (_isBaby) {
-                      return null;
-                    } else if (value == null || int.tryParse(value) == null) {
+                    if (value == null || int.tryParse(value) == null) {
                       return 'Lütfen geçerli bir yaş giriniz';
                     }
                     return null;
@@ -278,32 +282,6 @@ class _anasayfaState extends State<anasayfa> {
                 },
               ),
               const SizedBox(height: 20),
-              if (!_isBaby) // Eğer bebek değilse sigara bağımlılığı testi butonu gösterilsin
-                ElevatedButton(
-                  onPressed: () async {
-                    final score = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SigaraSorulariEkrani(),
-                      ),
-                    );
-                    setState(() {
-                      _smokingScore = score ?? 0;
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.redAccent,
-                    padding: const EdgeInsets.symmetric(vertical: 15.0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: const Text(
-                    'Sigara Bağımlılığı Testi',
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
-                ),
-              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
@@ -313,19 +291,19 @@ class _anasayfaState extends State<anasayfa> {
                       MaterialPageRoute(
                         builder: (context) => degerlendirme(
                           name: _name!,
-                          age: _age,
-                          ageInMonths: _ageInMonths,
+                          age: _isBaby ? null : _age,
+                          ageInMonths: _isBaby ? _ageInMonths : null,
                           isBaby: _isBaby,
                           gender: _gender!,
                           isPregnant: _isPregnant,
-                          headCircumference: _headCircumference,
+                          headCircumference: _isBaby ? _headCircumference : null,
                           height: _height,
                           weight: _weight,
                           isGoingToHajjUmrah: _isGoingToHajjUmrah,
                           isGoingToMilitary: _isGoingToMilitary,
                           isGoingToTravel: _isGoingToTravel,
                           profession: _profession,
-                          smokingScore: _smokingScore, // Sigara bağımlılığı puanı
+                          smokingScore: _smokingScore,
                         ),
                       ),
                     );

@@ -360,7 +360,7 @@ class degerlendirme extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 10),
-              Text(
+              Text( 
                 getSmokingDependencyLevel(),
                 style: _infoTextStyle(),
               ),
@@ -428,7 +428,7 @@ class degerlendirme extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             _getHealthRecommendations(),
-            if (height != null && weight != null &&  ageInMonths ==null   ) ...[
+            if (height != null && weight != null && ageInMonths == null) ...[
               const SizedBox(height: 20),
               const Divider(color: Colors.blueAccent),
               const Text(
