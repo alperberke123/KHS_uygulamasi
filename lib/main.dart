@@ -522,7 +522,7 @@ class _BilgilendirmeSayfasiState extends State<BilgilendirmeSayfasi> {
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: const Text(
-                "Koruyucu Sağlık Hizmetleri (KSH) uygulaması sağlığınızı korumak "
+                "Sağlığımı Takipteyim uygulaması sağlığınızı korumak "
                     "için kişisel özelliklerinize göre yaşam boyu almanız gereken "
                     "sağlık hizmetleri hakkında bilgilendirmeyi amaçlamaktadır.",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Colors.blueGrey),

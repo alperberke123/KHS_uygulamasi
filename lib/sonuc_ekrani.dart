@@ -15,6 +15,7 @@ class degerlendirme extends StatelessWidget {
   final bool isGoingToTravel;
   final String? profession;
   final int smokingScore;
+  final bool isMarriageApplicant;
 
   degerlendirme({
     required this.name,
@@ -31,6 +32,7 @@ class degerlendirme extends StatelessWidget {
     required this.isGoingToTravel,
     this.profession,
     required this.smokingScore,
+    required this.isMarriageApplicant,
   });
 
   String capitalizeFirstLetter(String name) {
@@ -275,13 +277,15 @@ class degerlendirme extends StatelessWidget {
         child: ListView(
           children: <Widget>[
             Text(
-              'Merhaba, ${capitalizeFirstLetter(name)}!',
+              'Merhaba, ${capitalizeFirstLetter(name)}',
               style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
                 color: Colors.blueAccent,
               ),
             ),
+
+
             const SizedBox(height: 10),
 
             if (isBaby && ageInMonths != null) ...[
@@ -377,6 +381,7 @@ class degerlendirme extends StatelessWidget {
                   color: Colors.blueAccent,
                 ),
               ),
+
               const SizedBox(height: 10),
               _buildAsiWidget(
                   "Erişkin Tip Tetanoz-Difteri (Td)",
@@ -414,7 +419,27 @@ class degerlendirme extends StatelessWidget {
                   "Laboratuvar"
               ),
             ],
-
+            const SizedBox(height: 10),
+            if (isMarriageApplicant) ...[
+              const Divider(color: Colors.blueAccent),
+              const Text(
+                'Evlilik Başvurusu Testleri:',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blueAccent,
+                ),
+              ),
+              const SizedBox(height: 10),
+              _buildTestWidget('HIV enfeksiyonları (AIDS)', 'Anti HIV Testi'),
+              _buildTestWidget('Hepatit B taraması', 'HbsAg Testi'),
+              _buildTestWidget('Hepatit C taraması', 'Anti HCV Testi'),
+              _buildTestWidget('Sfilis (Frengi)', 'VDRL Testi'),
+              _buildTestWidget('Kansızlık Testi', 'Hemogram (Tam Kan Sayımı)'),
+              _buildTestWidget('Kan Uyuşmazlığı Testi', 'Kan Grubu Analizi'),
+              _buildTestWidget('Akdeniz Anemisi (Talasemi)', 'Hemoglobin Elektroforezi Testi'),
+              _buildTestWidget('SMA Tarama Testi', 'SMA Taşıyıcılık Testi'),
+            ],
 
             const SizedBox(height: 20),
             const Divider(color: Colors.blueAccent),
@@ -426,6 +451,64 @@ class degerlendirme extends StatelessWidget {
                 color: Colors.blueAccent,
               ),
             ),
+
+            if (gender == 'Kadın' && isPregnant) ...[
+              const SizedBox(height: 20),
+              const Text(
+                '15-49 Yaş Kadın/Gebe Aşılamaları:',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blueAccent,
+                ),
+              ),
+              _buildVaccineSchedule(
+                'Td 1. Doz',
+                'Gebeliğin 4. ayında - İlk karşılaşmada',
+                'Aile Hekimliği',
+              ),
+              _buildVaccineSchedule(
+                'Td 2. Doz',
+                'Td 1’den en az 4 hafta sonra',
+                'Aile Hekimliği',
+              ),
+              _buildVaccineSchedule(
+                'Td 3. Doz',
+                'Td 2’den en az 6 ay sonra',
+                'Aile Hekimliği',
+              ),
+              _buildVaccineSchedule(
+                'Td 4. Doz',
+                'Td 3’ten en az 1 yıl sonra ya da bir sonraki gebelikte',
+                'Aile Hekimliği',
+              ),
+              _buildVaccineSchedule(
+                'Td 5. Doz',
+                'Td 4’ten en az 1 yıl sonra ya da bir sonraki gebelikte',
+                'Aile Hekimliği ve Gebe İzlem',
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'Gebe İzlem Süreçleri:',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blueAccent,
+                ),
+              ),
+              _buildMonitoringSchedule('İlk 14 hafta içinde'),
+              _buildMonitoringSchedule('18-24. hafta'),
+              _buildMonitoringSchedule('28-32. hafta'),
+              _buildMonitoringSchedule('36-38. hafta'),
+            ],
+            const SizedBox(height: 20),
+            if (gender == 'Kadın' && isPregnant) ...[
+              const Text(
+              'Sağlıklı bir gebelik süreci için düzenli kontrollere devam ediniz.',
+              style: TextStyle(fontSize: 16, color: Colors.blueGrey),
+            ),
+            ],
+
             const SizedBox(height: 10),
             _getHealthRecommendations(),
             if (height != null && weight != null && ageInMonths == null) ...[
@@ -625,7 +708,7 @@ class degerlendirme extends StatelessWidget {
       }
     }
 
-    if (age != null && age! >= 30 && age! <= 65) {
+    if (gender == 'Kadın'&& age != null && age! >= 30 && age! <= 65) {
       recommendations.add(_buildTaramaWidget("Serviks Kanser Taraması (HPV-DNA (Human Papilloma Virüs-Deoksiribo Nükleik Asit) ve Smear)", "5 Yılda Bir", "30-65 Yaş Kadınlar, KETEM, Hastane"));
     }
     if (age != null && age! >= 50 && age! <= 70) {
@@ -695,3 +778,63 @@ class degerlendirme extends StatelessWidget {
     );
   }
 }
+Widget _buildVaccineSchedule(String title, String time, String place) {
+  return Card(
+    color: Colors.lightBlue.shade50,
+    child: ListTile(
+      title: Text(
+        title,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Colors.blueAccent,
+        ),
+      ),
+      subtitle: Text(
+        'Zaman: $time\nYer: $place',
+        style: const TextStyle(
+          color: Colors.blueGrey,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ),
+  );
+}
+
+Widget _buildMonitoringSchedule(String time) {
+  return ListTile(
+    leading: const Icon(
+      Icons.check_circle_outline,
+      color: Colors.blueAccent,
+    ),
+    title: Text(
+      time,
+      style: const TextStyle(
+        fontSize: 16,
+        color: Colors.blueGrey,
+      ),
+    ),
+  );
+}
+Widget _buildTestWidget(String testName, String testDetails) {
+  return Card(
+    color: Colors.lightBlue.shade50,
+    child: ListTile(
+      title: Text(
+        testName,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Colors.blueAccent,
+        ),
+      ),
+      subtitle: Text(
+        testDetails,
+        style: const TextStyle(
+          color: Colors.blueGrey,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ),
+  );
+}
+
+

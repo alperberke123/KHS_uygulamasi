@@ -12,6 +12,7 @@ class _anasayfaState extends State<anasayfa> {
   String? _name;
   String? _gender;
   bool _isPregnant = false;
+  bool _isMarriageApplicant = false;
   double? _headCircumference;
   double? _height;
   double? _weight;
@@ -30,6 +31,9 @@ class _anasayfaState extends State<anasayfa> {
 
   bool get showMilitaryField {
     return _gender == 'Erkek' && (_age != null && _age! >= 18);
+  }
+  bool get showMarriageField {
+    return _age != null && _age! >= 16;
   }
 
   @override
@@ -54,9 +58,9 @@ class _anasayfaState extends State<anasayfa> {
                 textCapitalization: TextCapitalization.sentences,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Lütfen isim soyisim giriniz';
+                    return null;
                   }
-                  return null;
+
                 },
                 onSaved: (value) {
                   _name = value;
@@ -206,6 +210,17 @@ class _anasayfaState extends State<anasayfa> {
                     });
                   },
                 ),
+              if (showMarriageField)
+                CheckboxListTile(
+                  title: const Text('Evlilik başvurunuz var mı?'),
+                  activeColor: Colors.blueAccent,
+                  value: _isMarriageApplicant,
+                  onChanged: (value) {
+                    setState(() {
+                      _isMarriageApplicant = value!;
+                    });
+                  },
+                ),
               if (!_isBaby)
                 TextFormField(
                   decoration: const InputDecoration(
@@ -262,7 +277,7 @@ class _anasayfaState extends State<anasayfa> {
               ),
               if (showMilitaryField)
                 CheckboxListTile(
-                  title: const Text('Askerlik aşısı gerekli mi?'),
+                  title: const Text('Üç ay içinde askere gidecek misiniz ?'),
                   activeColor: Colors.blueAccent,
                   value: _isGoingToMilitary,
                   onChanged: (value) {
@@ -272,7 +287,7 @@ class _anasayfaState extends State<anasayfa> {
                   },
                 ),
               CheckboxListTile(
-                title: const Text('Seyahat için aşı gerekli mi?'),
+                title: const Text('Üç ay içinde yurtdışına seyahate gidecek misiniz ?'),
                 activeColor: Colors.blueAccent,
                 value: _isGoingToTravel,
                 onChanged: (value) {
@@ -286,11 +301,14 @@ class _anasayfaState extends State<anasayfa> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
+
+                    String greetingName = (_name == null || _name!.isEmpty) ? "" : "$_name";
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => degerlendirme(
-                          name: _name!,
+                          name: greetingName,
                           age: _isBaby ? null : _age,
                           ageInMonths: _isBaby ? _ageInMonths : null,
                           isBaby: _isBaby,
@@ -304,6 +322,8 @@ class _anasayfaState extends State<anasayfa> {
                           isGoingToTravel: _isGoingToTravel,
                           profession: _profession,
                           smokingScore: _smokingScore,
+                          isMarriageApplicant:_isMarriageApplicant,
+
                         ),
                       ),
                     );

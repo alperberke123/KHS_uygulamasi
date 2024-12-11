@@ -16,7 +16,7 @@ class _sayfa2State extends State<sayfa2> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Koruyucu Sağlık Hizmetleri'),
+        title: const Text('Sağlığımı Takipteyim'),
         backgroundColor: Colors.blueAccent,
         centerTitle: true,
       ),
