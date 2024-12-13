@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:ksh_uygulamasi/cocuklar_beslenme.dart';
+import 'package:ksh_uygulamasi/depresyon.dart';
+import 'package:ksh_uygulamasi/gebe_beslenme.dart';
+import 'package:ksh_uygulamasi/sigara_sorulari.dart';
+import 'package:ksh_uygulamasi/yasli_beslenme.dart';
+
 
 class degerlendirme extends StatelessWidget {
   final String name;
@@ -16,6 +22,7 @@ class degerlendirme extends StatelessWidget {
   final String? profession;
   final int smokingScore;
   final bool isMarriageApplicant;
+
 
   degerlendirme({
     required this.name,
@@ -364,7 +371,7 @@ class degerlendirme extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 10),
-              Text( 
+              Text(
                 getSmokingDependencyLevel(),
                 style: _infoTextStyle(),
               ),
@@ -440,9 +447,7 @@ class degerlendirme extends StatelessWidget {
               _buildTestWidget('Akdeniz Anemisi (Talasemi)', 'Hemoglobin Elektroforezi Testi'),
               _buildTestWidget('SMA Tarama Testi', 'SMA Taşıyıcılık Testi'),
             ],
-
             const SizedBox(height: 20),
-            const Divider(color: Colors.blueAccent),
             const Text(
               'Yapmanız Gerekenler:',
               style: TextStyle(
@@ -463,27 +468,27 @@ class degerlendirme extends StatelessWidget {
                 ),
               ),
               _buildVaccineSchedule(
-                'Td 1. Doz',
+                'Td 1. Doz (Erişkin Tipi Difteri, Tetanoz)',
                 'Gebeliğin 4. ayında - İlk karşılaşmada',
                 'Aile Hekimliği',
               ),
               _buildVaccineSchedule(
-                'Td 2. Doz',
+                'Td 2. Doz (Erişkin Tipi Difteri, Tetanoz)',
                 'Td 1’den en az 4 hafta sonra',
                 'Aile Hekimliği',
               ),
               _buildVaccineSchedule(
-                'Td 3. Doz',
+                'Td 3. Doz (Erişkin Tipi Difteri, Tetanoz)',
                 'Td 2’den en az 6 ay sonra',
                 'Aile Hekimliği',
               ),
               _buildVaccineSchedule(
-                'Td 4. Doz',
+                'Td 4. Doz (Erişkin Tipi Difteri, Tetanoz)',
                 'Td 3’ten en az 1 yıl sonra ya da bir sonraki gebelikte',
                 'Aile Hekimliği',
               ),
               _buildVaccineSchedule(
-                'Td 5. Doz',
+                'Td 5. Doz (Erişkin Tipi Difteri, Tetanoz)',
                 'Td 4’ten en az 1 yıl sonra ya da bir sonraki gebelikte',
                 'Aile Hekimliği ve Gebe İzlem',
               ),
@@ -509,8 +514,126 @@ class degerlendirme extends StatelessWidget {
             ),
             ],
 
-            const SizedBox(height: 10),
             _getHealthRecommendations(),
+            const SizedBox(height: 10),
+
+            Visibility(
+                visible: isPregnant, // Show button only if pregnant
+                child:ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const GebeBeslenme(),
+                  ),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.pinkAccent,
+                padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: const Text(
+                'Gebe Beslenme Önerileri',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+            ),
+            ),
+            const SizedBox(height: 10),
+            Visibility(
+              visible: age != null && age! > 65, // Show button only if pregnant
+              child:ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const yasliBeslenme(),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueAccent,
+                  padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: const Text(
+                  'Yaşlılarda Beslenme Önerileri',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Visibility(
+              visible: age != null && age! > 2 && age!<6, // Show button only if pregnant
+              child:ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const cocukBeslenme(),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueAccent,
+                  padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: const Text(
+                  'Çocuklarda Beslenme Önerileri',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>  SigaraSorulariEkrani(),
+                  ),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueAccent,
+                padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: const Text(
+                'Sigara Bağımlılık Düzeyi Testleri',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const DepressionQuiz(),
+                  ),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.deepPurpleAccent,
+                padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: const Text(
+                'Depresyon Testi',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+            ),
             if (height != null && weight != null && ageInMonths == null) ...[
               const SizedBox(height: 20),
               const Divider(color: Colors.blueAccent),
@@ -565,16 +688,6 @@ class degerlendirme extends StatelessWidget {
         Text('BMI: ${bmi.toStringAsFixed(1)} kg/m²', style: _infoTextStyle()),
         Text('Durum: $bmiCategory', style: _infoTextStyle()),
         const SizedBox(height: 10),
-        const Text(
-          'BMI (Body Mass Index) Değer Aralıkları:',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blueAccent),
-        ),
-        SizedBox(height: 5),
-        _buildBMIRange('Zayıf', '< 18.5 kg/m²', Colors.lightBlue.shade50),
-        _buildBMIRange('Normal Kilolu', '18.5 - 24.9 kg/m²', Colors.green.shade100),
-        _buildBMIRange('Fazla Kilolu', '25.0 - 29.9 kg/m²', Colors.yellow.shade100),
-        _buildBMIRange('Obez', '30.0 - 39.9 kg/m²', Colors.orange.shade100),
-        _buildBMIRange('İleri Derecede Obez (Morbid Obez)', '≥ 40.0 kg/m²', Colors.red.shade100),
       ],
     );
   }

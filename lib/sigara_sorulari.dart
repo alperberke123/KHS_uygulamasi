@@ -7,8 +7,6 @@ class SigaraSorulariEkrani extends StatefulWidget {
 
 class _SigaraSorulariEkraniState extends State<SigaraSorulariEkrani> {
   int _totalScore = 0;
-
-  // Seçilen cevapları tutmak için bir liste
   List<int?> selectedAnswers = [null, null, null, null, null, null];
 
   final List<Map<String, dynamic>> _questions = [
@@ -62,13 +60,39 @@ class _SigaraSorulariEkraniState extends State<SigaraSorulariEkrani> {
 
   void _answerQuestion(int index, int score) {
     setState(() {
-      selectedAnswers[index] = score; // Seçimi kaydediyoruz
+      selectedAnswers[index] = score;
     });
   }
 
   void _submitAnswers() {
     _totalScore = selectedAnswers.fold(0, (prev, element) => prev + (element ?? 0));
-    Navigator.pop(context, _totalScore); // Skoru geri gönderiyoruz
+    String resultMessage;
+
+    if (_totalScore <= 2) {
+      resultMessage = "Çok az bağımlılık";
+    } else if (_totalScore <= 4) {
+      resultMessage = "Az bağımlılık";
+    } else if (_totalScore == 5) {
+      resultMessage = "Orta derecede bağımlı";
+    } else if (_totalScore <= 7) {
+      resultMessage = "Yüksek bağımlılık";
+    } else {
+      resultMessage = "Çok yüksek bağımlılık";
+    }
+
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text("Test Sonucu"),
+        content: Text("Toplam Puanınız: $_totalScore\nBağımlılık Düzeyi: $resultMessage"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text("Tamam"),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -76,7 +100,7 @@ class _SigaraSorulariEkraniState extends State<SigaraSorulariEkrani> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Sigara Bağımlılığı Testi'),
-        backgroundColor: Colors.blueAccent, // İlk sayfaya uygun tema
+        backgroundColor: Colors.blueAccent,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -95,21 +119,21 @@ class _SigaraSorulariEkraniState extends State<SigaraSorulariEkrani> {
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: Colors.blueAccent, // Renk uyumu
+                          color: Colors.blueAccent,
                         ),
                       ),
                       ...question['answers'].map<Widget>((answer) {
                         return RadioListTile<int>(
                           title: Text(answer['text']),
                           value: answer['score'],
-                          groupValue: selectedAnswers[index], // Seçimi kontrol ediyoruz
-                          activeColor: Colors.blueAccent, // Tema rengi
+                          groupValue: selectedAnswers[index],
+                          activeColor: Colors.blueAccent,
                           onChanged: (value) {
-                            _answerQuestion(index, value!); // Seçimi kaydediyoruz
+                            _answerQuestion(index, value!);
                           },
                         );
                       }).toList(),
-                      const SizedBox(height: 10), // Sorular arası boşluk
+                      const SizedBox(height: 10),
                     ],
                   );
                 },
@@ -119,14 +143,14 @@ class _SigaraSorulariEkraniState extends State<SigaraSorulariEkrani> {
             ElevatedButton(
               onPressed: _submitAnswers,
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blueAccent, // İlk sayfaya uygun tema
-                padding: const EdgeInsets.symmetric(vertical: 15.0,horizontal: 15),
+                backgroundColor: Colors.blueAccent,
+                padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
               child: const Text(
-                'Sonuçları Gönder',
+                'Sonuçları Göster',
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
             ),

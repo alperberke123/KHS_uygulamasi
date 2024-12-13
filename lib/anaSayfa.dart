@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ksh_uygulamasi/sonuc_ekrani.dart';
+import 'package:ksh_uygulamasi/depresyon.dart';
 
 class anasayfa extends StatefulWidget {
   @override
@@ -190,6 +191,9 @@ class _anasayfaState extends State<anasayfa> {
                 onChanged: (value) {
                   setState(() {
                     _gender = value;
+                    if (_gender != 'Kadın') {
+                      _isPregnant = false; // Reset pregnancy checkbox when not female
+                    }
                   });
                 },
                 validator: (value) {
@@ -296,6 +300,7 @@ class _anasayfaState extends State<anasayfa> {
                   });
                 },
               ),
+
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
