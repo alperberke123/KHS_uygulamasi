@@ -65,6 +65,18 @@ class _SigaraSorulariEkraniState extends State<SigaraSorulariEkrani> {
   }
 
   void _submitAnswers() {
+    // Eğer bir soru cevaplanmamışsa uyarı göster
+    if (selectedAnswers.contains(null)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Lütfen tüm soruları cevaplayınız.'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    // Tüm sorular cevaplandıysa toplam puanı hesapla ve sonucu göster
     _totalScore = selectedAnswers.fold(0, (prev, element) => prev + (element ?? 0));
     String resultMessage;
 

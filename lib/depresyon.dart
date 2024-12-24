@@ -8,10 +8,21 @@ class DepressionQuiz extends StatefulWidget {
 }
 
 class _DepressionQuizState extends State<DepressionQuiz> {
-  final List<int> scores = List<int>.filled(21, 0);
+  final List<int?> scores = List<int?>.filled(21, null); // Değerler başlangıçta null
 
   void _calculateTotalScore(BuildContext context) {
-    int totalScore = scores.reduce((a, b) => a + b);
+    if (scores.contains(null)) {
+      // Eğer herhangi bir soru yanıtlanmadıysa uyarı göster
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Lütfen tüm soruları cevaplayınız."),
+        ),
+      );
+      return;
+    }
+
+    // Tüm sorular yanıtlandıysa puanı hesapla ve sonucu göster
+    int totalScore = scores.where((score) => score != null).fold(0, (sum, score) => sum + (score ?? 0));
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -53,7 +64,7 @@ class _DepressionQuizState extends State<DepressionQuiz> {
                         groupValue: scores[index],
                         onChanged: (value) {
                           setState(() {
-                            scores[index] = value!;
+                            scores[index] = value;
                           });
                         },
                       );
@@ -326,4 +337,10 @@ final List<Map<String, dynamic>> quizQuestions = [
       "Canımı sıkan şeylere bile artık kızamıyorum."
     ],
   },
+  // Add the remaining questions as they are...
 ];
+
+
+
+
+

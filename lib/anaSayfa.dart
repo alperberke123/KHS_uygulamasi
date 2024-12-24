@@ -68,7 +68,7 @@ class _anasayfaState extends State<anasayfa> {
                 },
               ),
               CheckboxListTile(
-                title: const Text('0-2 Yaş Bebek'),
+                title: const Text('0 ila 2 yaş bebekler için aşı, tarama programları hakkında bilgi alabilmek için tıklayınız.'),
                 activeColor: Colors.blueAccent,
                 value: _isBaby,
                 onChanged: (value) {
@@ -205,7 +205,7 @@ class _anasayfaState extends State<anasayfa> {
               ),
               if (showPregnancyField)
                 CheckboxListTile(
-                  title: const Text('Hamile misiniz?'),
+                  title: const Text('Hamileyseniz tıklayınız.'),
                   activeColor: Colors.blueAccent,
                   value: _isPregnant,
                   onChanged: (value) {
@@ -216,7 +216,7 @@ class _anasayfaState extends State<anasayfa> {
                 ),
               if (showMarriageField)
                 CheckboxListTile(
-                  title: const Text('Evlilik başvurunuz var mı?'),
+                  title: const Text('Evlilik başvurunuz varsa tıklayınız.'),
                   activeColor: Colors.blueAccent,
                   value: _isMarriageApplicant,
                   onChanged: (value) {
@@ -270,7 +270,7 @@ class _anasayfaState extends State<anasayfa> {
                   },
                 ),
               CheckboxListTile(
-                title: const Text('Hac/Umreye gidecek misiniz?'),
+                title: const Text('Hac veya Umreye gidecekseniz tıklayınız.'),
                 activeColor: Colors.blueAccent,
                 value: _isGoingToHajjUmrah,
                 onChanged: (value) {
@@ -281,7 +281,7 @@ class _anasayfaState extends State<anasayfa> {
               ),
               if (showMilitaryField)
                 CheckboxListTile(
-                  title: const Text('Üç ay içinde askere gidecek misiniz ?'),
+                  title: const Text('Üç ay içinde askere gidecekseniz tıklayınız.'),
                   activeColor: Colors.blueAccent,
                   value: _isGoingToMilitary,
                   onChanged: (value) {
@@ -291,7 +291,7 @@ class _anasayfaState extends State<anasayfa> {
                   },
                 ),
               CheckboxListTile(
-                title: const Text('Üç ay içinde yurtdışına seyahate gidecek misiniz ?'),
+                title: const Text('Üç ay içinde yurtdışına seyahate gidecekseniz tıklayınız.  '),
                 activeColor: Colors.blueAccent,
                 value: _isGoingToTravel,
                 onChanged: (value) {
