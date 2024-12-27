@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ksh_uygulamasi/beslenme_dusuk.dart';
+import 'package:ksh_uygulamasi/beslenme_yuksek.dart';
 import 'package:ksh_uygulamasi/cocuklar_beslenme.dart';
 import 'package:ksh_uygulamasi/depresyon.dart';
 import 'package:ksh_uygulamasi/gebe_beslenme.dart';
@@ -271,6 +273,22 @@ class degerlendirme extends StatelessWidget {
     }
     return 'Veri yetersiz';
   }
+  double calculateBMI() {
+    double heightInMeters = height! / 100;
+    double bmi1 = weight! / (heightInMeters * heightInMeters);
+    return bmi1;
+  }
+  bool isButtonVisible_yuksek_kilo() {
+    double bmi = calculateBMI();
+    return bmi>=25.0;
+  }
+  bool isButtonVisible_dusuk_kilo() {
+    double bmi = calculateBMI();
+    return bmi <= 18.5;
+  }
+  bool isButtonVisibleDepresyon(){
+    return age!>=18;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -442,7 +460,7 @@ class degerlendirme extends StatelessWidget {
               _buildTestWidget('Hepatit B taraması', 'HbsAg Testi'),
               _buildTestWidget('Hepatit C taraması', 'Anti HCV Testi'),
               _buildTestWidget('Sfilis (Frengi)', 'VDRL Testi'),
-              _buildTestWidget('Kansızlık Testi', 'Hemogram (Tam Kan Sayımı)'),
+              _buildTestWidget('Anemi Testi', 'Hemogram (Tam Kan Sayımı)'),
               _buildTestWidget('Kan Uyuşmazlığı Testi', 'Kan Grubu Analizi'),
               _buildTestWidget('Akdeniz Anemisi (Talasemi)', 'Hemoglobin Elektroforezi Testi'),
               _buildTestWidget('SMA Tarama Testi', 'SMA Taşıyıcılık Testi'),
@@ -613,7 +631,9 @@ class degerlendirme extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            ElevatedButton(
+            Visibility(
+              visible: isButtonVisibleDepresyon(),
+                child:ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
@@ -634,6 +654,7 @@ class degerlendirme extends StatelessWidget {
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
             ),
+            ),
             if (height != null && weight != null && ageInMonths == null) ...[
               const SizedBox(height: 20),
               const Divider(color: Colors.blueAccent),
@@ -645,8 +666,58 @@ class degerlendirme extends StatelessWidget {
                   color: Colors.blueAccent,
                 ),
               ),
+
               const SizedBox(height: 10),
               _getBMIResult(),
+
+              Visibility(
+                visible: isButtonVisible_yuksek_kilo() ,
+                child:ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const beslenme_yuksek(),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.greenAccent,
+                  padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: const Text(
+                  'Beslenme Önerileri Almak İçin Tıklayınız1111',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+              ),
+              ),
+              Visibility(
+                visible: isButtonVisible_dusuk_kilo() ,
+                child:ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const beslenme(),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.greenAccent,
+                    padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: const Text(
+                    'Beslenme Önerileri Almak İçin Tıklayınız',
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                ),
+              )
             ]
           ],
         ),
@@ -949,5 +1020,6 @@ Widget _buildTestWidget(String testName, String testDetails) {
     ),
   );
 }
+
 
 
