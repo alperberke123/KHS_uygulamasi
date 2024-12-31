@@ -24,6 +24,7 @@ class degerlendirme extends StatelessWidget {
   final String? profession;
   final int smokingScore;
   final bool isMarriageApplicant;
+  final bool isSmoking;
 
 
   degerlendirme({
@@ -42,6 +43,7 @@ class degerlendirme extends StatelessWidget {
     this.profession,
     required this.smokingScore,
     required this.isMarriageApplicant,
+    required this.isSmoking,
   });
 
   String capitalizeFirstLetter(String name) {
@@ -609,7 +611,9 @@ class degerlendirme extends StatelessWidget {
                 ),
               ),
             ),
-            ElevatedButton(
+            Visibility(// sayfanın yenilenmesini ayarlaman lazım *********** yoksa bir kere tıklayınca değer kalıyor
+              visible: isSmoking,
+              child: ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
@@ -629,6 +633,7 @@ class degerlendirme extends StatelessWidget {
                 'Sigara Bağımlılık Düzeyi Testleri',
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
+            ),
             ),
             const SizedBox(height: 10),
             Visibility(

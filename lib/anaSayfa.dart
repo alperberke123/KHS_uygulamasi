@@ -25,6 +25,7 @@ class _anasayfaState extends State<anasayfa> {
   bool _isBaby = false;
   int? _ageInMonths;
   int? _age;
+  bool _isSmoking =false;
 
   bool get showPregnancyField {
     return _gender == 'Kadın' && (_age != null && _age! >= 15);
@@ -35,6 +36,9 @@ class _anasayfaState extends State<anasayfa> {
   }
   bool get showMarriageField {
     return _age != null && _age! >= 16;
+  }
+  bool get showSigaraField {
+    return _age !=null && _age! >=13;
   }
 
   @override
@@ -300,6 +304,19 @@ class _anasayfaState extends State<anasayfa> {
                   });
                 },
               ),
+              if (showSigaraField)
+                CheckboxListTile(
+                  title: const Text('Sigara içiyorsanız tıklayınız'),
+                  activeColor: Colors.blueAccent,
+                  value: _isSmoking,
+                  onChanged: (value) {
+                    setState(() {
+                      _isSmoking = value!;
+                    });
+                  },
+                ),
+
+
 
               const SizedBox(height: 20),
               ElevatedButton(
@@ -328,6 +345,7 @@ class _anasayfaState extends State<anasayfa> {
                           profession: _profession,
                           smokingScore: _smokingScore,
                           isMarriageApplicant:_isMarriageApplicant,
+                          isSmoking:_isSmoking,
 
                         ),
                       ),
