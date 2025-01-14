@@ -8,23 +8,23 @@ import 'package:ksh_uygulamasi/sigara_sorulari.dart';
 import 'package:ksh_uygulamasi/yasli_beslenme.dart';
 
 
-class degerlendirme extends StatelessWidget {
-  final String name;
-  final int? age;
-  final int? ageInMonths;
-  final bool isBaby;
-  final String gender;
-  final bool isPregnant;
-  final double? height;
-  final double? weight;
-  final double? headCircumference;
-  final bool isGoingToHajjUmrah;
-  final bool isGoingToMilitary;
-  final bool isGoingToTravel;
-  final String? profession;
-  final int smokingScore;
-  final bool isMarriageApplicant;
-  final bool isSmoking;
+class degerlendirme extends StatefulWidget {
+   String name;
+   int? age;
+   int? ageInMonths;
+   bool isBaby;
+   String gender;
+   bool isPregnant;
+   double? height;
+   double? weight;
+   double? headCircumference;
+   bool isGoingToHajjUmrah;
+   bool isGoingToMilitary;
+   bool isGoingToTravel;
+   String? profession;
+   int smokingScore;
+   bool isMarriageApplicant;
+   bool isSmoking;
 
 
   degerlendirme({
@@ -46,6 +46,38 @@ class degerlendirme extends StatelessWidget {
     required this.isSmoking,
   });
 
+  @override
+  State<degerlendirme> createState() => _degerlendirmeState();
+}
+
+class _degerlendirmeState extends State<degerlendirme> {
+  void resetData() {
+    setState(() {
+      widget.name = '';
+      widget.age = null;
+      widget.ageInMonths = null;
+      widget.isBaby = false;
+      widget.gender = '';
+      widget.isPregnant = false;
+      widget.height = null;
+      widget.weight = null;
+      widget.headCircumference = null;
+      widget.isGoingToHajjUmrah = false;
+      widget.isGoingToMilitary = false;
+      widget.isGoingToTravel = false;
+      widget.profession = null;
+      widget.smokingScore = 0;
+      widget.isMarriageApplicant = false;
+      widget.isSmoking = false;
+    });
+  }
+
+   Future<bool> handlePopScope() async {
+     resetData(); // Verileri sıfırla
+     Navigator.pop(context); // Sayfadan çık
+     return Future.value(false);// Daha fazla işlem yapılmaz
+   }
+
   String capitalizeFirstLetter(String name) {
     if (name.isEmpty) return name;
     return name.trim()[0].toUpperCase() + name.trim().substring(1).toLowerCase();
@@ -53,18 +85,19 @@ class degerlendirme extends StatelessWidget {
 
   // Sigara bağımlılığı seviyesini hesaplama
   String getSmokingDependencyLevel() {
-    if (smokingScore <= 2) {
+    if (widget.smokingScore <= 2) {
       return "Çok az bağımlılık";
-    } else if (smokingScore == 3 || smokingScore == 4) {
+    } else if (widget.smokingScore == 3 || widget.smokingScore == 4) {
       return "Az bağımlılık";
-    } else if (smokingScore == 5) {
+    } else if (widget.smokingScore == 5) {
       return "Orta derecede bağımlı";
-    } else if (smokingScore == 6 || smokingScore == 7) {
+    } else if (widget.smokingScore == 6 || widget.smokingScore == 7) {
       return "Yüksek bağımlılık";
     } else {
       return "Çok yüksek bağımlılık";
     }
   }
+
   // Kız çocuklar için kilo persentil tablosu (3 ay - 18 yaş)
   final List<List<double>> girlWeightTable = [
     [3.01, 3.29, 3.58, 3.88, 4.10, 4.35],  // 0 ay (doğum)
@@ -197,6 +230,7 @@ class degerlendirme extends StatelessWidget {
     [46.0, 47.5, 48.5, 49.5, 50.5, 51.5], // 12 ay
     [50.0, 51.5, 52.5, 53.5, 54.5, 55.5], // 24 ay
   ];
+
   // Verilen değerin hangi persentilde olduğunu bulan fonksiyon
   double calculatePercentile(double value, List<double> percentiles) {
     for (int i = 0; i < percentiles.length; i++) {
@@ -212,19 +246,19 @@ class degerlendirme extends StatelessWidget {
     List<List<double>> selectedTable;
 
     // Cinsiyet ve yaşa göre tabloyu seç
-    if (gender == 'Kız') {
+    if (widget.gender == 'Kız') {
       selectedTable = girlWeightTable;
     } else {
       selectedTable = boyWeightTable;
     }
 
     // Yaşa göre tabloyu alıyoruz (örnek: 3 yaş = selectedTable[4])
-    int index = ageInMonths != null
-        ? (ageInMonths! ~/ 12) // Ay cinsinden yaşları yıl cinsine çeviriyoruz
-        : age != null ? age! - 1 : 0;
+    int index = widget.ageInMonths != null
+        ? (widget.ageInMonths! ~/ 12) // Ay cinsinden yaşları yıl cinsine çeviriyoruz
+        : widget.age != null ? widget.age! - 1 : 0;
 
-    if (index < selectedTable.length && weight != null) {
-      double percentile = calculatePercentile(weight!, selectedTable[index]);
+    if (index < selectedTable.length && widget.weight != null) {
+      double percentile = calculatePercentile(widget.weight!, selectedTable[index]);
       return '$percentile. persentil';
     }
     return 'Veri yetersiz';
@@ -235,19 +269,19 @@ class degerlendirme extends StatelessWidget {
     List<List<double>> selectedTable;
 
     // Cinsiyet ve yaşa göre tabloyu seç
-    if (gender == 'Kız') {
+    if (widget.gender == 'Kız') {
       selectedTable = girlHeightTable;
     } else {
       selectedTable = boyHeightTable;
     }
 
     // Yaşa göre tabloyu alıyoruz (örnek: 3 yaş = selectedTable[4])
-    int index = ageInMonths != null
-        ? (ageInMonths! ~/ 12)
-        : age != null ? age! - 1 : 0;
+    int index = widget.ageInMonths != null
+        ? (widget.ageInMonths! ~/ 12)
+        : widget.age != null ? widget.age! - 1 : 0;
 
-    if (index < selectedTable.length && height != null) {
-      double percentile = calculatePercentile(height!, selectedTable[index]);
+    if (index < selectedTable.length && widget.height != null) {
+      double percentile = calculatePercentile(widget.height!, selectedTable[index]);
       return '$percentile. persentil';
     }
     return 'Veri yetersiz';
@@ -258,53 +292,64 @@ class degerlendirme extends StatelessWidget {
     List<List<double>> selectedTable;
 
     // Cinsiyet ve yaşa göre tabloyu seç
-    if (gender == 'Kız') {
+    if (widget.gender == 'Kız') {
       selectedTable = girlHeadCircumferenceTable;
     } else {
       selectedTable = boyHeadCircumferenceTable;
     }
 
     // Yaşa göre tabloyu alıyoruz
-    int index = ageInMonths != null
-        ? (ageInMonths! ~/ 12)
-        : age != null ? age! - 1 : 0;
+    int index = widget.ageInMonths != null
+        ? (widget.ageInMonths! ~/ 12)
+        : widget.age != null ? widget.age! - 1 : 0;
 
-    if (index < selectedTable.length && headCircumference != null) {
-      double percentile = calculatePercentile(headCircumference!, selectedTable[index]);
+    if (index < selectedTable.length && widget.headCircumference != null) {
+      double percentile = calculatePercentile(widget.headCircumference!, selectedTable[index]);
       return '$percentile. persentil';
     }
     return 'Veri yetersiz';
   }
+
   double calculateBMI() {
-    double heightInMeters = height! / 100;
-    double bmi1 = weight! / (heightInMeters * heightInMeters);
+    double heightInMeters = widget.height! / 100;
+    double bmi1 = widget.weight! / (heightInMeters * heightInMeters);
     return bmi1;
   }
+
   bool isButtonVisible_yuksek_kilo() {
     double bmi = calculateBMI();
     return bmi>=25.0;
   }
+
   bool isButtonVisible_dusuk_kilo() {
     double bmi = calculateBMI();
     return bmi <= 18.5;
   }
+
   bool isButtonVisibleDepresyon(){
-    return age!>=18;
+    return widget.age!>=18;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return
+         Scaffold(
       appBar: AppBar(
         title: const Text('Sonuçlar'),
         backgroundColor: Colors.blueAccent,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () async {
+            await handlePopScope(); // Verileri sıfırla ve çık
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: <Widget>[
             Text(
-              'Merhaba, ${capitalizeFirstLetter(name)}',
+              'Merhaba, ${capitalizeFirstLetter(widget.name)}',
               style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
@@ -315,73 +360,73 @@ class degerlendirme extends StatelessWidget {
 
             const SizedBox(height: 10),
 
-            if (isBaby && ageInMonths != null) ...[
-              Text('Ay olarak yaş: $ageInMonths ay', style: _infoTextStyle()),
-              if (height != null)
-                Text('Boy Persentili: ${calculatePercentile(height!, [45, 50, 55, 60, 65, 70])}%', style: _infoTextStyle()),
-              if (weight != null)
-                Text('Kilo Persentili: ${calculatePercentile(weight!, [2.5, 3.0, 3.5, 4.0, 4.5])}%', style: _infoTextStyle()),
-              if (headCircumference != null)
-                Text('Baş Çevresi Persentili: ${calculatePercentile(headCircumference!, [32, 33, 34, 35, 36])}%', style: _infoTextStyle()),
+            if (widget.isBaby && widget.ageInMonths != null) ...[
+              Text('Ay olarak yaş: ${widget.ageInMonths} ay', style: _infoTextStyle()),
+              if (widget.height != null)
+                Text('Boy Persentili: ${calculatePercentile(widget.height!, [45, 50, 55, 60, 65, 70])}%', style: _infoTextStyle()),
+              if (widget.weight != null)
+                Text('Kilo Persentili: ${calculatePercentile(widget.weight!, [2.5, 3.0, 3.5, 4.0, 4.5])}%', style: _infoTextStyle()),
+              if (widget.headCircumference != null)
+                Text('Baş Çevresi Persentili: ${calculatePercentile(widget.headCircumference!, [32, 33, 34, 35, 36])}%', style: _infoTextStyle()),
             ],
 
-            if (!isBaby && age != null && age! <= 18) ...[
-              Text('Yaş: $age', style: _infoTextStyle()),
-              if (height != null)
-                Text('Boy Persentili: ${calculatePercentile(height!, [120, 130, 140, 150, 160, 170])}%', style: _infoTextStyle()),
-              if (weight != null)
-                Text('Kilo Persentili: ${calculatePercentile(weight!, [20, 25, 30, 35, 40, 45])}%', style: _infoTextStyle()),
+            if (!widget.isBaby && widget.age != null && widget.age! <= 18) ...[
+              Text('Yaş: ${widget.age}', style: _infoTextStyle()),
+              if (widget.height != null)
+                Text('Boy Persentili: ${calculatePercentile(widget.height!, [120, 130, 140, 150, 160, 170])}%', style: _infoTextStyle()),
+              if (widget.weight != null)
+                Text('Kilo Persentili: ${calculatePercentile(widget.weight!, [20, 25, 30, 35, 40, 45])}%', style: _infoTextStyle()),
             ],
 
             // Yaş ve Ay olarak yaş (Bebek veya Yetişkin kontrolü)
-            if (!isBaby && age != null)
-              Text('Yaş: $age', style: _infoTextStyle()),
+            if (!widget.isBaby && widget.age != null)
+              Text('Yaş: ${widget.age}', style: _infoTextStyle()),
 
-            if (isBaby && ageInMonths != null)
-              Text('Ay olarak yaş: $ageInMonths ay', style: _infoTextStyle()),
+            if (widget.isBaby && widget.ageInMonths != null)
+              Text('Ay olarak yaş: ${widget.ageInMonths} ay', style: _infoTextStyle()),
 
             // Eğer hem age hem de ageInMonths null ise uyarı göster
-            if ((isBaby && ageInMonths == null) || (!isBaby && age == null))
+            if ((widget.isBaby && widget.ageInMonths == null) || (!widget.isBaby && widget.age == null))
               const Text('Yaş bilgisi eksik', style: TextStyle(color: Colors.redAccent)),
 
             // Cinsiyet
-            Text('Cinsiyet: $gender', style: _infoTextStyle()),
+            Text('Cinsiyet: ${widget.gender}', style: _infoTextStyle()),
 
             // Hamilelik durumu kontrolü
-            if (gender == 'Kadın' && isPregnant)
+            if (widget.gender == 'Kadın' && widget.isPregnant)
               Text('Gebelik Durumu: Evet', style: _infoTextStyle()),
 
             // Boy ve kilo kontrolleri
-            if (!isBaby && height != null)
-              Text('Boy: ${height?.toStringAsFixed(1)} cm', style: _infoTextStyle()),
+            if (!widget.isBaby && widget.height != null)
+              Text('Boy: ${widget.height?.toStringAsFixed(1)} cm', style: _infoTextStyle()),
 
-            if (!isBaby && height == null)
+            if (!widget.isBaby && widget.height == null)
               const Text('Boy bilgisi eksik', style: TextStyle(color: Colors.redAccent)),
 
-            if (!isBaby && weight != null)
-              Text('Kilo: ${weight?.toStringAsFixed(1)} kg', style: _infoTextStyle()),
+            if (!widget.isBaby && widget.weight != null)
+              Text('Kilo: ${widget.weight?.toStringAsFixed(1)} kg', style: _infoTextStyle()),
 
-            if (!isBaby && weight == null)
+            if (!widget.isBaby && widget.weight == null)
               const Text('Kilo bilgisi eksik', style: TextStyle(color: Colors.redAccent)),
 
             // Diğer bilgiler
-            if (isGoingToHajjUmrah)
+            if (widget.isGoingToHajjUmrah)
               Text('Hac/Umre: Gidecek', style: _infoTextStyle()),
 
-            if (isGoingToMilitary)
+            if (widget.isGoingToMilitary)
               Text('Askerlik: Aşı Gerekli', style: _infoTextStyle()),
 
-            if (isGoingToTravel)
+            if (widget.isGoingToTravel)
               Text('Seyahat: Aşı Gerekli', style: _infoTextStyle()),
 
-            if (!isBaby && profession != 'Ev hanımı' && profession != null)
-              Text('Meslek: $profession', style: _infoTextStyle()),
+            if (!widget.isBaby && widget.profession != 'Ev hanımı' && widget.profession != null)
+              Text('Meslek: ${widget.profession}', style: _infoTextStyle()),
 
             // Sigara bağımlılığı testi sonucu
             const SizedBox(height: 20),
             const Divider(color: Colors.blueAccent),
             // Eğer smokingScore 0 ise, sigara bağımlılık düzeyi ile ilgili bilgileri gösterme
-            if (smokingScore > 0) ...[
+            if (widget.smokingScore > 0) ...[
               const Text(
                 'Sigara Bağımlılık Düzeyi:',
                 style: TextStyle(
@@ -397,7 +442,7 @@ class degerlendirme extends StatelessWidget {
               ),
             ],
 
-            if (profession != null && profession!.toLowerCase() == 'sağlık çalışanı') ...[
+            if (widget.profession != null && widget.profession!.toLowerCase() == 'sağlık çalışanı') ...[
               const SizedBox(height: 20),
               const Divider(color: Colors.blueAccent),
               const Text(
@@ -447,7 +492,8 @@ class degerlendirme extends StatelessWidget {
               ),
             ],
             const SizedBox(height: 10),
-            if (isMarriageApplicant) ...[
+            if (widget.isMarriageApplicant) ...[
+              const Divider(color: Colors.blueAccent),
               const Divider(color: Colors.blueAccent),
               const Text(
                 'Evlilik Başvurusu Testleri:',
@@ -477,7 +523,7 @@ class degerlendirme extends StatelessWidget {
               ),
             ),
 
-            if (gender == 'Kadın' && isPregnant) ...[
+            if (widget.gender == 'Kadın' && widget.isPregnant) ...[
               const SizedBox(height: 20),
               const Text(
                 '15-49 Yaş Kadın/Gebe Aşılamaları:',
@@ -527,7 +573,7 @@ class degerlendirme extends StatelessWidget {
               _buildMonitoringSchedule('36-38. hafta'),
             ],
             const SizedBox(height: 20),
-            if (gender == 'Kadın' && isPregnant) ...[
+            if (widget.gender == 'Kadın' && widget.isPregnant) ...[
               const Text(
               'Sağlıklı bir gebelik süreci için düzenli kontrollere devam ediniz.',
               style: TextStyle(fontSize: 16, color: Colors.blueGrey),
@@ -537,82 +583,24 @@ class degerlendirme extends StatelessWidget {
             _getHealthRecommendations(),
             const SizedBox(height: 10),
 
-            Visibility(
-                visible: isPregnant, // Show button only if pregnant
-                child:ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const GebeBeslenme(),
+
+            Center(
+              child: Visibility(
+                visible: widget.isSmoking && isButtonVisibleDepresyon(),
+                child: Text(
+                  "Sigara Bağımlılık Testi ve Depresyon Testlerini doldurmak için aşağıdaki butonlara tıklayınız.",
+                  textAlign: TextAlign.center, // Metni ortalamak için
+                  style: TextStyle(
+                    fontSize: 16.0, // Yazı boyutu
+                    fontWeight: FontWeight.normal, // Yazı kalınlığı
+                    color: Colors.black, // Yazı rengi
                   ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.pinkAccent,
-                padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: const Text(
-                'Gebe Beslenme Önerileri',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-            ),
-            ),
-            const SizedBox(height: 10),
-            Visibility(
-              visible: age != null && age! > 65, // Show button only if pregnant
-              child:ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const yasliBeslenme(),
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blueAccent,
-                  padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: const Text(
-                  'Yaşlılarda Beslenme Önerileri',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
               ),
             ),
             const SizedBox(height: 10),
-            Visibility(
-              visible: age != null && age! > 2 && age!<6, // Show button only if pregnant
-              child:ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const cocukBeslenme(),
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blueAccent,
-                  padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: const Text(
-                  'Çocuklarda Beslenme Önerileri',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                ),
-              ),
-            ),
             Visibility(// sayfanın yenilenmesini ayarlaman lazım *********** yoksa bir kere tıklayınca değer kalıyor
-              visible: isSmoking,
+              visible: widget.isSmoking,
               child: ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -655,12 +643,12 @@ class degerlendirme extends StatelessWidget {
                 ),
               ),
               child: const Text(
-                'Depresyon Testi',
+                'Beck Depresyon Testi ',
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
             ),
             ),
-            if (height != null && weight != null && ageInMonths == null) ...[
+            if (widget.height != null && widget.weight != null && widget.ageInMonths == null) ...[
               const SizedBox(height: 20),
               const Divider(color: Colors.blueAccent),
               const Text(
@@ -722,7 +710,81 @@ class degerlendirme extends StatelessWidget {
                     style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ),
-              )
+              ),
+              const SizedBox(height: 10),
+              Visibility(
+                visible: widget.isPregnant, // Show button only if pregnant
+                child:ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const GebeBeslenme(),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.pinkAccent,
+                    padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: const Text(
+                    'Gebe Beslenme Önerileri',
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Visibility(
+                visible: widget.age != null && widget.age! > 65, // Show button only if pregnant
+                child:ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const yasliBeslenme(),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueAccent,
+                    padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: const Text(
+                    'Yaşlılarda Beslenme Önerileri',
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: widget.age != null && widget.age! > 2 && widget.age!<6, // Show button only if pregnant
+                child:ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const cocukBeslenme(),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueAccent,
+                    padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: const Text(
+                    'Çocuklarda Beslenme Önerileri',
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                ),
+              ),
             ]
           ],
         ),
@@ -738,12 +800,12 @@ class degerlendirme extends StatelessWidget {
   }
 
   Widget _getBMIResult() {
-    if (height == null || weight == null) {
+    if (widget.height == null || widget.weight == null) {
       return const Text('Boy ve kilo bilgisi eksik.', style: TextStyle(color: Colors.redAccent));
     }
 
-    double heightInMeters = height! / 100;
-    double bmi = weight! / (heightInMeters * heightInMeters);
+    double heightInMeters = widget.height! / 100;
+    double bmi = widget.weight! / (heightInMeters * heightInMeters);
 
     String bmiCategory;
     if (bmi < 18.5) {
@@ -785,14 +847,14 @@ class degerlendirme extends StatelessWidget {
     List<Widget> recommendations = [];
 
     // Askerlik ve seyahat aşıları
-    if (isGoingToMilitary) {
+    if (widget.isGoingToMilitary) {
       recommendations.add(_buildAsiWidget("Erişkin Tip Tetanoz-Difteri (Td)", "Askerlik öncesi", "Aile Hekimliği"));
       recommendations.add(_buildAsiWidget("Menenjit Aşısı (Meningokok)", "Askerlik öncesi", "Aile Hekimliği"));
       recommendations.add(_buildAsiWidget("KKK (Kızamık-Kızamıkçık-Kabakulak)", "1980-1991 yılları arasında doğmuş olup askere gidecekler için", "Aile Hekimliği"));
       recommendations.add(_buildAsiWidget("Hep-B (Hepatit B - Eğer hiç yapılmadıysa)", "Askerlik öncesi", "Aile Hekimliği"));
     }
 
-    if (isGoingToTravel) {
+    if (widget.isGoingToTravel) {
       recommendations.add(_buildAsiWidget("Sarı Humma", "Orta ve Güney Amerika ile Afrika’nın tropikal bölgelerine gidenlere zorunlu", "Aile Hekimliği"));
       recommendations.add(_buildAsiWidget("Tifo", "Seyahat öncesi", "Aile Hekimliği"));
       recommendations.add(_buildAsiWidget("Kolera", "Seyahat öncesi", "Aile Hekimliği"));
@@ -803,131 +865,131 @@ class degerlendirme extends StatelessWidget {
     }
 
     // 0-2 yaş bebek için aşı ve taramalar (Orijinal kod)
-    if (isBaby && ageInMonths != null) {
-      if (ageInMonths! >= 0) {
+    if (widget.isBaby && widget.ageInMonths != null) {
+      if (widget.ageInMonths! >= 0) {
         recommendations.add(_buildAsiWidget("Hepatit B (1. Doz)", "Doğumda", "Hastane"));
         recommendations.add(_buildTaramaWidget("Göz muayenesi ve Kırmızı Refle Testi", "0-3 Ay", "Aile Hekimliği"));
         recommendations.add(_buildTaramaWidget("Neonatal Tarama Programı (Topuk Kanı)", "Doğumdan Sonraki 24 Saat", "Hastane"));
       }
-      if (ageInMonths! >= 1) {
+      if (widget.ageInMonths! >= 1) {
         recommendations.add(_buildAsiWidget("Hepatit B (2. Doz)", "1. Ayın Sonu", "Aile Hekimliği"));
       }
-      if (ageInMonths! >= 2) {
+      if (widget.ageInMonths! >= 2) {
         recommendations.add(_buildAsiWidget("BCG (1. Doz)", "2. Ayın Sonu", "Aile Hekimliği"));
         recommendations.add(_buildAsiWidget("KPA (Konjuge Pnömokok Aşısı) (1. Doz)", "2. Ayın Sonu", "Aile Hekimliği"));
         recommendations.add(_buildAsiWidget("DaBT-İPA-Hib (Difteri, Aselüler Boğmaca, Tetanoz, İnaktif Polio, Hemofilus İnfluenza Tip B) (1. Doz)", "2. Ayın Sonu", "Aile Hekimliği"));
       }
-      if (ageInMonths! >= 4) {
+      if (widget.ageInMonths! >= 4) {
         recommendations.add(_buildAsiWidget("KPA (Konjuge Pnömokok Aşısı) (2. Doz)", "4. Ayın Sonu", "Aile Hekimliği"));
         recommendations.add(_buildAsiWidget("DaBT-İPA-Hib (Difteri, Aselüler Boğmaca, Tetanoz, İnaktif Polio, Hemofilus İnfluenza Tip B) (2. Doz)", "4. Ayın Sonu", "Aile Hekimliği"));
         recommendations.add(_buildTaramaWidget("Gelişimsel Kalça Displazisi (Manuel Muayene)", "30-55 Gün Arası", "Aile Hekimliği"));
         recommendations.add(_buildTaramaWidget("Gelişimsel Kalça Displazisi (USG)", "İlk 4-6 Hafta", "Hastane"));
       }
-      if (ageInMonths! >= 6) {
+      if (widget.ageInMonths! >= 6) {
         recommendations.add(_buildAsiWidget("Hepatit B (3. Doz)", "6. Ayın Sonu", "Aile Hekimliği"));
         recommendations.add(_buildAsiWidget("DaBT-İPA-Hib (Difteri, Aselüler Boğmaca, Tetanoz, İnaktif Polio, Hemofilus İnfluenza Tip B) (3. Doz)", "6. Ayın Sonu", "Aile Hekimliği"));
         recommendations.add(_buildAsiWidget("OPA (Oral Polio) (1. Doz)", "6. Ayın Sonu", "Aile Hekimliği"));
         recommendations.add(_buildTaramaWidget("Demir Profilaksisi", "1 mg/kg/Gün, 4-12 Ay Bebek", "Aile Hekimliği"));
         recommendations.add(_buildTaramaWidget("D Vitamini Profilaksisi", "400 Iu, 0-12 Ay Bebek", "Aile Hekimliği"));
-        if (gender == 'Erkek') {
+        if (widget.gender == 'Erkek') {
           recommendations.add(_buildTaramaWidget("İnmeyen Testis Muayenesi", "Her Muayenede, 6 Ay-1 Yaş", "Aile Hekimliği"));
         }
       }
-      if (ageInMonths! >= 12) {
+      if (widget.ageInMonths! >= 12) {
         recommendations.add(_buildAsiWidget("KPA (Konjuge Pnömokok Aşısı) (Rapel)", "12. Ayın Sonu", "Aile Hekimliği"));
         recommendations.add(_buildAsiWidget("Su Çiçeği (1. Doz)", "12. Ayın Sonu", "Aile Hekimliği"));
         recommendations.add(_buildAsiWidget("KKK (Kızamık-Kızamıkçık-Kabakulak) (1. Doz)", "12. Ayın Sonu", "Aile Hekimliği"));
       }
-      if (ageInMonths! >= 18) {
+      if (widget.ageInMonths! >= 18) {
         recommendations.add(_buildAsiWidget("DaBT-İPA-Hib (Difteri, Aselüler Boğmaca, Tetanoz, İnaktif Polio, Hemofilus İnfluenza Tip B) (Rapel)", "18. Ayın Sonu", "Aile Hekimliği"));
         recommendations.add(_buildAsiWidget("OPA (Oral Polio) (2. Doz)", "18. Ayın Sonu", "Aile Hekimliği"));
         recommendations.add(_buildAsiWidget("Hepatit A (1. Doz)", "18. Ayın Sonu", "Aile Hekimliği"));
       }
-      if (ageInMonths! >= 24) {
+      if (widget.ageInMonths! >= 24) {
         recommendations.add(_buildAsiWidget("Hepatit A (2. Doz)", "24. Ayın Sonu", "Aile Hekimliği"));
       }
     }
 
     // Diğer yaşlara göre tarama programları ve aşılar
-    if (age != null && age! >= 3 && age! <= 18) {
+    if (widget.age != null && widget.age! >= 3 && widget.age! <= 18) {
       recommendations.add(_buildTaramaWidget("Arteriyel Tansiyon Ölçümü", "Yılda En Az 1 Kere", "Aile Hekimliği, Hastane"));
     }
 
-    if (age != null && age! >= 6 && age! <= 18) {
+    if (widget.age != null && widget.age! >= 6 && widget.age! <= 18) {
       recommendations.add(_buildTaramaWidget("Obezite Taraması (BKİ / Kilo/Boy Ölçümü)", "Yılda 1 Kez", "Aile Hekimliği"));
     }
 
-    if (age != null && age! == 3) {
+    if (widget.age != null && widget.age! == 3) {
       recommendations.add(_buildTaramaWidget("Flor Vernik", "Anasınıfı/İlkokul 1. sınıf, yılda 2 kez", "TSM (Toplum Sağlığı Merkezi)"));
     }
 
-    if (age != null && age! >= 6 && age! <= 19) {
+    if (widget.age != null && widget.age! >= 6 && widget.age! <= 19) {
       recommendations.add(_buildTaramaWidget("Çocuk İzlem", "6, 7-9, 10-14, 15-18 yaşlar", "Aile Hekimliği"));
     }
 
-    if (age != null && age! >= 10 && age! <= 21) {
+    if (widget.age != null && widget.age! >= 10 && widget.age! <= 21) {
       recommendations.add(_buildTaramaWidget("Hb/Htc Ölçümü (Hemoglobin/Hematokrit)", "10-14, 15-18, 19-21 Yaşlar", "Aile Hekimliği"));
     }
 
-    if (age != null && age! >= 18) {
+    if (widget.age != null && widget.age! >= 18) {
       recommendations.add(_buildTaramaWidget("Arteriyel Tansiyon Ölçümü", "Yılda En Az 1 Kere", "Aile Hekimliği, Hastane"));
     }
 
-    if (age != null && age! >= 35) {
+    if (widget.age != null && widget.age! >= 35) {
       recommendations.add(_buildTaramaWidget("Serum Lipid Profil (TG (Trigiliserid), LDL (Düşük yoğunluklu lipoprotein), HDL (Yüksek yoğunluklu lipoprotein))", "5 Yılda Bir", "Aile Hekimliği"));
       recommendations.add(_buildTaramaWidget("Tiroid Fonksiyon Taraması (TSH (Tiroid Stimülan Hormon))", "5 Yılda Bir", "Aile Hekimliği"));
     }
 
-    if (age != null && age! >= 45) {
+    if (widget.age != null && widget.age! >= 45) {
       recommendations.add(_buildTaramaWidget("Diyabet Taraması (AKŞ (Açlık Kan Şekeri), HbA1c)", "45 Yaş Üzeri", "Aile Hekimliği"));
     }
 
-    if (age != null && age! >= 18 && age! <= 65) {
+    if (widget.age != null && widget.age! >= 18 && widget.age! <= 65) {
       recommendations.add(_buildTaramaWidget("Obezite Taraması (BKİ (Beden Kitle İndeksi) / Bel Çevresi Ölçümü)", "Yılda 1 Kez", "Aile Hekimliği"));
     }
 
     // Meme kanseri taramaları ve muayeneleri
-    if (gender == 'Kadın' && age != null) {
-      if (age! >= 35) {
+    if (widget.gender == 'Kadın' && widget.age != null) {
+      if (widget.age! >= 35) {
         recommendations.add(_buildPembeTaramaWidget("KKMM (Kendi Kendine Meme Muayenesi)", "Ayda 1 Kere", "35 Yaş ve Üzeri Kadınlar, KETEM"));
       }
-      if (age! >= 40) {
+      if (widget.age! >= 40) {
         recommendations.add(_buildPembeTaramaWidget("Klinik Meme Muayenesi", "Yılda Bir", "40 Yaş ve Üzeri Kadınlar, Hastane"));
         recommendations.add(_buildPembeTaramaWidget("Mamografi", "2 Yılda Bir", "40-69 Yaş Kadınlar, KETEM, Hastane"));
       }
     }
 
-    if (gender == 'Kadın'&& age != null && age! >= 30 && age! <= 65) {
+    if (widget.gender == 'Kadın'&& widget.age != null && widget.age! >= 30 && widget.age! <= 65) {
       recommendations.add(_buildTaramaWidget("Serviks Kanser Taraması (HPV-DNA (Human Papilloma Virüs-Deoksiribo Nükleik Asit) ve Smear)", "5 Yılda Bir", "30-65 Yaş Kadınlar, KETEM, Hastane"));
     }
-    if (age != null && age! >= 50 && age! <= 70) {
+    if (widget.age != null && widget.age! >= 50 && widget.age! <= 70) {
       recommendations.add(_buildTaramaWidget("Kolon Kanser Taraması (GGK (Gaitada Gizli Kan))", "2 Yılda Bir", "50-70 Yaş, KETEM, Aile Hekimliği"));
       recommendations.add(_buildTaramaWidget("Kolon Kanser Taraması (Kolonoskopi)", "10 Yılda Bir", "50-70 Yaş, Hastane"));
     }
 
-    if (age != null && age! >= 40) {
+    if (widget.age != null && widget.age! >= 40) {
       recommendations.add(_buildTaramaWidget("Koroner Arter Hastalık Risk Taraması", "1 Defa", "40 Yaş Üzeri, Aile Hekimliği"));
       recommendations.add(_buildTaramaWidget("Düşük KV (Kardiyovasküler) Risk Taraması", "2 Yılda Bir", "40 Yaş Üzeri, Aile Hekimliği"));
     }
 
-    if (age != null && age! < 40) {
+    if (widget.age != null && widget.age! < 40) {
       recommendations.add(_buildTaramaWidget("Koroner Arter Hastalık Risk Taraması", "1 Defa", "40 Yaş Altı, Aile Hekimliği"));
     }
 
-    if (gender == 'Erkek' && age != null && age! >= 40 && age! <= 65) {
+    if (widget.gender == 'Erkek' && widget.age != null && widget.age! >= 40 && widget.age! <= 65) {
       recommendations.add(_buildTaramaWidget("Aspirin Kullanımı", "81 mg, 40-65 Yaş Erkekler", "Aile Hekimliği"));
     }
-    if (gender == 'Kadın' && age != null && age! >= 55 && age! <= 65) {
+    if (widget.gender == 'Kadın' && widget.age != null && widget.age! >= 55 && widget.age! <= 65) {
       recommendations.add(_buildTaramaWidget("Aspirin Kullanımı", "81 mg, 55-65 Yaş Kadınlar", "Aile Hekimliği"));
     }
 
-    if (isPregnant) {
+    if (widget.isPregnant) {
       recommendations.add(_buildTaramaWidget("Gebelik İzlem", "İlk 14 hafta içinde, 18-24. hafta, 28-32. hafta, 36-38. hafta", "Aile Hekimliği"));
       recommendations.add(_buildTaramaWidget("D Vitamini Takviyesi", "12 Haftadan itibaren gebelikte", "Aile Hekimliği"));
       recommendations.add(_buildTaramaWidget("Demir Takviyesi", "16 Haftadan itibaren gebelikte", "Aile Hekimliği"));
     }
 
-    if (isGoingToHajjUmrah) {
+    if (widget.isGoingToHajjUmrah) {
       recommendations.add(_buildAsiWidget("Meningokok Aşısı", "Hac/Umreden Yaklaşık 1 Ay Önce", "Toplum Sağlığı Merkezi"));
     }
 
@@ -1025,6 +1087,7 @@ Widget _buildTestWidget(String testName, String testDetails) {
     ),
   );
 }
+
 
 
 

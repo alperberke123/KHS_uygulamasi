@@ -27,6 +27,7 @@ class _anasayfaState extends State<anasayfa> {
   int? _age;
   bool _isSmoking =false;
 
+
   bool get showPregnancyField {
     return _gender == 'Kadın' && (_age != null && _age! >= 15);
   }
