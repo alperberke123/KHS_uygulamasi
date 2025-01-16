@@ -178,6 +178,18 @@ class _anasayfaState extends State<anasayfa> {
                   onChanged: (value) {
                     setState(() {
                       _age = int.tryParse(value);
+                      if (_age != null && _age! < 15) {
+                        _isPregnant = false;
+                      }
+                      if(_age != null && _age! < 16){
+                        _isMarriageApplicant=false;
+                      }
+                      if(_age != null && _age! < 18){
+                        _isGoingToMilitary=false;
+                      }
+                      if(_age != null && _age! < 13){
+                        _isSmoking=false;
+                      }
                     });
                   },
                 ),

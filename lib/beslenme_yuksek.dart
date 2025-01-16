@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class beslenme_yuksek extends StatefulWidget {
-  const beslenme_yuksek({super.key});
+class yuksekKilolu_hareket extends StatefulWidget {
+  const yuksekKilolu_hareket({super.key});
 
   @override
-  State<beslenme_yuksek> createState() => _beslenme_yuksekState();
+  State<yuksekKilolu_hareket> createState() => _yuksekKilolu_hareketState();
 }
 
-class _beslenme_yuksekState extends State<beslenme_yuksek> {
+class _yuksekKilolu_hareketState extends State<yuksekKilolu_hareket> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

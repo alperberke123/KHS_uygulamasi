@@ -360,6 +360,7 @@ class _degerlendirmeState extends State<degerlendirme> {
 
             const SizedBox(height: 10),
 
+
             if (widget.isBaby && widget.ageInMonths != null) ...[
               Text('Ay olarak yaş: ${widget.ageInMonths} ay', style: _infoTextStyle()),
               if (widget.height != null)
@@ -670,7 +671,7 @@ class _degerlendirmeState extends State<degerlendirme> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const beslenme_yuksek(),
+                      builder: (context) => const yuksekKilolu_hareket(),
                     ),
                   );
                 },
@@ -682,7 +683,7 @@ class _degerlendirmeState extends State<degerlendirme> {
                   ),
                 ),
                 child: const Text(
-                  'Beslenme Önerileri Almak İçin Tıklayınız1111',
+                  'Fiziksel Hareket Önerileri İçin Tıklayınız',
                   style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
               ),
@@ -694,7 +695,7 @@ class _degerlendirmeState extends State<degerlendirme> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const beslenme(),
+                        builder: (context) => const dusukKilolu_hareket(),
                       ),
                     );
                   },
@@ -706,7 +707,7 @@ class _degerlendirmeState extends State<degerlendirme> {
                     ),
                   ),
                   child: const Text(
-                    'Beslenme Önerileri Almak İçin Tıklayınız',
+                    'Fiziksel Hareket Önerileri İçin Tıklayınız',
                     style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ),
@@ -762,7 +763,7 @@ class _degerlendirmeState extends State<degerlendirme> {
                 ),
               ),
               Visibility(
-                visible: widget.age != null && widget.age! > 2 && widget.age!<6, // Show button only if pregnant
+                visible: widget.age != null && widget.age! >= 2 && widget.age!<=6, // Show button only if pregnant
                 child:ElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -785,6 +786,7 @@ class _degerlendirmeState extends State<degerlendirme> {
                   ),
                 ),
               ),
+
             ]
           ],
         ),
