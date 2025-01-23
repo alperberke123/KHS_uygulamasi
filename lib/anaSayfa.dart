@@ -78,15 +78,15 @@ class _anasayfaState extends State<anasayfa> {
                 value: _isBaby,
                 onChanged: (value) {
                   setState(() {
-                    _isBaby = value!;
+                    _isBaby = value?? false;
                     if (_isBaby) {
                       _age = null;
                       _headCircumference = null;
+                      _height = null;
+                      _weight = null;
                     } else {
                       _ageInMonths = null;
                     }
-                    _height = null;
-                    _weight = null;
                   });
                 },
               ),
@@ -107,7 +107,9 @@ class _anasayfaState extends State<anasayfa> {
                       return null;
                     },
                     onSaved: (value) {
-                      _ageInMonths = int.tryParse(value!);
+                      if (value != null && value.isNotEmpty) {
+                        _ageInMonths = int.tryParse(value);
+                      }
                     },
                   ),
                   TextFormField(
@@ -123,7 +125,11 @@ class _anasayfaState extends State<anasayfa> {
                       return null;
                     },
                     onSaved: (value) {
-                      _height = double.tryParse(value!);
+                      if (value != null && value.isNotEmpty) {
+                        _height = double.tryParse(value);
+                      } else {
+                        _height = null; // Varsayılan bir değer atanabilir
+                      }
                     },
                   ),
                   TextFormField(
@@ -173,22 +179,32 @@ class _anasayfaState extends State<anasayfa> {
                     return null;
                   },
                   onSaved: (value) {
-                    _age = int.tryParse(value!);
+                    _age = int.tryParse(value??'0');
                   },
                   onChanged: (value) {
                     setState(() {
                       _age = int.tryParse(value);
-                      if (_age != null && _age! < 15) {
+                      if (_age!= null) {
+                        debugPrint('Age is not null, value: $_age');
+                        if (_age! < 15) {
+                          _isPregnant = false;
+                        }
+                        if (_age! < 16) {
+                          _isMarriageApplicant = false;
+                        }
+                        if (_age! < 18) {
+                          _isGoingToMilitary = false;
+                        }
+                        if (_age! < 13) {
+                          _isSmoking = false;
+                        }
+                      } else {
+                        debugPrint('Age is null');
+                        // Eğer _age null ise ilgili değerleri varsayılan duruma getiriyoruz
                         _isPregnant = false;
-                      }
-                      if(_age != null && _age! < 16){
-                        _isMarriageApplicant=false;
-                      }
-                      if(_age != null && _age! < 18){
-                        _isGoingToMilitary=false;
-                      }
-                      if(_age != null && _age! < 13){
-                        _isSmoking=false;
+                        _isMarriageApplicant = false;
+                        _isGoingToMilitary = false;
+                        _isSmoking = false;
                       }
                     });
                   },
@@ -337,32 +353,41 @@ class _anasayfaState extends State<anasayfa> {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
 
-                    String greetingName = (_name == null || _name!.isEmpty) ? "" : "$_name";
+                    String greetingName = (_name == null || _name!.isEmpty) ? 'Bilinmiyor' : _name!;
+                    int age = _isBaby ? 0 : (_age ?? 0); // Bebek için yaş 0
+                    int? ageInMonths = _isBaby ? (_ageInMonths ?? 0) : null; // Ay bilgisi
+                    double height = _height ?? 0.0; // Boy bilgisi varsayılan
+                    double weight = _weight ?? 0.0; // Kilo bilgisi varsayılan
+                    double? headCircumference = _isBaby ? (_headCircumference ?? 0.0) : null; // Baş çevresi
 
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => degerlendirme(
                           name: greetingName,
-                          age: _isBaby ? null : _age,
-                          ageInMonths: _isBaby ? _ageInMonths : null,
+                          age: age,
+                          ageInMonths: ageInMonths,
                           isBaby: _isBaby,
-                          gender: _gender!,
+                          gender: _gender ?? 'Belirtilmedi',
                           isPregnant: _isPregnant,
-                          headCircumference: _isBaby ? _headCircumference : null,
-                          height: _height,
-                          weight: _weight,
+                          headCircumference: headCircumference,
+                          height: height,
+                          weight: weight,
                           isGoingToHajjUmrah: _isGoingToHajjUmrah,
                           isGoingToMilitary: _isGoingToMilitary,
                           isGoingToTravel: _isGoingToTravel,
-                          profession: _profession,
+                          profession: _profession ?? 'Bilinmiyor',
                           smokingScore: _smokingScore,
-                          isMarriageApplicant:_isMarriageApplicant,
-                          isSmoking:_isSmoking,
-
+                          isMarriageApplicant: _isMarriageApplicant,
+                          isSmoking: _isSmoking,
                         ),
                       ),
                     );
+                    debugPrint('Name: $greetingName');
+                    debugPrint('Gender: $_gender');
+                    debugPrint('Age: $_age');
+                    debugPrint('Height: $_height');
+                    debugPrint('Weight: $_weight');
                   }
                 },
                 style: ElevatedButton.styleFrom(

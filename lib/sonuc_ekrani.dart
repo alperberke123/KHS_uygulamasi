@@ -3,6 +3,7 @@ import 'package:ksh_uygulamasi/beslenme_dusuk.dart';
 import 'package:ksh_uygulamasi/beslenme_yuksek.dart';
 import 'package:ksh_uygulamasi/cocuklar_beslenme.dart';
 import 'package:ksh_uygulamasi/depresyon.dart';
+import 'package:ksh_uygulamasi/erkekUreme.dart';
 import 'package:ksh_uygulamasi/gebe_beslenme.dart';
 import 'package:ksh_uygulamasi/sigara_sorulari.dart';
 import 'package:ksh_uygulamasi/yasli_beslenme.dart';
@@ -28,7 +29,7 @@ class degerlendirme extends StatefulWidget {
 
 
   degerlendirme({
-    required this.name,
+    this.name = 'Bilinmiyor',
     this.age,
     this.ageInMonths,
     required this.isBaby,
@@ -53,7 +54,7 @@ class degerlendirme extends StatefulWidget {
 class _degerlendirmeState extends State<degerlendirme> {
   void resetData() {
     setState(() {
-      widget.name = '';
+      widget.name = 'Bilinmiyor';
       widget.age = null;
       widget.ageInMonths = null;
       widget.isBaby = false;
@@ -78,8 +79,8 @@ class _degerlendirmeState extends State<degerlendirme> {
      return Future.value(false);// Daha fazla işlem yapılmaz
    }
 
-  String capitalizeFirstLetter(String name) {
-    if (name.isEmpty) return name;
+  String capitalizeFirstLetter(String? name) {
+    if (name == null || name.isEmpty) return 'Bilinmiyor';
     return name.trim()[0].toUpperCase() + name.trim().substring(1).toLowerCase();
   }
 
@@ -241,8 +242,12 @@ class _degerlendirmeState extends State<degerlendirme> {
     return 97.0; // En üst persentil
   }
 
+
   // Cinsiyet ve yaşa göre tablo seçimi ve persentil hesaplaması
   String calculateWeightPercentile() {
+    if ((widget.ageInMonths == null && widget.age == null) || widget.weight == null) {
+      return 'Veri yetersiz';
+    }
     List<List<double>> selectedTable;
 
     // Cinsiyet ve yaşa göre tabloyu seç
@@ -255,9 +260,9 @@ class _degerlendirmeState extends State<degerlendirme> {
     // Yaşa göre tabloyu alıyoruz (örnek: 3 yaş = selectedTable[4])
     int index = widget.ageInMonths != null
         ? (widget.ageInMonths! ~/ 12) // Ay cinsinden yaşları yıl cinsine çeviriyoruz
-        : widget.age != null ? widget.age! - 1 : 0;
+        : widget.age! - 1;
 
-    if (index < selectedTable.length && widget.weight != null) {
+    if (index < selectedTable.length) {
       double percentile = calculatePercentile(widget.weight!, selectedTable[index]);
       return '$percentile. persentil';
     }
@@ -329,9 +334,21 @@ class _degerlendirmeState extends State<degerlendirme> {
   bool isButtonVisibleDepresyon(){
     return widget.age!>=18;
   }
+  bool isGenderErkek(){
+    return widget.gender == 'Erkek';
+  }
+  bool isGenderKadin(){
+    return widget.gender == 'Kadın';
+  }
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('Name: ${widget.name}');
+    debugPrint('Age: ${widget.age}');
+    debugPrint('Age in Months: ${widget.ageInMonths}');
+    debugPrint('Height: ${widget.height}');
+    debugPrint('Weight: ${widget.weight}');
+    debugPrint('Gender: ${widget.gender}');
     return
          Scaffold(
       appBar: AppBar(
@@ -356,7 +373,6 @@ class _degerlendirmeState extends State<degerlendirme> {
                 color: Colors.blueAccent,
               ),
             ),
-
 
             const SizedBox(height: 10),
 
@@ -649,6 +665,56 @@ class _degerlendirmeState extends State<degerlendirme> {
               ),
             ),
             ),
+            const SizedBox(height: 10),
+            Visibility(
+              visible: isGenderErkek(),
+              child:ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const erkekUreme(),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: const Text(
+                  'Üreme Sağlığı Hakkında Bilgi Almak için Tıklayınız ',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Visibility(
+              visible: isGenderKadin(),
+              child:ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const erkekUreme(),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: const Text(
+                  'Üreme Sağlığı Hakkında Bilgi Almak için Tıklayınız ',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+              ),
+            ),
             if (widget.height != null && widget.weight != null && widget.ageInMonths == null) ...[
               const SizedBox(height: 20),
               const Divider(color: Colors.blueAccent),
@@ -787,10 +853,12 @@ class _degerlendirmeState extends State<degerlendirme> {
                 ),
               ),
 
+
             ]
           ],
         ),
       ),
+
     );
   }
 
