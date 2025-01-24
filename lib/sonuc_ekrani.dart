@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:ksh_uygulamasi/BeslenmeOnerileri.dart';
 import 'package:ksh_uygulamasi/beslenme_dusuk.dart';
 import 'package:ksh_uygulamasi/beslenme_yuksek.dart';
 import 'package:ksh_uygulamasi/cocuklar_beslenme.dart';
 import 'package:ksh_uygulamasi/depresyon.dart';
 import 'package:ksh_uygulamasi/erkekUreme.dart';
 import 'package:ksh_uygulamasi/gebe_beslenme.dart';
+import 'package:ksh_uygulamasi/kadinUreme.dart';
 import 'package:ksh_uygulamasi/sigara_sorulari.dart';
 import 'package:ksh_uygulamasi/yasli_beslenme.dart';
 
@@ -28,7 +30,7 @@ class degerlendirme extends StatefulWidget {
    bool isSmoking;
 
 
-  degerlendirme({
+  degerlendirme({super.key,
     this.name = 'Bilinmiyor',
     this.age,
     this.ageInMonths,
@@ -335,10 +337,18 @@ class _degerlendirmeState extends State<degerlendirme> {
     return widget.age!>=18;
   }
   bool isGenderErkek(){
-    return widget.gender == 'Erkek';
+    return widget.gender == 'Erkek' && widget.age! >=18 && widget.age!<=65;
   }
   bool isGenderKadin(){
-    return widget.gender == 'Kadın';
+    return widget.gender == 'Kadın' && widget.age! >=15&& widget.age!<=45;
+  }
+  bool isButtonVisible_orta_yas(){
+    if(widget.isPregnant == false&&widget.age!>=6 && widget.age!<=65){
+      return true;
+    }else{
+      return false;
+    }
+
   }
 
   @override
@@ -604,7 +614,7 @@ class _degerlendirmeState extends State<degerlendirme> {
             Center(
               child: Visibility(
                 visible: widget.isSmoking && isButtonVisibleDepresyon(),
-                child: Text(
+                child: const Text(
                   "Sigara Bağımlılık Testi ve Depresyon Testlerini doldurmak için aşağıdaki butonlara tıklayınız.",
                   textAlign: TextAlign.center, // Metni ortalamak için
                   style: TextStyle(
@@ -698,7 +708,7 @@ class _degerlendirmeState extends State<degerlendirme> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const erkekUreme(),
+                      builder: (context) => const kadinUreme(),
                     ),
                   );
                 },
@@ -852,6 +862,30 @@ class _degerlendirmeState extends State<degerlendirme> {
                   ),
                 ),
               ),
+              Visibility(
+                visible: isButtonVisible_orta_yas() ,
+                child:ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const BeslenmeOnerileri(),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.greenAccent,
+                    padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: const Text(
+                    'Beslenme Önerileri için Tıklayınız',
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                ),
+              ),
 
 
             ]
@@ -900,18 +934,6 @@ class _degerlendirmeState extends State<degerlendirme> {
     );
   }
 
-  Widget _buildBMIRange(String category, String range, Color color) {
-    return Card(
-      color: color,
-      child: ListTile(
-        title: Text(
-          category,
-          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
-        ),
-        subtitle: Text(range, style: const TextStyle(color: Colors.black)),
-      ),
-    );
-  }
 
   Widget _getHealthRecommendations() {
     List<Widget> recommendations = [];

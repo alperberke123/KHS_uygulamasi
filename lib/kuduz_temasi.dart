@@ -23,9 +23,9 @@ class _KuduzTemasiState extends State<KuduzTemasi> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch, // Buton ve metinleri hizalı gösterir
             children: [
-              Text(
+              const Text(
                 "KUDUZ RİSKLİ TEMAS:",
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
                   color: Colors.blueAccent, // İlk sayfadaki mavi tema

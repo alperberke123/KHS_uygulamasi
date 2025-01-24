@@ -110,10 +110,10 @@ class _yuksekKilolu_hareketState extends State<yuksekKilolu_hareket> {
                   builder: (BuildContext context) {
                     return Container(
                       padding: const EdgeInsets.all(16.0),
-                      child: Column(
+                      child: const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
-                        children: const [
+                        children: [
                           Text(
                             'Orta Şiddetli Fiziksel Aktiviteler:',
                             style: TextStyle(

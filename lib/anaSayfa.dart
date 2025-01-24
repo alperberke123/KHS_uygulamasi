@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:ksh_uygulamasi/sonuc_ekrani.dart';
-import 'package:ksh_uygulamasi/depresyon.dart';
+
 
 class anasayfa extends StatefulWidget {
+  const anasayfa({super.key});
+
   @override
   _anasayfaState createState() => _anasayfaState();
 }
@@ -21,7 +23,7 @@ class _anasayfaState extends State<anasayfa> {
   bool _isGoingToMilitary = false;
   bool _isGoingToTravel = false;
   String? _profession;
-  int _smokingScore = 0;
+  final int _smokingScore = 0;
   bool _isBaby = false;
   int? _ageInMonths;
   int? _age;
@@ -29,7 +31,7 @@ class _anasayfaState extends State<anasayfa> {
 
 
   bool get showPregnancyField {
-    return _gender == 'Kadın' && (_age != null && _age! >= 15);
+    return _gender == 'Kadın' && (_age != null && _age! >= 15 && _age!<=50);
   }
 
   bool get showMilitaryField {
@@ -66,6 +68,7 @@ class _anasayfaState extends State<anasayfa> {
                   if (value == null || value.isEmpty) {
                     return null;
                   }
+                  return null;
 
                 },
                 onSaved: (value) {

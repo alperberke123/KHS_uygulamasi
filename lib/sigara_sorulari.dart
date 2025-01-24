@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class SigaraSorulariEkrani extends StatefulWidget {
+  const SigaraSorulariEkrani({super.key});
+
   @override
   _SigaraSorulariEkraniState createState() => _SigaraSorulariEkraniState();
 }

@@ -47,8 +47,8 @@ class _dusukKilolu_hareketState extends State<dusukKilolu_hareket> {
               builder: (context) => _buildActivityDetails(),
             );
           },
-          child: Row(
-            children: const [
+          child: const Row(
+            children: [
               Text(
                 'Ayrıntılı bilgi için tıklayınız ',
                 style: TextStyle(fontSize: 16, color: Colors.blue, decoration: TextDecoration.underline),
@@ -95,37 +95,37 @@ class _dusukKilolu_hareketState extends State<dusukKilolu_hareket> {
   }
 
   Widget _buildActivityDetails() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
+    return const Padding(
+      padding: EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text(
+          Text(
             'Orta Şiddette Fiziksel Aktiviteler',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 10),
-          const Text('• Tempolu yürüyüş (saatte yaklaşık 5 km)'),
-          const Text('• Bahçe işleri'),
-          const Text('• Ev işleri (süpürme, silme)'),
-          const Text('• Bisiklet (saatte 16 km)'),
-          const Text('• Hafif ritimde halk oyunları'),
-          const Text('• Salon dansları'),
-          const Text('• Tenis (çift)'),
-          const SizedBox(height: 20),
-          const Text(
+          SizedBox(height: 10),
+          Text('• Tempolu yürüyüş (saatte yaklaşık 5 km)'),
+          Text('• Bahçe işleri'),
+          Text('• Ev işleri (süpürme, silme)'),
+          Text('• Bisiklet (saatte 16 km)'),
+          Text('• Hafif ritimde halk oyunları'),
+          Text('• Salon dansları'),
+          Text('• Tenis (çift)'),
+          SizedBox(height: 20),
+          Text(
             'Şiddetli Fiziksel Aktiviteler',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 10),
-          const Text('• Koşu/jogging (saatte 8 km)'),
-          const Text('• Bisiklet (saatte 16 km)'),
-          const Text('• Yüzme'),
-          const Text('• Aerobik egzersizler'),
-          const Text('• Çok hızlı yürüme (saatte 7 km hız ile)'),
-          const Text('• Ağırlık kaldırma'),
-          const Text('• Basketbol'),
+          SizedBox(height: 10),
+          Text('• Koşu/jogging (saatte 8 km)'),
+          Text('• Bisiklet (saatte 16 km)'),
+          Text('• Yüzme'),
+          Text('• Aerobik egzersizler'),
+          Text('• Çok hızlı yürüme (saatte 7 km hız ile)'),
+          Text('• Ağırlık kaldırma'),
+          Text('• Basketbol'),
         ],
       ),
     );

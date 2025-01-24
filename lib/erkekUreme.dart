@@ -7,131 +7,174 @@ class erkekUreme extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Erkek Üreme Sağlığı'),
-        backgroundColor: Colors.blueAccent, // Başlık için renk
+        title: const Text('Erkek Üreme Sağlığı', style: TextStyle(fontSize: 24)),
+        backgroundColor: Colors.blueGrey,
+        centerTitle: true,
+        elevation: 10,
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
-        child: ListView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Başlık
-            Text(
-              'Erkekler için Üreme Sağlığı (18-65 yaş)',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Colors.redAccent,
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.blueAccent.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Text(
+                'Erkekler için Üreme Sağlığı (18-65 yaş)',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blueAccent,
+                ),
+                textAlign: TextAlign.center,
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // Erkek Üreme Organları Başlığı
-            Text(
+            const Text(
               'Erkek Üreme Organları Nelerdir?',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
+                color: Colors.blueGrey,
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
 
             // Dış Üreme Organları
-            Text(
-              'Dış Üreme Organları:',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+            Card(
+              elevation: 4,
+              margin: const EdgeInsets.symmetric(vertical: 10),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const ListTile(
+                title: Text(
+                  'Dış Üreme Organları',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                subtitle: Text('• Penis\n• Haya torbası (skrotum)'),
               ),
             ),
-            Text('• Penis\n• Haya torbası (skrotum)'),
-            SizedBox(height: 10),
 
             // İç Üreme Organları
-            Text(
-              'İç Üreme Organları:',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+            Card(
+              elevation: 4,
+              margin: const EdgeInsets.symmetric(vertical: 10),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const ListTile(
+                title: Text(
+                  'İç Üreme Organları',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                subtitle: Text(
+                  '• Hayalar (testisler)\n• Tohum kanalları (sperm kanalları)\n• Meni kesecikleri (semen kesecikleri)\n• Prostat\n• Boşaltım yolu, idrar yolu ve meni kanalı',
+                  style: TextStyle(fontSize: 16),
+                ),
               ),
             ),
-            Text('• Hayalar (testisler)\n• Tohum kanalları (sperm kanalları)\n• Meni kesecikleri (semen kesecikleri)\n• Prostat\n• Boşaltım yolu, idrar yolu ve meni kanalı'),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // Korunma Yöntemleri Başlığı
-            Text(
+            const Text(
               'Erkeğe Ait Korunma Yöntemleri',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
+                color: Colors.blueGrey,
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
 
-            // Geri Dönebilir Yöntemler
-            Text(
-              '• Geri Dönebilir Yöntemler:',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+            // Korunma Yöntemleri
+            Card(
+              elevation: 4,
+              margin: const EdgeInsets.symmetric(vertical: 10),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const ListTile(
+                title: Text(
+                  '• Geri Dönebilir Yöntemler',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                subtitle: Text('• Kondom (Korunmada etkilidir.)'),
               ),
             ),
-            Text('• Kondom (Korunmada etkilidir.)'),
-            SizedBox(height: 10),
-
-            // Kalıcı Yöntemler
-            Text(
-              '• Kalıcı Yöntemler:',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+            Card(
+              elevation: 4,
+              margin: const EdgeInsets.symmetric(vertical: 10),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const ListTile(
+                title: Text(
+                  '• Kalıcı Yöntemler',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                subtitle: Text('• Kanalların bağlanması (vazektomi)'),
               ),
             ),
-            Text('• Kanalların bağlanması (vazektomi)'),
-            SizedBox(height: 10),
-
-            // Geleneksel Yöntemler
-            Text(
-              '• Geleneksel yöntemlerden yaygın olarak kullanılan "Geri çekme" yönteminin koruyucu etkisi yoktur.',
-              style: TextStyle(
-                fontSize: 16,
-                fontStyle: FontStyle.italic,
+            Card(
+              elevation: 4,
+              margin: const EdgeInsets.symmetric(vertical: 10),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const ListTile(
+                title: Text(
+                  '• Geleneksel Yöntemler',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                subtitle: Text(
+                  '• "Geri çekme" yönteminin koruyucu etkisi yoktur.',
+                  style: TextStyle(fontStyle: FontStyle.italic, fontSize: 16),
+                ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // HPV ve Kanserler Başlığı
-            Text(
+            const Text(
               'Human Papilloma Virüsü ve Erkeklerde Yaptığı Kanserler',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
+                color: Colors.blueGrey,
               ),
             ),
-            SizedBox(height: 10),
-
-            // HPV ve Kanserler Açıklaması
-            Text(
-              'Human papilloma virüs (HPV), dünyada en sık görülen cinsel yol ile bulaşan enfeksiyon (CYBE) etkenidir. En sık vajinal ve anal cinsel ilişki ile ayrıca oral ilişki ile yayılır hatta cinsel ilişki olmadan sadece cilt temasıyla da bulaşma olabilir.',
-              style: TextStyle(fontSize: 16),
-            ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
 
             // HPV ile İlişkili Kanserler
-            Text(
-              'Erkeklerde HPV ile ilişkilendirilen hastalıklar:',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+            Card(
+              elevation: 4,
+              margin: const EdgeInsets.symmetric(vertical: 10),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
               ),
-            ),
-            Text(
-              '1. Genital bölgede, anal kanal ve çok nadiren rektumda, nazal kavite, paranazal sinüs, orofarengeyal bölgede, larinkste, nadiren trakeobronşial mukozada ve konjonktivada siğiller\n'
-                  '2. Penis kanseri\n'
-                  '3. Prostat kanseri\n'
-                  '4. Kısırlık (infertilite)\n'
-                  '5. Anüs kanseri\n'
-                  '6. Orofarenks kanseri',
-              style: TextStyle(fontSize: 16),
+              child: const ListTile(
+                title: Text(
+                  'HPV ile İlişkili Kanserler',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                subtitle: Text(
+                  '• Genital bölgede, anal kanal ve çok nadiren rektumda, nazal kavite, orofarengeyal bölgede siğiller\n'
+                      '• Penis kanseri\n'
+                      '• Prostat kanseri\n'
+                      '• Kısırlık (infertilite)\n'
+                      '• Anüs kanseri\n'
+                      '• Orofarenks kanseri',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
             ),
           ],
         ),
