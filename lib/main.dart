@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ksh_uygulamasi/ikinci_sayfa.dart';
 import 'dart:async';
+import 'package:ksh_uygulamasi/anaSayfa.dart';
+import 'package:ksh_uygulamasi/profil.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,7 +22,34 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue, // Genel tema rengi
       ),
 
-      home: const BilgilendirmeSayfasi(),
+      home: const MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatelessWidget {
+  const MyHomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('KHS Uygulaması'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.person),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ProfilSayfasi(),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+      body: const BilgilendirmeSayfasi(),
     );
   }
 }
