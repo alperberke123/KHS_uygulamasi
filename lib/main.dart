@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:ksh_uygulamasi/ikinci_sayfa.dart';
 import 'dart:async';
 import 'package:ksh_uygulamasi/anaSayfa.dart';
-import 'package:ksh_uygulamasi/profil.dart';
+//import 'package:ksh_uygulamasi/profil.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -39,12 +45,12 @@ class MyHomePage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.person),
             onPressed: () {
-              Navigator.push(
+             /* Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => const ProfilSayfasi(),
                 ),
-              );
+              );*/
             },
           ),
         ],
