@@ -47,7 +47,7 @@ class _asi_olmadimState extends State<asi_olmadim> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Hiç Aşı Olmadım"),
-        backgroundColor: Colors.blueAccent, // Mavi tonlu AppBar
+        backgroundColor: Colors.lightGreen, // Yeşil tonlu AppBar
         centerTitle: true,
       ),
       resizeToAvoidBottomInset: true,
@@ -59,7 +59,7 @@ class _asi_olmadimState extends State<asi_olmadim> {
             children: [
               const Text(
                 "Yaşınızı Giriniz",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.blueAccent), // Mavi metin rengi
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.lightGreen), // Yeşil metin rengi
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 10),
@@ -69,7 +69,7 @@ class _asi_olmadimState extends State<asi_olmadim> {
                 decoration: InputDecoration(
                   hintText: "Yaşınızı Giriniz",
                   filled: true,
-                  fillColor: Colors.blue[50], // Metin kutusunun arka planı mavi tonunda
+                  fillColor: Colors.green.shade50, // Metin kutusunun arka planı açık yeşil
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.0),
                     borderSide: BorderSide.none,
@@ -88,7 +88,7 @@ class _asi_olmadimState extends State<asi_olmadim> {
                   onPressed: updateText,
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-                    backgroundColor: Colors.blueAccent, // Butonun arka plan rengi mavi
+                    backgroundColor: Colors.lightGreen, // Butonun arka plan rengi yeşil
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -102,7 +102,7 @@ class _asi_olmadimState extends State<asi_olmadim> {
               const SizedBox(height: 40),
               if (_asiPlan.isNotEmpty)
                 Card(
-                  color: Colors.blue[50], // Kartın arka planı mavi
+                  color: Colors.green.shade50, // Kartın arka planı açık yeşil
                   elevation: 4,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),

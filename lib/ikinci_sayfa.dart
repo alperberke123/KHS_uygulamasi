@@ -17,7 +17,7 @@ class _sayfa2State extends State<sayfa2> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Sağlığımı Takipteyim'),
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Colors.lightGreen,
         centerTitle: true,
         elevation: 0,
       ),
@@ -26,121 +26,166 @@ class _sayfa2State extends State<sayfa2> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.blue.shade50, Colors.white],
+            colors: [Colors.green.shade50, Colors.white],
           ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: ListView(
-            children: [
-              const SizedBox(height: 20),
-              _buildInfoSection(
-                "Yakın zamanda kuduz açısından riskli bir temas gerçekleştirdiyseniz tıklayınız.",
-                "Kuduz Riskli Temas",
-                () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const KuduzTemasi()));
-                },
-                icon: Icons.pets,
-              ),
-              const SizedBox(height: 20),
-              _buildInfoSection(
-                "Hiç aşı olmadıysanız aşağıdaki butona tıklayabilirsiniz.",
-                "Hiç Aşı Olmadım",
-                () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const asi_olmadim()));
-                },
-                icon: Icons.vaccines,
-              ),
-              const SizedBox(height: 20),
-              _buildInfoSection(
-                "KSH hakkında genel bilgi sahibi olmak için",
-                "Genel Olarak KSH",
-                () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const DataPage()));
-                },
-                icon: Icons.info_outline,
-              ),
-              const SizedBox(height: 20),
-              _buildInfoSection(
-                "Kaydettiğiniz bilgiler doğrultusunda değerlendirme sonuçlarınızı görüntüleyin",
-                "Değerlendirme Sonuçlarım",
-                () {
-                  // TODO: Değerlendirme sonuçları sayfasına yönlendirme eklenecek
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Bu özellik yakında eklenecektir'),
-                      duration: Duration(seconds: 2),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                // Değerlendirme Sonuçları Kartı
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.green.shade50,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.green.withOpacity(0.2),
+                        spreadRadius: 3,
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      const Icon(
+                        Icons.assessment,
+                        size: 50,
+                        color: Colors.lightGreen,
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'Değerlendirme Sonuçlarım',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.lightGreen,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      const Text(
+                        'Kaydettiğiniz bilgiler doğrultusunda değerlendirme sonuçlarınızı görüntüleyin',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.green,
+                          height: 1.5,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Bu özellik yakında eklenecektir'),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.lightGreen,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          elevation: 4,
+                        ),
+                        child: const Text(
+                          'Sonuçları Görüntüle',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 30),
+                // Diğer Seçenekler Grid
+                GridView.count(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 16,
+                  crossAxisSpacing: 16,
+                  children: [
+                    _buildGridCard(
+                      "Kuduz Riskli Temas",
+                      Icons.pets,
+                      () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const KuduzTemasi()));
+                      },
                     ),
-                  );
-                },
-                icon: Icons.assessment,
-              ),
-            ],
+                    _buildGridCard(
+                      "Hiç Aşı Olmadım",
+                      Icons.vaccines,
+                      () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const asi_olmadim()));
+                      },
+                    ),
+                    _buildGridCard(
+                      "Genel Bilgi",
+                      Icons.info_outline,
+                      () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const DataPage()));
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildInfoSection(String text, String buttonText, VoidCallback onPressed, {IconData? icon}) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
+  Widget _buildGridCard(String title, IconData icon, VoidCallback onTap) {
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: const Offset(0, 3),
-          ),
-        ],
       ),
-      padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            text,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: Colors.blueGrey,
-              height: 1.5,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(15),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Colors.green.shade50, Colors.white],
             ),
           ),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: onPressed,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blueAccent,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                size: 40,
+                color: Colors.lightGreen,
               ),
-              elevation: 3,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (icon != null) ...[
-                  Icon(icon),
-                  const SizedBox(width: 8),
-                ],
-                Text(
-                  buttonText,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+              const SizedBox(height: 12),
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.green,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

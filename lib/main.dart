@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ksh_uygulamasi/ikinci_sayfa.dart';
 import 'dart:async';
 import 'package:ksh_uygulamasi/anaSayfa.dart';
-//import 'package:ksh_uygulamasi/profil.dart';
+import 'package:ksh_uygulamasi/anaSayfa.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
@@ -41,16 +41,16 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('KHS Uygulaması'),
+         backgroundColor: Colors.lightGreen,
         actions: [
           IconButton(
             icon: const Icon(Icons.person),
             onPressed: () {
-             /* Navigator.push(
+              Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const ProfilSayfasi(),
-                ),
-              );*/
+                  builder: (context) => const anasayfa(),                ),
+              );
             },
           ),
         ],
@@ -551,7 +551,7 @@ class _BilgilendirmeSayfasiState extends State<BilgilendirmeSayfasi> {
             const Spacer(),
             const Text(
               "UYGULAMAMIZ HAKKINDA",
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.blueAccent),
+              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.lightGreen),
             ),
             const SizedBox(height: 20),
             Padding(
@@ -560,7 +560,7 @@ class _BilgilendirmeSayfasiState extends State<BilgilendirmeSayfasi> {
                 "Sağlığımı Takipteyim uygulaması sağlığınızı korumak "
                     "için kişisel özelliklerinize göre yaşam boyu almanız gereken "
                     "sağlık hizmetleri hakkında bilgilendirmeyi amaçlamaktadır.",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Colors.blueGrey),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Colors.green),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -574,7 +574,7 @@ class _BilgilendirmeSayfasiState extends State<BilgilendirmeSayfasi> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                backgroundColor: Colors.lightBlue, // Açık mavi buton
+                backgroundColor: Colors.lightGreen, // Açık yeşil buton
               ),
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const sayfa2()));

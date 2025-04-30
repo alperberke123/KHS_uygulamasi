@@ -27,7 +27,7 @@ class GebeBeslenme extends StatelessWidget {
                 "Beslenme Tarzı:",
                 "Her gün en az 2 su bardağı kadar süt veya yoğurt tüketilmelidirler. Bu besinlerin yerine 2-3 kibrit kutusu kadar peynir veya 1-2 kaşık çökelek tüketmeleri de yararlı olacaktır. Çiğ süt ve bundan yapılan peynirler zararlı mikropları içerdiğinden pastörize süt ve bu sütlerden yapılan peynirler tercih edilmelidir. Yine anne adayları normal zamanda yediklerine ek olarak bir adet yumurta veya yumurta kadar et, tavuk, balık tüketmelidir. Bu besinler tüketilemiyorsa kurubaklagil yemekleri, mercimekli veya nohutlu çorbaların tüketilmesine özen gösterilmelidir. Vitaminler açısından zengin olan taze sebze ve meyveler her öğünde düzenli olarak tüketilmelidir. Azar azar ve sık aralıklarla beslenilmeli, uzun süre aç kalınmamalıdır."),
             _buildNutritionTip(
-                "Yemeklerin Yapıplma Tarzı:",
+                "Yemeklerin Yapılma Tarzı:",
                 "Yemeklerde sıvı yağlar tercih edilmelidir. Gün içinde zeytinyağı tüketmeye özen gösterilmelidir. Fasulye, nohut, mercimek gibi kuru baklagillerin yanında, C vitamini açısından zengin bol limonlu salata, taze soğan veya meyve tüketilmelidir. Yemeklerde mutlaka iyotlu tuz kullanılmalıdır. Böylelikle bebek, guatr hastalığı ve zeka geriliğinden korunmuş olur. İyotlu tuz, koyu renkli cam kavanozda saklanılmalı, ışıktan, güneşten ve nemli ortamlardan korunmalıdır. Böylelikle iyodun kayba uğraması engellenmiş olur. Yüksek tansiyon (hipertansiyon) varsa yemekler tuzsuz veya az tuzlu pişirilmelidir. Aşırı tuzlu besinler tüketilmemelidir.."),
             _buildNutritionTip(
                 "Kötü Alışkanlıklar:",

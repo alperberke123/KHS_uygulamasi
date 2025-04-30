@@ -13,7 +13,7 @@ class _KuduzTemasiState extends State<KuduzTemasi> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Kuduz Riskli Temas'),
-        backgroundColor: Colors.blueAccent, // İlk sayfadaki renk temasına uygun hale getirildi
+        backgroundColor: Colors.lightGreen, // Yeşil tema
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -28,7 +28,7 @@ class _KuduzTemasiState extends State<KuduzTemasi> {
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  color: Colors.blueAccent, // İlk sayfadaki mavi tema
+                  color: Colors.lightGreen, // Yeşil tema
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -36,7 +36,7 @@ class _KuduzTemasiState extends State<KuduzTemasi> {
               Container(
                 padding: const EdgeInsets.all(15.0),
                 decoration: BoxDecoration(
-                  color: Colors.blue[50], // Arka plan rengi olarak mavi ton kullanıldı
+                  color: Colors.green.shade50, // Arka plan rengi olarak açık yeşil kullanıldı
                   borderRadius: BorderRadius.circular(10), // Köşeleri yuvarlat
                 ),
                 child: const Text(
@@ -69,7 +69,7 @@ Alternatif aşı programı ise:
                     Navigator.pop(context); // Geri dön butonu
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blueAccent, // İlk sayfadaki buton rengiyle aynı
+                    backgroundColor: Colors.lightGreen, // Yeşil buton
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12), // Butonun köşeleri yuvarlatıldı
                     ),

@@ -359,11 +359,11 @@ class _degerlendirmeState extends State<degerlendirme> {
     debugPrint('Height: ${widget.height}');
     debugPrint('Weight: ${widget.weight}');
     debugPrint('Gender: ${widget.gender}');
-    return
-         Scaffold(
+   return Scaffold(
+      backgroundColor: Colors.lightGreen.shade50,
       appBar: AppBar(
         title: const Text('Sonuçlar'),
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Colors.lightGreen,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () async {
@@ -380,7 +380,7 @@ class _degerlendirmeState extends State<degerlendirme> {
               style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
-                color: Colors.blueAccent,
+                color: Colors.lightGreen,
               ),
             ),
 
@@ -451,7 +451,7 @@ class _degerlendirmeState extends State<degerlendirme> {
 
             // Sigara bağımlılığı testi sonucu
             const SizedBox(height: 20),
-            const Divider(color: Colors.blueAccent),
+            const Divider(color: Colors.lightGreen),
             // Eğer smokingScore 0 ise, sigara bağımlılık düzeyi ile ilgili bilgileri gösterme
             if (widget.smokingScore > 0) ...[
               const Text(
@@ -459,7 +459,7 @@ class _degerlendirmeState extends State<degerlendirme> {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.blueAccent,
+                  color: Colors.lightGreen,
                 ),
               ),
               const SizedBox(height: 10),
@@ -471,13 +471,13 @@ class _degerlendirmeState extends State<degerlendirme> {
 
             if (widget.profession != null && widget.profession!.toLowerCase() == 'sağlık çalışanı') ...[
               const SizedBox(height: 20),
-              const Divider(color: Colors.blueAccent),
+              const Divider(color: Colors.lightGreen),
               const Text(
                 'Sağlık Çalışanları İçin Aşılar:',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.blueAccent,
+                  color: Colors.lightGreen,
                 ),
               ),
 
@@ -520,14 +520,14 @@ class _degerlendirmeState extends State<degerlendirme> {
             ],
             const SizedBox(height: 10),
             if (widget.isMarriageApplicant) ...[
-              const Divider(color: Colors.blueAccent),
-              const Divider(color: Colors.blueAccent),
+              const Divider(color: Colors.lightGreen),
+              const Divider(color: Colors.lightGreen),
               const Text(
                 'Evlilik Başvurusu Testleri:',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.blueAccent,
+                  color: Colors.lightGreen,
                 ),
               ),
               const SizedBox(height: 10),
@@ -546,7 +546,7 @@ class _degerlendirmeState extends State<degerlendirme> {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.blueAccent,
+                color: Colors.lightGreen,
               ),
             ),
 
@@ -557,7 +557,7 @@ class _degerlendirmeState extends State<degerlendirme> {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.blueAccent,
+                  color: Colors.lightGreen,
                 ),
               ),
               _buildVaccineSchedule(
@@ -591,7 +591,7 @@ class _degerlendirmeState extends State<degerlendirme> {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.blueAccent,
+                  color: Colors.lightGreen,
                 ),
               ),
               _buildMonitoringSchedule('İlk 14 hafta içinde'),
@@ -638,7 +638,7 @@ class _degerlendirmeState extends State<degerlendirme> {
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blueAccent,
+                backgroundColor: Colors.lightGreen,
                 padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -727,13 +727,13 @@ class _degerlendirmeState extends State<degerlendirme> {
             ),
             if (widget.height != null && widget.weight != null && widget.ageInMonths == null) ...[
               const SizedBox(height: 20),
-              const Divider(color: Colors.blueAccent),
+              const Divider(color: Colors.lightGreen),
               const Text(
                 'Obezite Durumu:',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.blueAccent,
+                  color: Colors.lightGreen,
                 ),
               ),
 
@@ -826,7 +826,7 @@ class _degerlendirmeState extends State<degerlendirme> {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blueAccent,
+                    backgroundColor: Colors.lightGreen,
                     padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -850,7 +850,7 @@ class _degerlendirmeState extends State<degerlendirme> {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blueAccent,
+                    backgroundColor: Colors.lightGreen,
                     padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -1055,8 +1055,8 @@ class _degerlendirmeState extends State<degerlendirme> {
       recommendations.add(_buildTaramaWidget("Serviks Kanser Taraması (HPV-DNA (Human Papilloma Virüs-Deoksiribo Nükleik Asit) ve Smear)", "5 Yılda Bir", "30-65 Yaş Kadınlar, KETEM, Hastane"));
     }
     if (widget.age != null && widget.age! >= 50 && widget.age! <= 70) {
-      recommendations.add(_buildTaramaWidget("Kolon Kanser Taraması (GGK (Gaitada Gizli Kan))", "2 Yılda Bir", "50-70 Yaş, KETEM, Aile Hekimliği"));
-      recommendations.add(_buildTaramaWidget("Kolon Kanser Taraması (Kolonoskopi)", "10 Yılda Bir", "50-70 Yaş, Hastane"));
+      recommendations.add(_buildTaramaWidget("Bağırsak Kanser Taraması (GGK (Gaitada Gizli Kan))", "2 Yılda Bir", "50-70 Yaş, KETEM, Aile Hekimliği"));
+      recommendations.add(_buildTaramaWidget("Bağırsak Kanser Taraması (Kolonoskopi)", "10 Yılda Bir", "50-70 Yaş, Hastane"));
     }
 
     if (widget.age != null && widget.age! >= 40) {
@@ -1092,9 +1092,9 @@ class _degerlendirmeState extends State<degerlendirme> {
 
   Widget _buildAsiWidget(String name, String zaman, String yer) {
     return Card(
-      color: Colors.lightBlue.shade50,
+      color: Colors.lightGreen.shade200,
       child: ListTile(
-        title: Text(name, style: const TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.bold)),
+        title: Text(name, style: const TextStyle(color: Colors.lightGreen, fontWeight: FontWeight.bold)),
         subtitle: Text('Zaman: $zaman\nYer: $yer', style: const TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold)),
       ),
     );
@@ -1102,9 +1102,9 @@ class _degerlendirmeState extends State<degerlendirme> {
 
   Widget _buildTaramaWidget(String name, String zaman, String yer) {
     return Card(
-      color: Colors.lightBlue.shade50,
+      color: Colors.lightGreen.shade200,
       child: ListTile(
-        title: Text(name, style: const TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.bold)),
+        title: Text(name, style: const TextStyle(color: Colors.lightGreen, fontWeight: FontWeight.bold)),
         subtitle: Text('Zaman: $zaman\nYer: $yer', style: const TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold)),
       ),
     );
@@ -1123,13 +1123,13 @@ class _degerlendirmeState extends State<degerlendirme> {
 }
 Widget _buildVaccineSchedule(String title, String time, String place) {
   return Card(
-    color: Colors.lightBlue.shade50,
+    color: Colors.lightGreen.shade200,
     child: ListTile(
       title: Text(
         title,
         style: const TextStyle(
           fontWeight: FontWeight.bold,
-          color: Colors.blueAccent,
+          color: Colors.lightGreen,
         ),
       ),
       subtitle: Text(
@@ -1147,7 +1147,7 @@ Widget _buildMonitoringSchedule(String time) {
   return ListTile(
     leading: const Icon(
       Icons.check_circle_outline,
-      color: Colors.blueAccent,
+      color: Colors.lightGreen,
     ),
     title: Text(
       time,
@@ -1160,13 +1160,13 @@ Widget _buildMonitoringSchedule(String time) {
 }
 Widget _buildTestWidget(String testName, String testDetails) {
   return Card(
-    color: Colors.lightBlue.shade50,
+    color: Colors.lightGreen.shade200,
     child: ListTile(
       title: Text(
         testName,
         style: const TextStyle(
           fontWeight: FontWeight.bold,
-          color: Colors.blueAccent,
+          color: Colors.lightGreen,
         ),
       ),
       subtitle: Text(

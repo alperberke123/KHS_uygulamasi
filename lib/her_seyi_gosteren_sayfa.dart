@@ -8,7 +8,7 @@ class DataPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Koruyucu Sağlık Hizmetleri'),
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Colors.lightGreen,
         centerTitle: true,
       ),
       body: Padding(
@@ -126,9 +126,9 @@ class DataPage extends StatelessWidget {
 
 • Serviks Kanser Taraması (HPV-DNA ve Smear) - 5 Yılda Bir - 30-65 Yaş Kadınlar - KETEM, Hastane
 
-• Kolon Kanser Taraması (GGK) - 2 Yılda Bir - 50-70 Yaş - KETEM, Aile Hekimliği
+• Bağırsak Kanser Taraması (GGK) - 2 Yılda Bir - 50-70 Yaş - KETEM, Aile Hekimliği
 
-• Kolon Kanser Taraması (Kolonoskopi) - 10 Yılda Bir - 50-70 Yaş - Hastane
+• Bağırsak Kanser Taraması (Kolonoskopi) - 10 Yılda Bir - 50-70 Yaş - Hastane
               """),
 
               _buildSectionTitle("Koroner Arter Hastalık Riski Tarama Programı"),
@@ -232,7 +232,7 @@ class DataPage extends StatelessWidget {
         style: const TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,
-          color: Colors.blueAccent,
+          color: Colors.lightGreen,
         ),
         textAlign: TextAlign.center,
       ),
