@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
-class kadinUreme extends StatelessWidget {
-  const kadinUreme({super.key});
+class KadinUreme extends StatelessWidget {
+  const KadinUreme({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Kadın Üreme Sağlığı', style: TextStyle(fontSize: 24)),
+        title:
+            const Text('Kadın Üreme Sağlığı', style: TextStyle(fontSize: 24)),
         backgroundColor: Colors.pinkAccent,
         centerTitle: true,
         elevation: 10,
@@ -39,7 +40,7 @@ class kadinUreme extends StatelessWidget {
             // Kadın ve Üreme Sağlığı Açıklaması
             const Text(
               'Dünyada nüfus, kalkınma ve doğurganlık arasında kurulan ilişki önce “Nüfus planlaması”, ardından “Doğum kontrolü” ve “Aile planlaması” kavramlarının gelişmesine sebep olmuştur.\n'
-                  'Bu alanda yapılan çalışmaların kadının statüsü ile ilgili konularla ve kadının genel sağlık sorunları ile ilişkisi, kadın nüfusa odaklanılmasına ve bu kavramlara “Kadın Sağlığı” nın da eklenmesine yol açmıştır.',
+              'Bu alanda yapılan çalışmaların kadının statüsü ile ilgili konularla ve kadının genel sağlık sorunları ile ilişkisi, kadın nüfusa odaklanılmasına ve bu kavramlara “Kadın Sağlığı” nın da eklenmesine yol açmıştır.',
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
@@ -72,11 +73,11 @@ class kadinUreme extends StatelessWidget {
             const SizedBox(height: 10),
             const Text(
               '• Aşırı doğurganlığın ve buna bağlı ortaya çıkan kansızlık, jinekolojik hastalıklar, doğuma bağlı oluşabilecek rahatsızlıkların azaltılması\n'
-                  '• Çok ve sık gebelikleri önleyerek, çok ve sık gebeliklerin anne ve çocuk sağlığına olan olumsuz etkilerini gidermek\n'
-                  '• Riskli gebeliklerin önlenmesi\n'
-                  '• İstenmeyen gebeliklerin ve bunlara bağlı olumsuz sonuçların önlenmesi\n'
-                  '• Doğum yaşının ayarlanmasını sağlamak\n'
-                  '• Çocuğu olmayan ailelere çocuk sahibi olmaları için yol göstermek',
+              '• Çok ve sık gebelikleri önleyerek, çok ve sık gebeliklerin anne ve çocuk sağlığına olan olumsuz etkilerini gidermek\n'
+              '• Riskli gebeliklerin önlenmesi\n'
+              '• İstenmeyen gebeliklerin ve bunlara bağlı olumsuz sonuçların önlenmesi\n'
+              '• Doğum yaşının ayarlanmasını sağlamak\n'
+              '• Çocuğu olmayan ailelere çocuk sahibi olmaları için yol göstermek',
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
@@ -104,7 +105,8 @@ class kadinUreme extends StatelessWidget {
                   'Hazne (Vajen)',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                subtitle: Text('Vücudun dışında iç genital organlara doğru bir geçit görevi gören, genişleyebilen bir kanaldır. Cinsel ilişki bu kanal aracılığıyla olur.'),
+                subtitle: Text(
+                    'Vücudun dışında iç genital organlara doğru bir geçit görevi gören, genişleyebilen bir kanaldır. Cinsel ilişki bu kanal aracılığıyla olur.'),
               ),
             ),
             Card(
@@ -118,7 +120,8 @@ class kadinUreme extends StatelessWidget {
                   'Rahim (Uterus)',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                subtitle: Text('Rahim iç yüzü, gebeliğin yerleşmesi ve bebeğin gelişmesine uygun bir tabakayla kaplıdır. Gebelik süresince, bebek rahim içinde büyüyüp gelişir.'),
+                subtitle: Text(
+                    'Rahim iç yüzü, gebeliğin yerleşmesi ve bebeğin gelişmesine uygun bir tabakayla kaplıdır. Gebelik süresince, bebek rahim içinde büyüyüp gelişir.'),
               ),
             ),
             Card(
@@ -132,7 +135,8 @@ class kadinUreme extends StatelessWidget {
                   'Tüpler',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                subtitle: Text('Rahmin iki yanından çıkıp, yumurtalıklara kadar uzanan ince kanallardır. Yumurtalıklardan çıkan yumurtayı yakalarlar.'),
+                subtitle: Text(
+                    'Rahmin iki yanından çıkıp, yumurtalıklara kadar uzanan ince kanallardır. Yumurtalıklardan çıkan yumurtayı yakalarlar.'),
               ),
             ),
             Card(
@@ -146,7 +150,8 @@ class kadinUreme extends StatelessWidget {
                   'Yumurtalıklar',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                subtitle: Text('Kadınlık hormonlarını ve kadın üreme hücresi olan yumurtayı üretirler.'),
+                subtitle: Text(
+                    'Kadınlık hormonlarını ve kadın üreme hücresi olan yumurtayı üretirler.'),
               ),
             ),
             const SizedBox(height: 20),
@@ -163,21 +168,21 @@ class kadinUreme extends StatelessWidget {
             const SizedBox(height: 10),
             const Text(
               '• Hormonal Yöntemler\n'
-                  '• Kombine oral kontraseptifler (Hap)\n'
-                  '• Enjekte edilen kontraseptifler (İğne)\n'
-                  '• Vajinal halkalar\n'
-                  '• Minihaplar\n'
-                  '• Post koital haplar (Ertesi gün hapı)\n'
-                  '• Deri altı kapsüller (implantlar)\n'
-                  '• Rahim içi araçlar (Spiral)\n'
-                  '• Bakırlı rahim içi araçlar\n'
-                  '• Hormonlu rahim içi araçlar\n'
-                  '• Bariyer yöntemler\n'
-                  '• Kondom\n'
-                  '• Diyafram\n'
-                  '• Cerrahi Yöntemler\n'
-                  '• Tüp ligasyonu\n'
-                  '• Vazektomi',
+              '• Kombine oral kontraseptifler (Hap)\n'
+              '• Enjekte edilen kontraseptifler (İğne)\n'
+              '• Vajinal halkalar\n'
+              '• Minihaplar\n'
+              '• Post koital haplar (Ertesi gün hapı)\n'
+              '• Deri altı kapsüller (implantlar)\n'
+              '• Rahim içi araçlar (Spiral)\n'
+              '• Bakırlı rahim içi araçlar\n'
+              '• Hormonlu rahim içi araçlar\n'
+              '• Bariyer yöntemler\n'
+              '• Kondom\n'
+              '• Diyafram\n'
+              '• Cerrahi Yöntemler\n'
+              '• Tüp ligasyonu\n'
+              '• Vazektomi',
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
@@ -194,16 +199,16 @@ class kadinUreme extends StatelessWidget {
             const SizedBox(height: 10),
             const Text(
               'Kadına Ait Yöntemler:\n'
-                  '• Doğum kontrol hapları\n'
-                  '• Rahim içi araç\n'
-                  '• Diyafram\n'
-                  '• Kadın kondomu\n'
-                  '• Enjektabl kontraseptifler\n'
-                  '• Kalıcı Yöntemler\n'
-                  '• Tüplerin bağlanması\n\n'
-                  'Erkeğe Ait Yöntemler:\n'
-                  '• Kondom\n'
-                  '• Vazektomi',
+              '• Doğum kontrol hapları\n'
+              '• Rahim içi araç\n'
+              '• Diyafram\n'
+              '• Kadın kondomu\n'
+              '• Enjektabl kontraseptifler\n'
+              '• Kalıcı Yöntemler\n'
+              '• Tüplerin bağlanması\n\n'
+              'Erkeğe Ait Yöntemler:\n'
+              '• Kondom\n'
+              '• Vazektomi',
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
@@ -220,7 +225,7 @@ class kadinUreme extends StatelessWidget {
             const SizedBox(height: 10),
             const Text(
               '• Geleneksel yöntemlerden "Geri çekme" ve "Vajinal Lavaj" yöntemlerinin koruyucu etkisi yoktur.\n'
-                  '• Modern aile planlaması yöntemi seçmeden önce sağlık kuruluşuna danışılmalıdır.',
+              '• Modern aile planlaması yöntemi seçmeden önce sağlık kuruluşuna danışılmalıdır.',
               style: TextStyle(fontSize: 16),
             ),
           ],

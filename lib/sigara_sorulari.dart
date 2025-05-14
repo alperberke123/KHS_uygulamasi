@@ -13,7 +13,8 @@ class _SigaraSorulariEkraniState extends State<SigaraSorulariEkrani> {
 
   final List<Map<String, dynamic>> _questions = [
     {
-      'question': 'Günün ilk sigarasını sabah uyandıktan ne kadar sonra içersiniz?',
+      'question':
+          'Günün ilk sigarasını sabah uyandıktan ne kadar sonra içersiniz?',
       'answers': [
         {'text': 'İlk 5 dakika içinde', 'score': 3},
         {'text': '6-30 dakika içinde', 'score': 2},
@@ -22,7 +23,8 @@ class _SigaraSorulariEkraniState extends State<SigaraSorulariEkrani> {
       ],
     },
     {
-      'question': 'Sigara içmenin yasak olduğu yerlerde sigara içmemek sizi zorlar mı?',
+      'question':
+          'Sigara içmenin yasak olduğu yerlerde sigara içmemek sizi zorlar mı?',
       'answers': [
         {'text': 'Evet', 'score': 1},
         {'text': 'Hayır', 'score': 0},
@@ -45,14 +47,16 @@ class _SigaraSorulariEkraniState extends State<SigaraSorulariEkrani> {
       ],
     },
     {
-      'question': 'Sabahları günün diğer zamanlarına göre daha fazla sigara içiyor musunuz?',
+      'question':
+          'Sabahları günün diğer zamanlarına göre daha fazla sigara içiyor musunuz?',
       'answers': [
         {'text': 'Evet', 'score': 1},
         {'text': 'Hayır', 'score': 0},
       ],
     },
     {
-      'question': 'Yatmanızı gerektirecek kadar hasta olduğunuz zamanlarda da sigara içer misiniz?',
+      'question':
+          'Yatmanızı gerektirecek kadar hasta olduğunuz zamanlarda da sigara içer misiniz?',
       'answers': [
         {'text': 'Evet', 'score': 1},
         {'text': 'Hayır', 'score': 0},
@@ -79,7 +83,8 @@ class _SigaraSorulariEkraniState extends State<SigaraSorulariEkrani> {
     }
 
     // Tüm sorular cevaplandıysa toplam puanı hesapla ve sonucu göster
-    _totalScore = selectedAnswers.fold(0, (prev, element) => prev + (element ?? 0));
+    _totalScore =
+        selectedAnswers.fold(0, (prev, element) => prev + (element ?? 0));
     String resultMessage;
 
     if (_totalScore <= 2) {
@@ -98,7 +103,8 @@ class _SigaraSorulariEkraniState extends State<SigaraSorulariEkrani> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text("Test Sonucu"),
-        content: Text("Toplam Puanınız: $_totalScore\nBağımlılık Düzeyi: $resultMessage"),
+        content: Text(
+            "Toplam Puanınız: $_totalScore\nBağımlılık Düzeyi: $resultMessage"),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
@@ -158,7 +164,8 @@ class _SigaraSorulariEkraniState extends State<SigaraSorulariEkrani> {
               onPressed: _submitAnswers,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blueAccent,
-                padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 15.0, horizontal: 15.0),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),

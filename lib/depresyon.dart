@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ksh_uygulamasi/SuggestionsPage.dart';
 
 class DepressionQuiz extends StatefulWidget {
   const DepressionQuiz({Key? key}) : super(key: key);
@@ -8,7 +9,8 @@ class DepressionQuiz extends StatefulWidget {
 }
 
 class _DepressionQuizState extends State<DepressionQuiz> {
-  final List<int?> scores = List<int?>.filled(21, null); // Değerler başlangıçta null
+  final List<int?> scores =
+      List<int?>.filled(21, null); // Değerler başlangıçta null
 
   void _calculateTotalScore(BuildContext context) {
     if (scores.contains(null)) {
@@ -22,7 +24,9 @@ class _DepressionQuizState extends State<DepressionQuiz> {
     }
 
     // Tüm sorular yanıtlandıysa puanı hesapla ve sonucu göster
-    int totalScore = scores.where((score) => score != null).fold(0, (sum, score) => sum + (score ?? 0));
+    int totalScore = scores
+        .where((score) => score != null)
+        .fold(0, (sum, score) => sum + (score ?? 0));
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -59,7 +63,8 @@ class _DepressionQuizState extends State<DepressionQuiz> {
                     ),
                     ...List.generate(4, (optionIndex) {
                       return RadioListTile<int>(
-                        title: Text(quizQuestions[index]['options']![optionIndex]),
+                        title:
+                            Text(quizQuestions[index]['options']![optionIndex]),
                         value: optionIndex,
                         groupValue: scores[index],
                         onChanged: (value) {
@@ -139,6 +144,19 @@ class QuizResultPage extends StatelessWidget {
                 },
                 child: const Text('Başa Dön'),
               ),
+              ElevatedButton(
+                onPressed: () {
+                  // Belgeyi gösteren sayfaya yönlendirme
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          const SuggestionsPage(), // Yeni öneri sayfasına yönlendirme
+                    ),
+                  );
+                },
+                child: const Text('Psikolojik Sağlamlık ve Öneriler'),
+              )
             ],
           ),
         ),
@@ -302,7 +320,8 @@ final List<Map<String, dynamic>> quizQuestions = [
     ],
   },
   {
-    "question": "Cezalandırılmanız gereken şeyler yaptığınızı düşünüyor musunuz?",
+    "question":
+        "Cezalandırılmanız gereken şeyler yaptığınızı düşünüyor musunuz?",
     "options": [
       "Cezalandırılması gereken şeyler yaptığımı sanmıyorum.",
       "Yaptıklarımdan dolayı cezalandırılabileceğimi düşünüyorum.",
@@ -337,10 +356,4 @@ final List<Map<String, dynamic>> quizQuestions = [
       "Canımı sıkan şeylere bile artık kızamıyorum."
     ],
   },
-  // Add the remaining questions as they are...
 ];
-
-
-
-
-

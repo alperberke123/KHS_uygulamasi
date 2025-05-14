@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:ksh_uygulamasi/anaSayfa.dart';
 import 'package:ksh_uygulamasi/her_seyi_gosteren_sayfa.dart';
 import 'package:ksh_uygulamasi/hic_asi_olmadim.dart';
 import 'package:ksh_uygulamasi/kuduz_temasi.dart';
 
-class sayfa2 extends StatefulWidget {
-  const sayfa2({super.key});
+class Sayfa2 extends StatefulWidget {
+  const Sayfa2({super.key});
 
   @override
-  State<sayfa2> createState() => _sayfa2State();
+  State<Sayfa2> createState() => _Sayfa2State();
 }
 
-class _sayfa2State extends State<sayfa2> {
+class _Sayfa2State extends State<Sayfa2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,7 +88,8 @@ class _sayfa2State extends State<sayfa2> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.lightGreen,
                           foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 32, vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),
@@ -119,21 +119,30 @@ class _sayfa2State extends State<sayfa2> {
                       "Kuduz Riskli Temas",
                       Icons.pets,
                       () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const KuduzTemasi()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const KuduzTemasi()));
                       },
                     ),
                     _buildGridCard(
                       "Hiç Aşı Olmadım",
                       Icons.vaccines,
                       () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const asi_olmadim()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const AsiOlmadim()));
                       },
                     ),
                     _buildGridCard(
                       "Genel Bilgi",
                       Icons.info_outline,
                       () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const DataPage()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const DataPage()));
                       },
                     ),
                   ],

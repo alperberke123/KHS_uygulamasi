@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CheckSorulari extends StatefulWidget {
   final String? gender;
@@ -25,11 +26,13 @@ class _CheckSorulariState extends State<CheckSorulari> {
   bool _isSmoking = false;
 
   bool get showPregnancyField {
-    return widget.gender == 'Kadın' && (widget.age != null && widget.age! >= 15 && widget.age! <= 50);
+    return widget.gender == 'Kadın' &&
+        (widget.age != null && widget.age! >= 15 && widget.age! <= 50);
   }
 
   bool get showMilitaryField {
-    return widget.gender == 'Erkek' && (widget.age != null && widget.age! >= 18);
+    return widget.gender == 'Erkek' &&
+        (widget.age != null && widget.age! >= 18);
   }
 
   bool get showMarriageField {
@@ -38,6 +41,33 @@ class _CheckSorulariState extends State<CheckSorulari> {
 
   bool get showSigaraField {
     return widget.age != null && widget.age! >= 13;
+  }
+
+  void _saveToFirebase() async {
+    try {
+      CollectionReference userCollection =
+          FirebaseFirestore.instance.collection('user_responses');
+
+      // Veriyi Firestore'a kaydediyoruz
+      await userCollection.add({
+        'gender': widget.gender,
+        'age': widget.age,
+        'isPregnant': _isPregnant,
+        'isMarriageApplicant': _isMarriageApplicant,
+        'isGoingToHajjUmrah': _isGoingToHajjUmrah,
+        'isGoingToMilitary': _isGoingToMilitary,
+        'isGoingToTravel': _isGoingToTravel,
+        'isSmoking': _isSmoking,
+      });
+
+      // Veri kaydedildikten sonra başarılı bir mesaj gösterilebilir
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Veriler başarıyla kaydedildi!")));
+    } catch (e) {
+      // Hata olursa hata mesajını gösteriyoruz
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Hata oluştu: $e")));
+    }
   }
 
   @override
@@ -104,7 +134,8 @@ class _CheckSorulariState extends State<CheckSorulari> {
                 ),
                 if (showMilitaryField)
                   CheckboxListTile(
-                    title: const Text('Üç ay içinde askere gidecekseniz tıklayınız.'),
+                    title: const Text(
+                        'Üç ay içinde askere gidecekseniz tıklayınız.'),
                     activeColor: Colors.lightGreen,
                     value: _isGoingToMilitary,
                     onChanged: (value) {
@@ -114,7 +145,8 @@ class _CheckSorulariState extends State<CheckSorulari> {
                     },
                   ),
                 CheckboxListTile(
-                  title: const Text('Üç ay içinde yurtdışına seyahate gidecekseniz tıklayınız.'),
+                  title: const Text(
+                      'Üç ay içinde yurtdışına seyahate gidecekseniz tıklayınız.'),
                   activeColor: Colors.lightGreen,
                   value: _isGoingToTravel,
                   onChanged: (value) {
@@ -138,6 +170,7 @@ class _CheckSorulariState extends State<CheckSorulari> {
                 Center(
                   child: ElevatedButton(
                     onPressed: () {
+                      _saveToFirebase();
                       Navigator.pop(context, {
                         'isPregnant': _isPregnant,
                         'isMarriageApplicant': _isMarriageApplicant,
@@ -149,7 +182,8 @@ class _CheckSorulariState extends State<CheckSorulari> {
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.lightGreen,
-                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 15),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 32, vertical: 15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -174,4 +208,4 @@ class _CheckSorulariState extends State<CheckSorulari> {
       ),
     );
   }
-} 
+}

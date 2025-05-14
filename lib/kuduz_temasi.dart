@@ -21,7 +21,8 @@ class _KuduzTemasiState extends State<KuduzTemasi> {
           padding: const EdgeInsets.all(16.0), // Genel kenar boşlukları
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch, // Buton ve metinleri hizalı gösterir
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            // Buton ve metinleri hizalı gösterir
             children: [
               const Text(
                 "KUDUZ RİSKLİ TEMAS:",
@@ -36,7 +37,8 @@ class _KuduzTemasiState extends State<KuduzTemasi> {
               Container(
                 padding: const EdgeInsets.all(15.0),
                 decoration: BoxDecoration(
-                  color: Colors.green.shade50, // Arka plan rengi olarak açık yeşil kullanıldı
+                  color: Colors.green.shade50,
+                  // Arka plan rengi olarak açık yeşil kullanıldı
                   borderRadius: BorderRadius.circular(10), // Köşeleri yuvarlat
                 ),
                 child: const Text(
@@ -71,9 +73,11 @@ Alternatif aşı programı ise:
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.lightGreen, // Yeşil buton
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12), // Butonun köşeleri yuvarlatıldı
+                      borderRadius: BorderRadius.circular(
+                          12), // Butonun köşeleri yuvarlatıldı
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
                   ),
                   child: const Text(
                     "Geri Dön",

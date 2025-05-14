@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:ksh_uygulamasi/ikinci_sayfa.dart';
 import 'dart:async';
 import 'package:ksh_uygulamasi/anaSayfa.dart';
-import 'package:ksh_uygulamasi/anaSayfa.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -23,11 +22,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        scaffoldBackgroundColor: Colors.lightBlue.shade50, // Açık mavi arka plan
+        scaffoldBackgroundColor: Colors.lightBlue.shade50,
+        // Açık mavi arka plan
         useMaterial3: true,
         primarySwatch: Colors.blue, // Genel tema rengi
       ),
-
       home: const MyHomePage(),
     );
   }
@@ -41,7 +40,7 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('KHS Uygulaması'),
-         backgroundColor: Colors.lightGreen,
+        backgroundColor: Colors.lightGreen,
         actions: [
           IconButton(
             icon: const Icon(Icons.person),
@@ -49,7 +48,8 @@ class MyHomePage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const anasayfa(),                ),
+                  builder: (context) => const Anasayfa(),
+                ),
               );
             },
           ),
@@ -220,7 +220,8 @@ class _BilgilendirmeSayfasiState extends State<BilgilendirmeSayfasi> {
     if (today.month == 6 && today.day == 26) {
       specialDays.add({
         "title": "Dünya Uyuşturucu Kullanımı ve Kaçakçılığı ile Mücadele Günü",
-        "message": "26 Haziran Dünya Uyuşturucu Kullanımı ve Kaçakçılığı ile Mücadele Günü!"
+        "message":
+            "26 Haziran Dünya Uyuşturucu Kullanımı ve Kaçakçılığı ile Mücadele Günü!"
       });
     }
     if (today.month == 7 && today.day == 28) {
@@ -254,10 +255,8 @@ class _BilgilendirmeSayfasiState extends State<BilgilendirmeSayfasi> {
       });
     }
     if (today.month == 9 && today.day == 29) {
-      specialDays.add({
-        "title": "Dünya Kalp Günü",
-        "message": "29 Eylül Dünya Kalp Günü!"
-      });
+      specialDays.add(
+          {"title": "Dünya Kalp Günü", "message": "29 Eylül Dünya Kalp Günü!"});
     }
     if (today.month == 10 && today.day == 1) {
       specialDays.add({
@@ -312,10 +311,8 @@ class _BilgilendirmeSayfasiState extends State<BilgilendirmeSayfasi> {
       });
     }
     if (today.month == 12 && today.day == 1) {
-      specialDays.add({
-        "title": "Dünya AIDS Günü",
-        "message": "1 Aralık Dünya AIDS Günü!"
-      });
+      specialDays.add(
+          {"title": "Dünya AIDS Günü", "message": "1 Aralık Dünya AIDS Günü!"});
     }
     if (today.month == 12 && today.day == 3) {
       specialDays.add({
@@ -326,102 +323,108 @@ class _BilgilendirmeSayfasiState extends State<BilgilendirmeSayfasi> {
 
     // Süreli özel günler
     if (today.isAfter(DateTime(today.year, 1, 1)) &&
-        today.isBefore(DateTime(today.year, 1, 31).add(const Duration(days: 1)))) {
+        today.isBefore(
+            DateTime(today.year, 1, 31).add(const Duration(days: 1)))) {
       specialDays.add({
         "title": "Rahim Ağzı (Serviks) Kanseri Farkındalık Ayı",
         "message": "1-31 Ocak boyunca Serviks Kanseri Farkındalığı!"
       });
     }
     if (today.isAfter(DateTime(today.year, 3, 1)) &&
-        today.isBefore(DateTime(today.year, 3, 7).add(const Duration(days: 1)))) {
-      specialDays.add({
-        "title": "Yeşilay Haftası",
-        "message": "1-7 Mart Yeşilay Haftası!"
-      });
+        today.isBefore(
+            DateTime(today.year, 3, 7).add(const Duration(days: 1)))) {
+      specialDays.add(
+          {"title": "Yeşilay Haftası", "message": "1-7 Mart Yeşilay Haftası!"});
     }
     if (today.isAfter(DateTime(today.year, 3, 14)) &&
-        today.isBefore(DateTime(today.year, 3, 20).add(const Duration(days: 1)))) {
+        today.isBefore(
+            DateTime(today.year, 3, 20).add(const Duration(days: 1)))) {
       specialDays.add({
         "title": "Dünya Tuza Dikkat Haftası",
         "message": "14-20 Mart Dünya Tuza Dikkat Haftası!"
       });
     }
     if (today.isAfter(DateTime(today.year, 3, 18)) &&
-        today.isBefore(DateTime(today.year, 3, 24).add(const Duration(days: 1)))) {
+        today.isBefore(
+            DateTime(today.year, 3, 24).add(const Duration(days: 1)))) {
       specialDays.add({
         "title": "Yaşlılar Haftası",
         "message": "18-24 Mart Yaşlılar Haftası!"
       });
     }
     if (today.isAfter(DateTime(today.year, 4, 1)) &&
-        today.isBefore(DateTime(today.year, 4, 7).add(const Duration(days: 1)))) {
-      specialDays.add({
-        "title": "Kanser Haftası",
-        "message": "1-7 Nisan Kanser Haftası!"
-      });
+        today.isBefore(
+            DateTime(today.year, 4, 7).add(const Duration(days: 1)))) {
+      specialDays.add(
+          {"title": "Kanser Haftası", "message": "1-7 Nisan Kanser Haftası!"});
     }
     if (today.isAfter(DateTime(today.year, 4, 12)) &&
-        today.isBefore(DateTime(today.year, 4, 18).add(const Duration(days: 1)))) {
+        today.isBefore(
+            DateTime(today.year, 4, 18).add(const Duration(days: 1)))) {
       specialDays.add({
         "title": "Kalp Sağlığı Haftası",
         "message": "12-18 Nisan Kalp Sağlığı Haftası!"
       });
     }
     if (today.isAfter(DateTime(today.year, 4, 7)) &&
-        today.isBefore(DateTime(today.year, 4, 13).add(const Duration(days: 1)))) {
+        today.isBefore(
+            DateTime(today.year, 4, 13).add(const Duration(days: 1)))) {
       specialDays.add({
         "title": "Dünya Sağlık Haftası",
         "message": "7-13 Nisan Dünya Sağlık Haftası!"
       });
     }
     if (today.isAfter(DateTime(today.year, 4, 24)) &&
-        today.isBefore(DateTime(today.year, 4, 30).add(const Duration(days: 1)))) {
-      specialDays.add({
-        "title": "Aşı Haftası",
-        "message": "24-30 Nisan Aşı Haftası!"
-      });
+        today.isBefore(
+            DateTime(today.year, 4, 30).add(const Duration(days: 1)))) {
+      specialDays
+          .add({"title": "Aşı Haftası", "message": "24-30 Nisan Aşı Haftası!"});
     }
     if (today.isAfter(DateTime(today.year, 5, 10)) &&
-        today.isBefore(DateTime(today.year, 5, 16).add(const Duration(days: 1)))) {
+        today.isBefore(
+            DateTime(today.year, 5, 16).add(const Duration(days: 1)))) {
       specialDays.add({
         "title": "Engelliler Haftası",
         "message": "10-16 Mayıs Engelliler Haftası!"
       });
     }
     if (today.isAfter(DateTime(today.year, 6, 1)) &&
-        today.isBefore(DateTime(today.year, 6, 7).add(const Duration(days: 1)))) {
+        today.isBefore(
+            DateTime(today.year, 6, 7).add(const Duration(days: 1)))) {
       specialDays.add({
         "title": "İyot Yetersizliği Hastalıklarının Önlenmesi Haftası",
         "message": "1-7 Haziran İyot Yetersizliği Haftası!"
       });
     }
     if (today.isAfter(DateTime(today.year, 8, 1)) &&
-        today.isBefore(DateTime(today.year, 8, 7).add(const Duration(days: 1)))) {
+        today.isBefore(
+            DateTime(today.year, 8, 7).add(const Duration(days: 1)))) {
       specialDays.add({
         "title": "Dünya Emzirme Haftası",
         "message": "1-7 Ağustos Dünya Emzirme Haftası!"
       });
     }
     if (today.isAfter(DateTime(today.year, 9, 3)) &&
-        today.isBefore(DateTime(today.year, 9, 9).add(const Duration(days: 1)))) {
+        today.isBefore(
+            DateTime(today.year, 9, 9).add(const Duration(days: 1)))) {
       specialDays.add({
         "title": "Halk Sağlığı Haftası",
         "message": "3-9 Eylül Halk Sağlığı Haftası!"
       });
     }
     if (today.isAfter(DateTime(today.year, 10, 1)) &&
-        today.isBefore(DateTime(today.year, 10, 31).add(const Duration(days: 1)))) {
+        today.isBefore(
+            DateTime(today.year, 10, 31).add(const Duration(days: 1)))) {
       specialDays.add({
         "title": "Meme Kanseri Bilinçlendirme Ayı",
         "message": "1-31 Ekim Meme Kanseri Bilinçlendirme Ayı!"
       });
     }
     if (today.isAfter(DateTime(today.year, 10, 1)) &&
-        today.isBefore(DateTime(today.year, 10, 7).add(const Duration(days: 1)))) {
-      specialDays.add({
-        "title": "Emzirme Haftası",
-        "message": "1-7 Ekim Emzirme Haftası!"
-      });
+        today.isBefore(
+            DateTime(today.year, 10, 7).add(const Duration(days: 1)))) {
+      specialDays.add(
+          {"title": "Emzirme Haftası", "message": "1-7 Ekim Emzirme Haftası!"});
     }
 
     // Değişken tarihler
@@ -472,13 +475,16 @@ class _BilgilendirmeSayfasiState extends State<BilgilendirmeSayfasi> {
           double titleFontSize = screenWidth * 0.06;
 
           // Meme kanseri pop-up'ları için pembe arka plan rengi belirle
-          bool isBreastCancerRelated = title.contains("Meme Kanseri") || title.contains("Meme Sağlığı");
+          bool isBreastCancerRelated =
+              title.contains("Meme Kanseri") || title.contains("Meme Sağlığı");
 
           return Dialog(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20.0),
             ),
-            backgroundColor: isBreastCancerRelated ? Colors.pinkAccent : Colors.white, // Pembe arka plan
+            backgroundColor: isBreastCancerRelated
+                ? Colors.pinkAccent
+                : Colors.white, // Pembe arka plan
             child: Container(
               padding: const EdgeInsets.all(20.0),
               child: Column(
@@ -487,7 +493,8 @@ class _BilgilendirmeSayfasiState extends State<BilgilendirmeSayfasi> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.celebration, color: Colors.blueAccent, size: 30),
+                      const Icon(Icons.celebration,
+                          color: Colors.blueAccent, size: 30),
                       const SizedBox(width: 10),
                       Expanded(
                         child: Text(
@@ -495,7 +502,9 @@ class _BilgilendirmeSayfasiState extends State<BilgilendirmeSayfasi> {
                           style: TextStyle(
                             fontSize: titleFontSize,
                             fontWeight: FontWeight.bold,
-                            color: isBreastCancerRelated ? Colors.white : Colors.blueAccent, // Metin rengi
+                            color: isBreastCancerRelated
+                                ? Colors.white
+                                : Colors.blueAccent, // Metin rengi
                           ),
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,
@@ -509,14 +518,18 @@ class _BilgilendirmeSayfasiState extends State<BilgilendirmeSayfasi> {
                     message,
                     style: TextStyle(
                       fontSize: 18,
-                      color: isBreastCancerRelated ? Colors.white : Colors.black54, // Metin rengi
+                      color: isBreastCancerRelated
+                          ? Colors.white
+                          : Colors.black54, // Metin rengi
                     ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: isBreastCancerRelated ? Colors.white : Colors.blue, // Pembe pop-up'ta beyaz buton
+                      backgroundColor: isBreastCancerRelated
+                          ? Colors.white
+                          : Colors.blue, // Pembe pop-up'ta beyaz buton
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
@@ -524,7 +537,9 @@ class _BilgilendirmeSayfasiState extends State<BilgilendirmeSayfasi> {
                     child: Text(
                       "Kapat",
                       style: TextStyle(
-                        color: isBreastCancerRelated ? Colors.pinkAccent : Colors.white, // Buton yazı rengi
+                        color: isBreastCancerRelated
+                            ? Colors.pinkAccent
+                            : Colors.white, // Buton yazı rengi
                       ),
                     ),
                     onPressed: () {
@@ -540,7 +555,6 @@ class _BilgilendirmeSayfasiState extends State<BilgilendirmeSayfasi> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -551,25 +565,27 @@ class _BilgilendirmeSayfasiState extends State<BilgilendirmeSayfasi> {
             const Spacer(),
             const Text(
               "UYGULAMAMIZ HAKKINDA",
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.lightGreen),
+              style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.lightGreen),
             ),
             const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: const Text(
+            const Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Text(
                 "Sağlığımı Takipteyim uygulaması sağlığınızı korumak "
-                    "için kişisel özelliklerinize göre yaşam boyu almanız gereken "
-                    "sağlık hizmetleri hakkında bilgilendirmeyi amaçlamaktadır.",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Colors.green),
+                "için kişisel özelliklerinize göre yaşam boyu almanız gereken "
+                "sağlık hizmetleri hakkında bilgilendirmeyi amaçlamaktadır.",
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.green),
                 textAlign: TextAlign.center,
               ),
             ),
             const Spacer(),
             ElevatedButton(
-              child: const Text(
-                "Diğer sayfa için tıklayınız",
-                style: TextStyle(color: Colors.white),
-              ),
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
@@ -577,8 +593,13 @@ class _BilgilendirmeSayfasiState extends State<BilgilendirmeSayfasi> {
                 backgroundColor: Colors.lightGreen, // Açık yeşil buton
               ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const sayfa2()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const Sayfa2()));
               },
+              child: const Text(
+                "Diğer sayfa için tıklayınız",
+                style: TextStyle(color: Colors.white),
+              ),
             ),
             const Spacer(),
           ],

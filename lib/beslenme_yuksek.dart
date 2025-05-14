@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class yuksekKilolu_hareket extends StatefulWidget {
-  const yuksekKilolu_hareket({super.key});
+class YuksekKiloluHareket extends StatefulWidget {
+  const YuksekKiloluHareket({super.key});
 
   @override
-  State<yuksekKilolu_hareket> createState() => _yuksekKilolu_hareketState();
+  State<YuksekKiloluHareket> createState() => _YuksekKiloluHareketState();
 }
 
-class _yuksekKilolu_hareketState extends State<yuksekKilolu_hareket> {
+class _YuksekKiloluHareketState extends State<YuksekKiloluHareket> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -155,7 +155,8 @@ class _yuksekKilolu_hareketState extends State<yuksekKilolu_hareket> {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blueAccent,
-                padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 15.0, horizontal: 20.0),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),

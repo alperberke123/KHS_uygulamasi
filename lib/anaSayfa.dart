@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:ksh_uygulamasi/sonuc_ekrani.dart';
 import 'package:ksh_uygulamasi/check_sorulari.dart';
 
-class anasayfa extends StatefulWidget {
-  const anasayfa({super.key});
+class Anasayfa extends StatefulWidget {
+  const Anasayfa({super.key});
 
   @override
-  _anasayfaState createState() => _anasayfaState();
+  _AnasayfaState createState() => _AnasayfaState();
 }
 
-class _anasayfaState extends State<anasayfa> {
+class _AnasayfaState extends State<Anasayfa> {
   final _formKey = GlobalKey<FormState>();
 
   String? _name;
@@ -30,17 +30,19 @@ class _anasayfaState extends State<anasayfa> {
   bool _isSmoking = false;
 
   bool get showPregnancyField {
-    return _gender == 'Kadın' && (_age != null && _age! >= 15 && _age!<=50);
+    return _gender == 'Kadın' && (_age != null && _age! >= 15 && _age! <= 50);
   }
 
   bool get showMilitaryField {
     return _gender == 'Erkek' && (_age != null && _age! >= 18);
   }
+
   bool get showMarriageField {
     return _age != null && _age! >= 16;
   }
+
   bool get showSigaraField {
-    return _age !=null && _age! >=13;
+    return _age != null && _age! >= 13;
   }
 
   @override
@@ -142,12 +144,13 @@ class _anasayfaState extends State<anasayfa> {
                             },
                           ),
                           CheckboxListTile(
-                            title: const Text('0 ila 2 yaş bebekler için aşı, tarama programları hakkında bilgi alabilmek için tıklayınız.'),
+                            title: const Text(
+                                '0 ila 2 yaş bebekler için aşı, tarama programları hakkında bilgi alabilmek için tıklayınız.'),
                             activeColor: Colors.lightGreen,
                             value: _isBaby,
                             onChanged: (value) {
                               setState(() {
-                                _isBaby = value?? false;
+                                _isBaby = value ?? false;
                                 if (_isBaby) {
                                   _age = null;
                                   _headCircumference = null;
@@ -159,77 +162,80 @@ class _anasayfaState extends State<anasayfa> {
                               });
                             },
                           ),
-                          if (_isBaby)
-                            ...[
-                              TextFormField(
-                                decoration: const InputDecoration(
-                                  labelText: 'Ay olarak yaş',
-                                  labelStyle: TextStyle(color: Colors.blueGrey),
-                                ),
-                                keyboardType: TextInputType.number,
-                                validator: (value) {
-                                  if (value == null || int.tryParse(value) == null) {
-                                    return 'Lütfen geçerli bir ay giriniz';
-                                  } else if (int.tryParse(value)! > 24) {
-                                    return 'Lütfen 0 ile 24 arasında bir ay giriniz';
-                                  }
-                                  return null;
-                                },
-                                onSaved: (value) {
-                                  if (value != null && value.isNotEmpty) {
-                                    _ageInMonths = int.tryParse(value);
-                                  }
-                                },
+                          if (_isBaby) ...[
+                            TextFormField(
+                              decoration: const InputDecoration(
+                                labelText: 'Ay olarak yaş',
+                                labelStyle: TextStyle(color: Colors.blueGrey),
                               ),
-                              TextFormField(
-                                decoration: const InputDecoration(
-                                  labelText: 'Boy (cm)',
-                                  labelStyle: TextStyle(color: Colors.blueGrey),
-                                ),
-                                keyboardType: TextInputType.number,
-                                validator: (value) {
-                                  if (value == null || double.tryParse(value) == null) {
-                                    return 'Lütfen geçerli bir boy giriniz';
-                                  }
-                                  return null;
-                                },
-                                onSaved: (value) {
-                                  _height = double.tryParse(value!);
-                                },
+                              keyboardType: TextInputType.number,
+                              validator: (value) {
+                                if (value == null ||
+                                    int.tryParse(value) == null) {
+                                  return 'Lütfen geçerli bir ay giriniz';
+                                } else if (int.tryParse(value)! > 24) {
+                                  return 'Lütfen 0 ile 24 arasında bir ay giriniz';
+                                }
+                                return null;
+                              },
+                              onSaved: (value) {
+                                if (value != null && value.isNotEmpty) {
+                                  _ageInMonths = int.tryParse(value);
+                                }
+                              },
+                            ),
+                            TextFormField(
+                              decoration: const InputDecoration(
+                                labelText: 'Boy (cm)',
+                                labelStyle: TextStyle(color: Colors.blueGrey),
                               ),
-                              TextFormField(
-                                decoration: const InputDecoration(
-                                  labelText: 'Kilo (kg)',
-                                  labelStyle: TextStyle(color: Colors.blueGrey),
-                                ),
-                                keyboardType: TextInputType.number,
-                                validator: (value) {
-                                  if (value == null || double.tryParse(value) == null) {
-                                    return 'Lütfen geçerli bir kilo giriniz';
-                                  }
-                                  return null;
-                                },
-                                onSaved: (value) {
-                                  _weight = double.tryParse(value!);
-                                },
+                              keyboardType: TextInputType.number,
+                              validator: (value) {
+                                if (value == null ||
+                                    double.tryParse(value) == null) {
+                                  return 'Lütfen geçerli bir boy giriniz';
+                                }
+                                return null;
+                              },
+                              onSaved: (value) {
+                                _height = double.tryParse(value!);
+                              },
+                            ),
+                            TextFormField(
+                              decoration: const InputDecoration(
+                                labelText: 'Kilo (kg)',
+                                labelStyle: TextStyle(color: Colors.blueGrey),
                               ),
-                              TextFormField(
-                                decoration: const InputDecoration(
-                                  labelText: 'Baş Çevresi (cm)',
-                                  labelStyle: TextStyle(color: Colors.blueGrey),
-                                ),
-                                keyboardType: TextInputType.number,
-                                validator: (value) {
-                                  if (value == null || double.tryParse(value) == null) {
-                                    return 'Lütfen geçerli bir baş çevresi giriniz';
-                                  }
-                                  return null;
-                                },
-                                onSaved: (value) {
-                                  _headCircumference = double.tryParse(value!);
-                                },
+                              keyboardType: TextInputType.number,
+                              validator: (value) {
+                                if (value == null ||
+                                    double.tryParse(value) == null) {
+                                  return 'Lütfen geçerli bir kilo giriniz';
+                                }
+                                return null;
+                              },
+                              onSaved: (value) {
+                                _weight = double.tryParse(value!);
+                              },
+                            ),
+                            TextFormField(
+                              decoration: const InputDecoration(
+                                labelText: 'Baş Çevresi (cm)',
+                                labelStyle: TextStyle(color: Colors.blueGrey),
                               ),
-                            ],
+                              keyboardType: TextInputType.number,
+                              validator: (value) {
+                                if (value == null ||
+                                    double.tryParse(value) == null) {
+                                  return 'Lütfen geçerli bir baş çevresi giriniz';
+                                }
+                                return null;
+                              },
+                              onSaved: (value) {
+                                _headCircumference = double.tryParse(value!);
+                              },
+                            ),
+                          ],
                           if (!_isBaby)
                             TextFormField(
                               decoration: const InputDecoration(
@@ -238,7 +244,8 @@ class _anasayfaState extends State<anasayfa> {
                               ),
                               keyboardType: TextInputType.number,
                               validator: (value) {
-                                if (value == null || double.tryParse(value) == null) {
+                                if (value == null ||
+                                    double.tryParse(value) == null) {
                                   return 'Lütfen geçerli bir boy giriniz';
                                 }
                                 return null;
@@ -259,7 +266,8 @@ class _anasayfaState extends State<anasayfa> {
                               ),
                               keyboardType: TextInputType.number,
                               validator: (value) {
-                                if (value == null || double.tryParse(value) == null) {
+                                if (value == null ||
+                                    double.tryParse(value) == null) {
                                   return 'Lütfen geçerli bir kilo giriniz';
                                 }
                                 return null;
@@ -290,13 +298,14 @@ class _anasayfaState extends State<anasayfa> {
                               ),
                               keyboardType: TextInputType.number,
                               validator: (value) {
-                                if (value == null || int.tryParse(value) == null) {
+                                if (value == null ||
+                                    int.tryParse(value) == null) {
                                   return 'Lütfen geçerli bir yaş giriniz';
                                 }
                                 return null;
                               },
                               onSaved: (value) {
-                                _age = int.tryParse(value??'0');
+                                _age = int.tryParse(value ?? '0');
                               },
                             ),
                           DropdownButtonFormField<String>(
@@ -307,9 +316,9 @@ class _anasayfaState extends State<anasayfa> {
                             value: _gender,
                             items: ['Kadın', 'Erkek']
                                 .map((gender) => DropdownMenuItem(
-                              value: gender,
-                              child: Text(gender),
-                            ))
+                                      value: gender,
+                                      child: Text(gender),
+                                    ))
                                 .toList(),
                             onChanged: (value) {
                               setState(() {
@@ -336,7 +345,8 @@ class _anasayfaState extends State<anasayfa> {
                             ),
                           if (showMarriageField)
                             CheckboxListTile(
-                              title: const Text('Evlilik başvurunuz varsa tıklayınız.'),
+                              title: const Text(
+                                  'Evlilik başvurunuz varsa tıklayınız.'),
                               activeColor: Colors.lightGreen,
                               value: _isMarriageApplicant,
                               onChanged: (value) {
@@ -347,7 +357,8 @@ class _anasayfaState extends State<anasayfa> {
                             ),
                           if (showSigaraField)
                             CheckboxListTile(
-                              title: const Text('Sigara içiyorsanız tıklayınız'),
+                              title:
+                                  const Text('Sigara içiyorsanız tıklayınız'),
                               activeColor: Colors.lightGreen,
                               value: _isSmoking,
                               onChanged: (value) {
@@ -380,24 +391,33 @@ class _anasayfaState extends State<anasayfa> {
                         if (result != null) {
                           setState(() {
                             _isPregnant = result['isPregnant'] ?? false;
-                            _isMarriageApplicant = result['isMarriageApplicant'] ?? false;
-                            _isGoingToHajjUmrah = result['isGoingToHajjUmrah'] ?? false;
-                            _isGoingToMilitary = result['isGoingToMilitary'] ?? false;
-                            _isGoingToTravel = result['isGoingToTravel'] ?? false;
+                            _isMarriageApplicant =
+                                result['isMarriageApplicant'] ?? false;
+                            _isGoingToHajjUmrah =
+                                result['isGoingToHajjUmrah'] ?? false;
+                            _isGoingToMilitary =
+                                result['isGoingToMilitary'] ?? false;
+                            _isGoingToTravel =
+                                result['isGoingToTravel'] ?? false;
                             _isSmoking = result['isSmoking'] ?? false;
                           });
 
-                          String greetingName = (_name == null || _name!.isEmpty) ? 'Bilinmiyor' : _name!;
+                          String greetingName =
+                              (_name == null || _name!.isEmpty)
+                                  ? 'Bilinmiyor'
+                                  : _name!;
                           int age = _isBaby ? 0 : (_age ?? 0);
-                          int? ageInMonths = _isBaby ? (_ageInMonths ?? 0) : null;
+                          int? ageInMonths =
+                              _isBaby ? (_ageInMonths ?? 0) : null;
                           double height = _height ?? 0.0;
                           double weight = _weight ?? 0.0;
-                          double? headCircumference = _isBaby ? (_headCircumference ?? 0.0) : null;
+                          double? headCircumference =
+                              _isBaby ? (_headCircumference ?? 0.0) : null;
 
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => degerlendirme(
+                              builder: (context) => Degerlendirme(
                                 name: greetingName,
                                 age: age,
                                 ageInMonths: ageInMonths,
@@ -422,7 +442,8 @@ class _anasayfaState extends State<anasayfa> {
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.lightGreen,
-                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 15),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 32, vertical: 15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),

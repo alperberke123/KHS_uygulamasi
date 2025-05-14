@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class cocukBeslenme extends StatelessWidget {
-  const cocukBeslenme({super.key});
+class CocukBeslenme extends StatelessWidget {
+  const CocukBeslenme({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +26,10 @@ class cocukBeslenme extends StatelessWidget {
             _buildNutritionTip(
                 "Beslenme Tarzı:",
                 "Çocukların sağlıklı beslenmesi için dört besin grubunda bulunan çeşitli besinlerden yeterli"
-                "miktarlarda ve dengeli bir şekilde tüketmeleri gerekmektedir. Süt grubunda yer alan süt"
+                    "miktarlarda ve dengeli bir şekilde tüketmeleri gerekmektedir. Süt grubunda yer alan süt"
                     "yoğurt, et grubunda yer alan et, tavuk, yumurta, peynir, kuru baklagiller, sebze ve meyve"
                     "grubu ve tahıl grubuna giren ekmek, bulgur, makarna, pirinç vb. besinlerin her öğünde"
-                "yeterli miktarlarda tüketilmesi önerilmektedir."),
+                    "yeterli miktarlarda tüketilmesi önerilmektedir."),
             _buildNutritionTip(
                 "Yemeklerin Yapıplma Tarzı:",
                 "Çocukların özellikle kemik ve diş gelişimi için günde 2-3 "
@@ -50,16 +50,16 @@ class cocukBeslenme extends StatelessWidget {
                     "kahvaltı örneğidir."),
             _buildNutritionTip(
                 "Genel Olarak Dikkat Edilmesi Gereken Şeyler:",
-               " Gün boyu fiziksel ve zihinsel performansın en üst düzeyde tutulabilmesi, "
-                   "düzenli olarak ara ve ana öğünlerin tüketilmesi ile mümkündür. "
-                   "Bu nedenle, öğün atlanmamalıdır. Günlük tüketilecek besinlerin "
-                   "3 ana, 2 ara öğünde alınması en uygun olanıdır."
-           " Yüksek oranda şeker ve şekerli besinler çocukların beslenmesi "
-                   "için olumlu değildir. Şeker alımı ile iştahsızlık ve diş "
-                   "çürümeleri arasında sıkı bir ilişki vardır. Bu riski azaltmak "
-                   "veya en aza indirmek için şekerli içeceklerin, tatlıların, bisküvi, "
-                   "çikolata gibi besinlerin fazla tüketilmemesi özellikle ara öğünlerde "
-                   "çocuklara verilmemesi bu besinler yerine taze meyvelerin tüketilmesi önerilmektedir."),
+                " Gün boyu fiziksel ve zihinsel performansın en üst düzeyde tutulabilmesi, "
+                    "düzenli olarak ara ve ana öğünlerin tüketilmesi ile mümkündür. "
+                    "Bu nedenle, öğün atlanmamalıdır. Günlük tüketilecek besinlerin "
+                    "3 ana, 2 ara öğünde alınması en uygun olanıdır."
+                    " Yüksek oranda şeker ve şekerli besinler çocukların beslenmesi "
+                    "için olumlu değildir. Şeker alımı ile iştahsızlık ve diş "
+                    "çürümeleri arasında sıkı bir ilişki vardır. Bu riski azaltmak "
+                    "veya en aza indirmek için şekerli içeceklerin, tatlıların, bisküvi, "
+                    "çikolata gibi besinlerin fazla tüketilmemesi özellikle ara öğünlerde "
+                    "çocuklara verilmemesi bu besinler yerine taze meyvelerin tüketilmesi önerilmektedir."),
             _buildNutritionTip(
                 "Vitamin Mineral Alımı:",
                 "Yetişkinlere ve okul çağındaki çocuklara kıyasla okul öncesi "
@@ -128,4 +128,3 @@ class cocukBeslenme extends StatelessWidget {
     );
   }
 }
-

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
-class erkekUreme extends StatelessWidget {
-  const erkekUreme({super.key});
+class ErkekUreme extends StatelessWidget {
+  const ErkekUreme({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Erkek Üreme Sağlığı', style: TextStyle(fontSize: 24)),
+        title:
+            const Text('Erkek Üreme Sağlığı', style: TextStyle(fontSize: 24)),
         backgroundColor: Colors.blueGrey,
         centerTitle: true,
         elevation: 10,
@@ -167,11 +168,11 @@ class erkekUreme extends StatelessWidget {
                 ),
                 subtitle: Text(
                   '• Genital bölgede, anal kanal ve çok nadiren rektumda, nazal kavite, orofarengeyal bölgede siğiller\n'
-                      '• Penis kanseri\n'
-                      '• Prostat kanseri\n'
-                      '• Kısırlık (infertilite)\n'
-                      '• Anüs kanseri\n'
-                      '• Orofarenks kanseri',
+                  '• Penis kanseri\n'
+                  '• Prostat kanseri\n'
+                  '• Kısırlık (infertilite)\n'
+                  '• Anüs kanseri\n'
+                  '• Orofarenks kanseri',
                   style: TextStyle(fontSize: 16),
                 ),
               ),

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class asi_olmadim extends StatefulWidget {
-  const asi_olmadim({super.key});
+class AsiOlmadim extends StatefulWidget {
+  const AsiOlmadim({super.key});
 
   @override
-  State<asi_olmadim> createState() => _asi_olmadimState();
+  State<AsiOlmadim> createState() => _AsiOlmadimState();
 }
 
-class _asi_olmadimState extends State<asi_olmadim> {
+class _AsiOlmadimState extends State<AsiOlmadim> {
   var tfController = TextEditingController();
   String _asiPlan = "";
 
@@ -59,7 +59,10 @@ class _asi_olmadimState extends State<asi_olmadim> {
             children: [
               const Text(
                 "Yaşınızı Giriniz",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.lightGreen), // Yeşil metin rengi
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.lightGreen), // Yeşil metin rengi
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 10),
@@ -69,7 +72,8 @@ class _asi_olmadimState extends State<asi_olmadim> {
                 decoration: InputDecoration(
                   hintText: "Yaşınızı Giriniz",
                   filled: true,
-                  fillColor: Colors.green.shade50, // Metin kutusunun arka planı açık yeşil
+                  fillColor: Colors.green.shade50,
+                  // Metin kutusunun arka planı açık yeşil
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.0),
                     borderSide: BorderSide.none,
@@ -87,8 +91,10 @@ class _asi_olmadimState extends State<asi_olmadim> {
                 child: ElevatedButton(
                   onPressed: updateText,
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-                    backgroundColor: Colors.lightGreen, // Butonun arka plan rengi yeşil
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 16, horizontal: 24),
+                    backgroundColor: Colors.lightGreen,
+                    // Butonun arka plan rengi yeşil
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -111,7 +117,8 @@ class _asi_olmadimState extends State<asi_olmadim> {
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
                       _asiPlan,
-                      style: const TextStyle(fontSize: 18, color: Colors.black87),
+                      style:
+                          const TextStyle(fontSize: 18, color: Colors.black87),
                     ),
                   ),
                 ),
