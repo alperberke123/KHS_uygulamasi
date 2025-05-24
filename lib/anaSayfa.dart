@@ -384,6 +384,8 @@ class _AnasayfaState extends State<Anasayfa> {
                               gender: _gender,
                               age: _age,
                               isBaby: _isBaby,
+                              weight: _weight,
+                              height: _height,
                             ),
                           ),
                         );

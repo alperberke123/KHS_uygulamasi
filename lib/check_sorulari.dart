@@ -5,10 +5,14 @@ class CheckSorulari extends StatefulWidget {
   final String? gender;
   final int? age;
   final bool isBaby;
+  final double? weight;
+  final double? height;
 
   const CheckSorulari({
     Key? key,
     required this.gender,
+    required this.height,
+    required this.weight,
     required this.age,
     required this.isBaby,
   }) : super(key: key);
@@ -25,6 +29,9 @@ class _CheckSorulariState extends State<CheckSorulari> {
   bool _isGoingToTravel = false;
   bool _isSmoking = false;
 
+  /*final TextEditingController _heightController = TextEditingController();
+  final TextEditingController _weightController = TextEditingController();
+*/
   bool get showPregnancyField {
     return widget.gender == 'Kadın' &&
         (widget.age != null && widget.age! >= 15 && widget.age! <= 50);
@@ -47,9 +54,14 @@ class _CheckSorulariState extends State<CheckSorulari> {
     try {
       CollectionReference userCollection =
           FirebaseFirestore.instance.collection('user_responses');
+/*
+      double? height = double.tryParse(_heightController.text);
+      double? weight = double.tryParse(_weightController.text);*/
 
       // Veriyi Firestore'a kaydediyoruz
       await userCollection.add({
+        'height' : widget.height,
+        'weight' : widget.weight,
         'gender': widget.gender,
         'age': widget.age,
         'isPregnant': _isPregnant,
