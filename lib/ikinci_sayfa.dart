@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:ksh_uygulamasi/her_seyi_gosteren_sayfa.dart';
 import 'package:ksh_uygulamasi/hic_asi_olmadim.dart';
 import 'package:ksh_uygulamasi/kuduz_temasi.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ksh_uygulamasi/sonuc_ekrani.dart';
 
 class Sayfa2 extends StatefulWidget {
   const Sayfa2({super.key});
@@ -11,6 +13,20 @@ class Sayfa2 extends StatefulWidget {
 }
 
 class _Sayfa2State extends State<Sayfa2> {
+  Future<Map<String, dynamic>?> _loadUserData() async {
+    try {
+      const userId = 'default_user';
+      final docSnapshot = await FirebaseFirestore.instance.collection('users').doc(userId).get();
+      if (docSnapshot.exists) {
+        return docSnapshot.data();
+      }
+      return null;
+    } catch (e) {
+      print('Veri yüklenirken hata oluştu: $e');
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,13 +93,44 @@ class _Sayfa2State extends State<Sayfa2> {
                       ),
                       const SizedBox(height: 20),
                       ElevatedButton(
-                        onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Bu özellik yakında eklenecektir'),
-                              duration: Duration(seconds: 2),
-                            ),
-                          );
+                        onPressed: () async {
+                          final userData = await _loadUserData();
+                          if (userData != null) {
+                            if (context.mounted) {
+                              await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Degerlendirme(
+                                    name: userData['name'] ?? 'Bilinmiyor',
+                                    age: userData['age'],
+                                    ageInMonths: userData['ageInMonths'],
+                                    isBaby: userData['isBaby'] ?? false,
+                                    gender: userData['gender'] ?? 'Belirtilmedi',
+                                    isPregnant: userData['isPregnant'] ?? false,
+                                    headCircumference: userData['headCircumference']?.toDouble(),
+                                    height: userData['height']?.toDouble(),
+                                    weight: userData['weight']?.toDouble(),
+                                    isGoingToHajjUmrah: userData['isGoingToHajjUmrah'] ?? false,
+                                    isGoingToMilitary: userData['isGoingToMilitary'] ?? false,
+                                    isGoingToTravel: userData['isGoingToTravel'] ?? false,
+                                    profession: userData['profession'],
+                                    smokingScore: userData['smokingScore'] ?? 0,
+                                    isMarriageApplicant: userData['isMarriageApplicant'] ?? false,
+                                    isSmoking: userData['isSmoking'] ?? false,
+                                  ),
+                                ),
+                              );
+                            }
+                          } else {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Henüz kayıtlı bilgi bulunmamaktadır. Lütfen önce profil bilgilerinizi giriniz.'),
+                                  duration: Duration(seconds: 3),
+                                ),
+                              );
+                            }
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.lightGreen,

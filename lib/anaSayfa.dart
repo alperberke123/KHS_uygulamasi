@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ksh_uygulamasi/sonuc_ekrani.dart';
 import 'package:ksh_uygulamasi/check_sorulari.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Anasayfa extends StatefulWidget {
   const Anasayfa({super.key});
@@ -11,6 +13,17 @@ class Anasayfa extends StatefulWidget {
 
 class _AnasayfaState extends State<Anasayfa> {
   final _formKey = GlobalKey<FormState>();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  // Controller'ları ekleyelim
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
+  final TextEditingController _ageInMonthsController = TextEditingController();
+  final TextEditingController _heightController = TextEditingController();
+  final TextEditingController _weightController = TextEditingController();
+  final TextEditingController _headCircumferenceController = TextEditingController();
+  final TextEditingController _professionController = TextEditingController();
 
   String? _name;
   String? _gender;
@@ -43,6 +56,64 @@ class _AnasayfaState extends State<Anasayfa> {
 
   bool get showSigaraField {
     return _age != null && _age! >= 13;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  @override
+  void dispose() {
+    // Controller'ları temizleyelim
+    _nameController.dispose();
+    _ageController.dispose();
+    _ageInMonthsController.dispose();
+    _heightController.dispose();
+    _weightController.dispose();
+    _headCircumferenceController.dispose();
+    _professionController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadUserData() async {
+    try {
+      // Kullanıcı ID'si olarak sabit bir değer kullanıyoruz
+      const userId = 'default_user';
+      final docSnapshot = await _firestore.collection('users').doc(userId).get();
+      if (docSnapshot.exists) {
+        final data = docSnapshot.data() as Map<String, dynamic>;
+        setState(() {
+          _name = data['name'] as String? ?? '';
+          _gender = data['gender'] as String? ?? '';
+          _isPregnant = data['isPregnant'] as bool? ?? false;
+          _isMarriageApplicant = data['isMarriageApplicant'] as bool? ?? false;
+          _headCircumference = (data['headCircumference'] as num?)?.toDouble();
+          _height = (data['height'] as num?)?.toDouble();
+          _weight = (data['weight'] as num?)?.toDouble();
+          _isGoingToHajjUmrah = data['isGoingToHajjUmrah'] as bool? ?? false;
+          _isGoingToMilitary = data['isGoingToMilitary'] as bool? ?? false;
+          _isGoingToTravel = data['isGoingToTravel'] as bool? ?? false;
+          _profession = data['profession'] as String? ?? '';
+          _isBaby = data['isBaby'] as bool? ?? false;
+          _ageInMonths = data['ageInMonths'] as int?;
+          _age = data['age'] as int?;
+          _isSmoking = data['isSmoking'] as bool? ?? false;
+
+          // Controller'ları güncelle
+          _nameController.text = _name ?? '';
+          _ageController.text = _age?.toString() ?? '';
+          _ageInMonthsController.text = _ageInMonths?.toString() ?? '';
+          _heightController.text = _height?.toString() ?? '';
+          _weightController.text = _weight?.toString() ?? '';
+          _headCircumferenceController.text = _headCircumference?.toString() ?? '';
+          _professionController.text = _profession ?? '';
+        });
+      }
+    } catch (e) {
+      print('Kullanıcı bilgileri yüklenirken hata oluştu: $e');
+    }
   }
 
   @override
@@ -127,6 +198,7 @@ class _AnasayfaState extends State<Anasayfa> {
                           ),
                           const SizedBox(height: 16),
                           TextFormField(
+                            controller: _nameController,
                             decoration: const InputDecoration(
                               labelText: 'İsim Soyisim',
                               labelStyle: TextStyle(color: Colors.blueGrey),
@@ -140,7 +212,7 @@ class _AnasayfaState extends State<Anasayfa> {
                               return null;
                             },
                             onSaved: (value) {
-                              _name = value;
+                              _name = _nameController.text;
                             },
                           ),
                           CheckboxListTile(
@@ -164,6 +236,7 @@ class _AnasayfaState extends State<Anasayfa> {
                           ),
                           if (_isBaby) ...[
                             TextFormField(
+                              controller: _ageInMonthsController,
                               decoration: const InputDecoration(
                                 labelText: 'Ay olarak yaş',
                                 labelStyle: TextStyle(color: Colors.blueGrey),
@@ -185,59 +258,7 @@ class _AnasayfaState extends State<Anasayfa> {
                               },
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
-                                labelText: 'Boy (cm)',
-                                labelStyle: TextStyle(color: Colors.blueGrey),
-                              ),
-                              keyboardType: TextInputType.number,
-                              validator: (value) {
-                                if (value == null ||
-                                    double.tryParse(value) == null) {
-                                  return 'Lütfen geçerli bir boy giriniz';
-                                }
-                                return null;
-                              },
-                              onSaved: (value) {
-                                _height = double.tryParse(value!);
-                              },
-                            ),
-                            TextFormField(
-                              decoration: const InputDecoration(
-                                labelText: 'Kilo (kg)',
-                                labelStyle: TextStyle(color: Colors.blueGrey),
-                              ),
-                              keyboardType: TextInputType.number,
-                              validator: (value) {
-                                if (value == null ||
-                                    double.tryParse(value) == null) {
-                                  return 'Lütfen geçerli bir kilo giriniz';
-                                }
-                                return null;
-                              },
-                              onSaved: (value) {
-                                _weight = double.tryParse(value!);
-                              },
-                            ),
-                            TextFormField(
-                              decoration: const InputDecoration(
-                                labelText: 'Baş Çevresi (cm)',
-                                labelStyle: TextStyle(color: Colors.blueGrey),
-                              ),
-                              keyboardType: TextInputType.number,
-                              validator: (value) {
-                                if (value == null ||
-                                    double.tryParse(value) == null) {
-                                  return 'Lütfen geçerli bir baş çevresi giriniz';
-                                }
-                                return null;
-                              },
-                              onSaved: (value) {
-                                _headCircumference = double.tryParse(value!);
-                              },
-                            ),
-                          ],
-                          if (!_isBaby)
-                            TextFormField(
+                              controller: _heightController,
                               decoration: const InputDecoration(
                                 labelText: 'Boy (cm)',
                                 labelStyle: TextStyle(color: Colors.blueGrey),
@@ -253,13 +274,11 @@ class _AnasayfaState extends State<Anasayfa> {
                               onSaved: (value) {
                                 if (value != null && value.isNotEmpty) {
                                   _height = double.tryParse(value);
-                                } else {
-                                  _height = null;
                                 }
                               },
                             ),
-                          if (!_isBaby)
                             TextFormField(
+                              controller: _weightController,
                               decoration: const InputDecoration(
                                 labelText: 'Kilo (kg)',
                                 labelStyle: TextStyle(color: Colors.blueGrey),
@@ -275,23 +294,86 @@ class _AnasayfaState extends State<Anasayfa> {
                               onSaved: (value) {
                                 if (value != null && value.isNotEmpty) {
                                   _weight = double.tryParse(value);
-                                } else {
-                                  _weight = null;
+                                }
+                              },
+                            ),
+                            TextFormField(
+                              controller: _headCircumferenceController,
+                              decoration: const InputDecoration(
+                                labelText: 'Baş Çevresi (cm)',
+                                labelStyle: TextStyle(color: Colors.blueGrey),
+                              ),
+                              keyboardType: TextInputType.number,
+                              validator: (value) {
+                                if (value == null ||
+                                    double.tryParse(value) == null) {
+                                  return 'Lütfen geçerli bir baş çevresi giriniz';
+                                }
+                                return null;
+                              },
+                              onSaved: (value) {
+                                if (value != null && value.isNotEmpty) {
+                                  _headCircumference = double.tryParse(value);
+                                }
+                              },
+                            ),
+                          ],
+                          if (!_isBaby)
+                            TextFormField(
+                              controller: _heightController,
+                              decoration: const InputDecoration(
+                                labelText: 'Boy (cm)',
+                                labelStyle: TextStyle(color: Colors.blueGrey),
+                              ),
+                              keyboardType: TextInputType.number,
+                              validator: (value) {
+                                if (value == null ||
+                                    double.tryParse(value) == null) {
+                                  return 'Lütfen geçerli bir boy giriniz';
+                                }
+                                return null;
+                              },
+                              onSaved: (value) {
+                                if (value != null && value.isNotEmpty) {
+                                  _height = double.tryParse(value);
                                 }
                               },
                             ),
                           if (!_isBaby)
                             TextFormField(
+                              controller: _weightController,
+                              decoration: const InputDecoration(
+                                labelText: 'Kilo (kg)',
+                                labelStyle: TextStyle(color: Colors.blueGrey),
+                              ),
+                              keyboardType: TextInputType.number,
+                              validator: (value) {
+                                if (value == null ||
+                                    double.tryParse(value) == null) {
+                                  return 'Lütfen geçerli bir kilo giriniz';
+                                }
+                                return null;
+                              },
+                              onSaved: (value) {
+                                if (value != null && value.isNotEmpty) {
+                                  _weight = double.tryParse(value);
+                                }
+                              },
+                            ),
+                          if (!_isBaby)
+                            TextFormField(
+                              controller: _professionController,
                               decoration: const InputDecoration(
                                 labelText: 'Meslek',
                                 labelStyle: TextStyle(color: Colors.blueGrey),
                               ),
                               onSaved: (value) {
-                                _profession = value;
+                                _profession = _professionController.text;
                               },
                             ),
                           if (!_isBaby)
                             TextFormField(
+                              controller: _ageController,
                               decoration: const InputDecoration(
                                 labelText: 'Yaş',
                                 labelStyle: TextStyle(color: Colors.blueGrey),
@@ -305,7 +387,9 @@ class _AnasayfaState extends State<Anasayfa> {
                                 return null;
                               },
                               onSaved: (value) {
-                                _age = int.tryParse(value ?? '0');
+                                if (value != null && value.isNotEmpty) {
+                                  _age = int.tryParse(_ageController.text);
+                                }
                               },
                             ),
                           DropdownButtonFormField<String>(
@@ -374,78 +458,127 @@ class _AnasayfaState extends State<Anasayfa> {
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () async {
+                      print('Butona basıldı');
+                      
                       if (_formKey.currentState!.validate()) {
+                        print('Form doğrulaması başarılı');
                         _formKey.currentState!.save();
-
-                        final result = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CheckSorulari(
-                              gender: _gender,
-                              age: _age,
-                              isBaby: _isBaby,
-                              weight: _weight,
-                              height: _height,
-                            ),
-                          ),
-                        );
-
-                        if (result != null) {
+                        
+                        try {
+                          // Kullanıcı ID'si olarak sabit bir değer kullanıyoruz
+                          const userId = 'default_user';
+                          
+                          // Önce state değişkenlerini güncelle
                           setState(() {
-                            _isPregnant = result['isPregnant'] ?? false;
-                            _isMarriageApplicant =
-                                result['isMarriageApplicant'] ?? false;
-                            _isGoingToHajjUmrah =
-                                result['isGoingToHajjUmrah'] ?? false;
-                            _isGoingToMilitary =
-                                result['isGoingToMilitary'] ?? false;
-                            _isGoingToTravel =
-                                result['isGoingToTravel'] ?? false;
-                            _isSmoking = result['isSmoking'] ?? false;
+                            _name = _nameController.text;
+                            _age = int.tryParse(_ageController.text);
+                            _ageInMonths = int.tryParse(_ageInMonthsController.text);
+                            _height = double.tryParse(_heightController.text);
+                            _weight = double.tryParse(_weightController.text);
+                            _headCircumference = double.tryParse(_headCircumferenceController.text);
+                            _profession = _professionController.text;
                           });
 
-                          String greetingName =
-                              (_name == null || _name!.isEmpty)
-                                  ? 'Bilinmiyor'
-                                  : _name!;
-                          int age = _isBaby ? 0 : (_age ?? 0);
-                          int? ageInMonths =
-                              _isBaby ? (_ageInMonths ?? 0) : null;
-                          double height = _height ?? 0.0;
-                          double weight = _weight ?? 0.0;
-                          double? headCircumference =
-                              _isBaby ? (_headCircumference ?? 0.0) : null;
+                          // Sonra Firestore'a kaydet
+                          final userData = {
+                            'name': _name ?? '',
+                            'gender': _gender ?? '',
+                            'isPregnant': _isPregnant,
+                            'isMarriageApplicant': _isMarriageApplicant,
+                            'headCircumference': _headCircumference,
+                            'height': _height,
+                            'weight': _weight,
+                            'isGoingToHajjUmrah': _isGoingToHajjUmrah,
+                            'isGoingToMilitary': _isGoingToMilitary,
+                            'isGoingToTravel': _isGoingToTravel,
+                            'profession': _profession ?? '',
+                            'isBaby': _isBaby,
+                            'ageInMonths': _ageInMonths,
+                            'age': _age,
+                            'isSmoking': _isSmoking,
+                          };
 
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Degerlendirme(
-                                name: greetingName,
-                                age: age,
-                                ageInMonths: ageInMonths,
-                                isBaby: _isBaby,
-                                gender: _gender ?? 'Belirtilmedi',
-                                isPregnant: _isPregnant,
-                                headCircumference: headCircumference,
-                                height: height,
-                                weight: weight,
-                                isGoingToHajjUmrah: _isGoingToHajjUmrah,
-                                isGoingToMilitary: _isGoingToMilitary,
-                                isGoingToTravel: _isGoingToTravel,
-                                profession: _profession ?? 'Bilinmiyor',
-                                smokingScore: _smokingScore,
-                                isMarriageApplicant: _isMarriageApplicant,
-                                isSmoking: _isSmoking,
+                          await _firestore.collection('users').doc(userId).set(userData, SetOptions(merge: true));
+                          print('Veriler Firestore\'a kaydedildi');
+
+                          if (mounted) {
+                            // CheckSorulari sayfasına geç
+                            print('CheckSorulari sayfasına geçiliyor...');
+                            final result = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CheckSorulari(
+                                  gender: _gender,
+                                  age: _age,
+                                  isBaby: _isBaby,
+                                  weight: _weight,
+                                  height: _height,
+                                ),
                               ),
-                            ),
-                          );
+                            );
+
+                            print('CheckSorulari sayfasından dönüldü');
+                            print('Result: $result');
+
+                            if (result != null && mounted) {
+                              setState(() {
+                                _isPregnant = result['isPregnant'] ?? false;
+                                _isMarriageApplicant = result['isMarriageApplicant'] ?? false;
+                                _isGoingToHajjUmrah = result['isGoingToHajjUmrah'] ?? false;
+                                _isGoingToMilitary = result['isGoingToMilitary'] ?? false;
+                                _isGoingToTravel = result['isGoingToTravel'] ?? false;
+                                _isSmoking = result['isSmoking'] ?? false;
+                              });
+
+                              print('State güncellendi, Degerlendirme sayfasına geçiliyor...');
+                              
+                              // Degerlendirme sayfasına geç
+                              if (mounted) {
+                                await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Degerlendirme(
+                                      name: _name ?? 'Bilinmiyor',
+                                      age: _age ?? 0,
+                                      ageInMonths: _ageInMonths,
+                                      isBaby: _isBaby,
+                                      gender: _gender ?? 'Belirtilmedi',
+                                      isPregnant: _isPregnant,
+                                      headCircumference: _headCircumference,
+                                      height: _height ?? 0.0,
+                                      weight: _weight ?? 0.0,
+                                      isGoingToHajjUmrah: _isGoingToHajjUmrah,
+                                      isGoingToMilitary: _isGoingToMilitary,
+                                      isGoingToTravel: _isGoingToTravel,
+                                      profession: _profession ?? 'Bilinmiyor',
+                                      smokingScore: _smokingScore,
+                                      isMarriageApplicant: _isMarriageApplicant,
+                                      isSmoking: _isSmoking,
+                                    ),
+                                  ),
+                                );
+                                print('Degerlendirme sayfasına geçildi');
+                              }
+                            }
+                          }
+                        } catch (e) {
+                          print('Hata oluştu: $e');
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Hata oluştu: $e')),
+                            );
+                          }
                         }
+                      } else {
+                        print('Form doğrulaması başarısız');
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Lütfen tüm gerekli alanları doldurun')),
+                        );
                       }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.lightGreen,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 32, vertical: 15),
+                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
