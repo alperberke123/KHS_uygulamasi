@@ -4,12 +4,19 @@ import 'dart:async';
 import 'package:ksh_uygulamasi/anaSayfa.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:ksh_uygulamasi/services/notification_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  
+  // Bildirim servisini başlat
+  final notificationService = NotificationService();
+  await notificationService.init();
+  await notificationService.scheduleAllSpecialDays();
+  
   runApp(const MyApp());
 }
 
