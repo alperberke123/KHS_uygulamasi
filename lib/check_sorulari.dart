@@ -72,13 +72,27 @@ class _CheckSorulariState extends State<CheckSorulari> {
         'isSmoking': _isSmoking,
       });
 
+      if (!mounted) return;
+
       // Veri kaydedildikten sonra başarılı bir mesaj gösterilebilir
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Veriler başarıyla kaydedildi!")));
-    } catch (e) {
+
+      Navigator.pop(context, {
+        'isPregnant': _isPregnant,
+        'isMarriageApplicant': _isMarriageApplicant,
+        'isGoingToHajjUmrah': _isGoingToHajjUmrah,
+        'isGoingToMilitary': _isGoingToMilitary,
+        'isGoingToTravel': _isGoingToTravel,
+        'isSmoking': _isSmoking,
+      });
+    }
+    catch (e) {
       // Hata olursa hata mesajını gösteriyoruz
+      if (!mounted) return;
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("Hata oluştu: $e")));
+      print("Firebase kaydetme hatası: $e");
     }
   }
 

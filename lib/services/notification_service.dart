@@ -1,6 +1,7 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 
 class NotificationService {
   static final NotificationService _instance = NotificationService._internal();
@@ -27,19 +28,38 @@ class NotificationService {
     );
 
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+    // Timezone verilerini yükle ve cihazın timezone'unu ayarla
     tz.initializeTimeZones();
+    final String deviceTimeZone = await FlutterNativeTimezone.getLocalTimezone();
+    tz.setLocalLocation(tz.getLocation(deviceTimeZone));
+  }
+
+  tz.TZDateTime _scheduleAtFutureTime({
+    required int year,
+    required int month,
+    required int day,
+    int hour = 9,
+    int minute = 0,
+  }) {
+    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+    tz.TZDateTime scheduled = tz.TZDateTime(tz.local, year, month, day, hour, minute);
+    if (scheduled.isBefore(now)) {
+      scheduled = tz.TZDateTime(tz.local, year + 1, month, day, hour, minute);
+    }
+    return scheduled;
   }
 
   Future<void> scheduleSpecialDayNotification({
     required String title,
     required String message,
-    required DateTime scheduledDate,
+    required tz.TZDateTime scheduledDate,
   }) async {
     await flutterLocalNotificationsPlugin.zonedSchedule(
       0,
       title,
       message,
-      tz.TZDateTime.from(scheduledDate, tz.local),
+      scheduledDate,
       const NotificationDetails(
         android: AndroidNotificationDetails(
           'special_days_channel',
@@ -53,19 +73,20 @@ class NotificationService {
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.dateAndTime,
     );
   }
 
   Future<void> scheduleYearlyScreeningNotification({
     required String title,
     required String message,
-    required DateTime scheduledDate,
+    required tz.TZDateTime scheduledDate,
   }) async {
     await flutterLocalNotificationsPlugin.zonedSchedule(
       1, // Benzersiz ID
       title,
       message,
-      tz.TZDateTime.from(scheduledDate, tz.local),
+      scheduledDate,
       const NotificationDetails(
         android: AndroidNotificationDetails(
           'yearly_screening_channel',
@@ -79,20 +100,21 @@ class NotificationService {
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.dateAndTime,
     );
   }
 
   Future<void> scheduleAgeBasedScreeningNotification({
     required String title,
     required String message,
-    required DateTime scheduledDate,
+    required tz.TZDateTime scheduledDate,
     required int age,
   }) async {
     await flutterLocalNotificationsPlugin.zonedSchedule(
       2, // Benzersiz ID
       title,
       message,
-      tz.TZDateTime.from(scheduledDate, tz.local),
+      scheduledDate,
       const NotificationDetails(
         android: AndroidNotificationDetails(
           'age_based_screening_channel',
@@ -106,20 +128,21 @@ class NotificationService {
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.dateAndTime,
     );
   }
 
   Future<void> scheduleBabyMonthlyScreeningNotification({
     required String title,
     required String message,
-    required DateTime scheduledDate,
+    required tz.TZDateTime scheduledDate,
     required int month,
   }) async {
     await flutterLocalNotificationsPlugin.zonedSchedule(
       3, // Benzersiz ID
       title,
       message,
-      tz.TZDateTime.from(scheduledDate, tz.local),
+      scheduledDate,
       const NotificationDetails(
         android: AndroidNotificationDetails(
           'baby_screening_channel',
@@ -133,10 +156,12 @@ class NotificationService {
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.dateAndTime,
     );
   }
 
   Future<void> scheduleAllSpecialDays() async {
+    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
     // Sabit tarihli özel günler
     final specialDays = [
       {'title': 'Dünya Kanser Günü', 'message': '4 Şubat Dünya Kanser Günü!', 'month': 2, 'day': 4},
@@ -174,24 +199,17 @@ class NotificationService {
     ];
 
     for (var day in specialDays) {
-      final now = DateTime.now();
-      final scheduledDate = DateTime(now.year, day['month'] as int, day['day'] as int);
-      
-      // Eğer tarih geçmişse, gelecek yıl için planla
-      if (scheduledDate.isBefore(now)) {
-        final nextYearDate = DateTime(now.year + 1, day['month'] as int, day['day'] as int);
-        await scheduleSpecialDayNotification(
-          title: day['title'] as String,
-          message: day['message'] as String,
-          scheduledDate: nextYearDate,
-        );
-      } else {
-        await scheduleSpecialDayNotification(
-          title: day['title'] as String,
-          message: day['message'] as String,
-          scheduledDate: scheduledDate,
-        );
-      }
+      final tz.TZDateTime when = _scheduleAtFutureTime(
+        year: now.year,
+        month: day['month'] as int,
+        day: day['day'] as int,
+        hour: 9,
+      );
+      await scheduleSpecialDayNotification(
+        title: day['title'] as String,
+        message: day['message'] as String,
+        scheduledDate: when,
+      );
     }
 
     // Yıllık tarama bildirimleri
@@ -211,20 +229,17 @@ class NotificationService {
     ];
 
     for (var screening in yearlyScreenings) {
-      final now = DateTime.now();
-      final scheduledDate = DateTime(now.year, screening['month'] as int, screening['day'] as int);
-      
-      // Gelecek 5 yıl için bildirimleri planla
-      for (int i = 0; i < 5; i++) {
-        final nextYearDate = DateTime(scheduledDate.year + i, scheduledDate.month, scheduledDate.day);
-        if (nextYearDate.isAfter(now)) {
-          await scheduleYearlyScreeningNotification(
-            title: screening['title'] as String,
-            message: screening['message'] as String,
-            scheduledDate: nextYearDate,
-          );
-        }
-      }
+      final tz.TZDateTime when = _scheduleAtFutureTime(
+        year: now.year,
+        month: screening['month'] as int,
+        day: screening['day'] as int,
+        hour: 10,
+      );
+      await scheduleYearlyScreeningNotification(
+        title: screening['title'] as String,
+        message: screening['message'] as String,
+        scheduledDate: when,
+      );
     }
 
     // Yaşa bağlı tarama bildirimleri
@@ -241,15 +256,18 @@ class NotificationService {
       },
     ];
 
-    for (var screening in ageBasedScreenings) {
-      final now = DateTime.now();
-      final scheduledDate = DateTime(now.year, now.month, now.day);
-      
-      for (var age in screening['ages'] as List<int>) {
+    for (var group in ageBasedScreenings) {
+      for (var age in group['ages'] as List<int>) {
+        final tz.TZDateTime when = _scheduleAtFutureTime(
+          year: now.year,
+          month: now.month,
+          day: now.day,
+          hour: 11,
+        );
         await scheduleAgeBasedScreeningNotification(
-          title: screening['title'] as String,
-          message: '${screening['message'] as String} (${age} yaş)',
-          scheduledDate: scheduledDate,
+          title: group['title'] as String,
+          message: '${group['message']} ($age yaş)',
+          scheduledDate: when,
           age: age,
         );
       }
@@ -274,16 +292,19 @@ class NotificationService {
       },
     ];
 
-    for (var screening in babyMonthlyScreenings) {
-      final now = DateTime.now();
-      final scheduledDate = DateTime(now.year, now.month, now.day);
-      
-      for (var month in screening['months'] as List<int>) {
+    for (var group in babyMonthlyScreenings) {
+      for (var m in group['months'] as List<int>) {
+        final tz.TZDateTime when = _scheduleAtFutureTime(
+          year: now.year,
+          month: now.month + m,
+          day: now.day,
+          hour: 12,
+        );
         await scheduleBabyMonthlyScreeningNotification(
-          title: screening['title'] as String,
-          message: '${screening['message'] as String} (${month}. ay)',
-          scheduledDate: scheduledDate,
-          month: month,
+          title: group['title'] as String,
+          message: '${group['message']} ($m. ay)',
+          scheduledDate: when,
+          month: m,
         );
       }
     }
