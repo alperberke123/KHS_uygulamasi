@@ -3,6 +3,7 @@ import 'package:ksh_uygulamasi/sonuc_ekrani.dart';
 import 'package:ksh_uygulamasi/check_sorulari.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:ksh_uygulamasi/services/notification_service.dart';
 
 class Anasayfa extends StatefulWidget {
   const Anasayfa({super.key});
@@ -15,6 +16,7 @@ class _AnasayfaState extends State<Anasayfa> {
   final _formKey = GlobalKey<FormState>();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  String? _userId;
 
   // Controller'ları ekleyelim
   final TextEditingController _nameController = TextEditingController();
@@ -61,7 +63,7 @@ class _AnasayfaState extends State<Anasayfa> {
   @override
   void initState() {
     super.initState();
-    _loadUserData();
+    _initializeUser();
   }
 
   @override
@@ -77,11 +79,32 @@ class _AnasayfaState extends State<Anasayfa> {
     super.dispose();
   }
 
+  Future<void> _initializeUser() async {
+    try {
+      // Mevcut kullanıcıyı al
+      User? currentUser = _auth.currentUser;
+      if (currentUser != null) {
+        _userId = currentUser.uid;
+        await _loadUserData();
+      } else {
+        // Eğer kullanıcı yoksa yeni bir anonim kullanıcı oluştur
+        UserCredential userCredential = await _auth.signInAnonymously();
+        _userId = userCredential.user?.uid;
+        
+        if (_userId != null) {
+          await _loadUserData();
+        }
+      }
+    } catch (e) {
+      print('Kullanıcı oluşturulurken hata: $e');
+    }
+  }
+
   Future<void> _loadUserData() async {
     try {
-      // Kullanıcı ID'si olarak sabit bir değer kullanıyoruz
-      const userId = 'default_user';
-      final docSnapshot = await _firestore.collection('users').doc(userId).get();
+      if (_userId == null) return;
+      
+      final docSnapshot = await _firestore.collection('users').doc(_userId).get();
       if (docSnapshot.exists) {
         final data = docSnapshot.data() as Map<String, dynamic>;
         setState(() {
@@ -465,9 +488,6 @@ class _AnasayfaState extends State<Anasayfa> {
                         _formKey.currentState!.save();
                         
                         try {
-                          // Kullanıcı ID'si olarak sabit bir değer kullanıyoruz
-                          const userId = 'default_user';
-                          
                           // Önce state değişkenlerini güncelle
                           setState(() {
                             _name = _nameController.text;
@@ -478,6 +498,10 @@ class _AnasayfaState extends State<Anasayfa> {
                             _headCircumference = double.tryParse(_headCircumferenceController.text);
                             _profession = _professionController.text;
                           });
+
+                          if (_userId == null) {
+                            throw Exception('Kullanıcı ID bulunamadı');
+                          }
 
                           // Sonra Firestore'a kaydet
                           final userData = {
@@ -498,8 +522,26 @@ class _AnasayfaState extends State<Anasayfa> {
                             'isSmoking': _isSmoking,
                           };
 
-                          await _firestore.collection('users').doc(userId).set(userData, SetOptions(merge: true));
+                          await _firestore.collection('users').doc(_userId).set(userData, SetOptions(merge: true));
                           print('Veriler Firestore\'a kaydedildi');
+
+                          // Bildirimleri planla
+                          final notificationService = NotificationService();
+                          
+                          if (_isBaby && _ageInMonths != null) {
+                            // Bebek için bildirimleri planla
+                            await notificationService.scheduleBabyScreenings(
+                              DateTime.now().subtract(Duration(days: _ageInMonths! * 30)),
+                            );
+                          } else if (_age != null) {
+                            // Yetişkin için bildirimleri planla
+                            final birthDate = DateTime.now().subtract(Duration(days: _age! * 365));
+                            await notificationService.scheduleUserHealthScreenings(
+                              birthDate: birthDate,
+                              isPregnant: _isPregnant,
+                              hasChronicDisease: _isSmoking, // Sigara içenler için kronik hastalık taramaları
+                            );
+                          }
 
                           if (mounted) {
                             // CheckSorulari sayfasına geç

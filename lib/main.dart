@@ -3,18 +3,26 @@ import 'package:ksh_uygulamasi/ikinci_sayfa.dart';
 import 'dart:async';
 import 'package:ksh_uygulamasi/anaSayfa.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'firebase_options.dart';
 import 'package:ksh_uygulamasi/services/notification_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Firebase'i başlat
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   
+  // Firebase Authentication'ı başlat
+  await FirebaseAuth.instance.signInAnonymously();
+  
   // Bildirim servisini başlat
   final notificationService = NotificationService();
   await notificationService.init();
+  
+  // Tüm bildirimleri planla
   await notificationService.scheduleAllSpecialDays();
   
   runApp(const MyApp());
