@@ -6,6 +6,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'firebase_options.dart';
 import 'package:ksh_uygulamasi/services/notification_service.dart';
+import 'package:ksh_uygulamasi/services/ad_service.dart';
+import 'package:ksh_uygulamasi/services/purchase_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +26,14 @@ void main() async {
   
   // Tüm bildirimleri planla
   await notificationService.scheduleAllSpecialDays();
+
+  // Reklam servisini başlat
+  final adService = AdService();
+  await adService.initialize();
+
+  // Satın alma servisini başlat
+  final purchaseService = PurchaseService();
+  await purchaseService.initialize();
   
   runApp(const MyApp());
 }
