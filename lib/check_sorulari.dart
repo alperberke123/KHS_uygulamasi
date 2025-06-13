@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ksh_uygulamasi/sonuc_ekrani.dart';
 
 class CheckSorulari extends StatefulWidget {
   final String? gender;
@@ -7,6 +8,13 @@ class CheckSorulari extends StatefulWidget {
   final bool isBaby;
   final double? weight;
   final double? height;
+  final String? name;
+  final int? ageInMonths;
+  final double? headCircumference;
+  final String? profession;
+  final int smokingScore;
+  final bool isMarriageApplicant;
+  final bool isSmoking;
 
   const CheckSorulari({
     Key? key,
@@ -15,6 +23,13 @@ class CheckSorulari extends StatefulWidget {
     required this.weight,
     required this.age,
     required this.isBaby,
+    this.name,
+    this.ageInMonths,
+    this.headCircumference,
+    this.profession,
+    this.smokingScore = 0,
+    this.isMarriageApplicant = false,
+    this.isSmoking = false,
   }) : super(key: key);
 
   @override
@@ -78,14 +93,31 @@ class _CheckSorulariState extends State<CheckSorulari> {
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Veriler başarıyla kaydedildi!")));
 
-      Navigator.pop(context, {
-        'isPregnant': _isPregnant,
-        'isMarriageApplicant': _isMarriageApplicant,
-        'isGoingToHajjUmrah': _isGoingToHajjUmrah,
-        'isGoingToMilitary': _isGoingToMilitary,
-        'isGoingToTravel': _isGoingToTravel,
-        'isSmoking': _isSmoking,
-      });
+      // Sonuç sayfasına yönlendir
+      if (!mounted) return;
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Degerlendirme(
+            name: widget.name ?? 'Bilinmiyor',
+            age: widget.age,
+            ageInMonths: widget.ageInMonths,
+            isBaby: widget.isBaby,
+            gender: widget.gender ?? 'Belirtilmedi',
+            isPregnant: _isPregnant,
+            headCircumference: widget.headCircumference,
+            height: widget.height ?? 0.0,
+            weight: widget.weight ?? 0.0,
+            isGoingToHajjUmrah: _isGoingToHajjUmrah,
+            isGoingToMilitary: _isGoingToMilitary,
+            isGoingToTravel: _isGoingToTravel,
+            profession: widget.profession ?? 'Bilinmiyor',
+            smokingScore: widget.smokingScore,
+            isMarriageApplicant: _isMarriageApplicant,
+            isSmoking: _isSmoking,
+          ),
+        ),
+      );
     }
     catch (e) {
       // Hata olursa hata mesajını gösteriyoruz
@@ -195,17 +227,7 @@ class _CheckSorulariState extends State<CheckSorulari> {
                 const SizedBox(height: 30),
                 Center(
                   child: ElevatedButton(
-                    onPressed: () {
-                      _saveToFirebase();
-                      Navigator.pop(context, {
-                        'isPregnant': _isPregnant,
-                        'isMarriageApplicant': _isMarriageApplicant,
-                        'isGoingToHajjUmrah': _isGoingToHajjUmrah,
-                        'isGoingToMilitary': _isGoingToMilitary,
-                        'isGoingToTravel': _isGoingToTravel,
-                        'isSmoking': _isSmoking,
-                      });
-                    },
+                    onPressed: _saveToFirebase,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.lightGreen,
                       padding: const EdgeInsets.symmetric(

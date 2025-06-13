@@ -4,6 +4,7 @@ import 'package:ksh_uygulamasi/hic_asi_olmadim.dart';
 import 'package:ksh_uygulamasi/kuduz_temasi.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ksh_uygulamasi/sonuc_ekrani.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Sayfa2 extends StatefulWidget {
   const Sayfa2({super.key});
@@ -13,12 +14,25 @@ class Sayfa2 extends StatefulWidget {
 }
 
 class _Sayfa2State extends State<Sayfa2> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   Future<Map<String, dynamic>?> _loadUserData() async {
     try {
-      const userId = 'default_user';
-      final docSnapshot = await FirebaseFirestore.instance.collection('users').doc(userId).get();
-      if (docSnapshot.exists) {
-        return docSnapshot.data();
+      User? currentUser = _auth.currentUser;
+      if (currentUser == null) {
+        // Eğer kullanıcı oturum açmamışsa, anonim oturum aç
+        UserCredential userCredential = await _auth.signInAnonymously();
+        currentUser = userCredential.user;
+      }
+
+      if (currentUser != null) {
+        final docSnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(currentUser.uid)
+            .get();
+        if (docSnapshot.exists) {
+          return docSnapshot.data();
+        }
       }
       return null;
     } catch (e) {
@@ -143,7 +157,7 @@ class _Sayfa2State extends State<Sayfa2> {
                           elevation: 4,
                         ),
                         child: const Text(
-                          'Sonuçları Görüntüle',
+                          'Değerlendirme Sonuçlarına Giriş',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,

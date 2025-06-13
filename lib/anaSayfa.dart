@@ -555,6 +555,13 @@ class _AnasayfaState extends State<Anasayfa> {
                                   isBaby: _isBaby,
                                   weight: _weight,
                                   height: _height,
+                                  name: _name,
+                                  ageInMonths: _ageInMonths,
+                                  headCircumference: _headCircumference,
+                                  profession: _profession,
+                                  smokingScore: _smokingScore,
+                                  isMarriageApplicant: _isMarriageApplicant,
+                                  isSmoking: _isSmoking,
                                 ),
                               ),
                             );

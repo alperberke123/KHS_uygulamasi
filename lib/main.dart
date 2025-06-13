@@ -54,11 +54,15 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('KHS Uygulaması'),
+        title: const Text('Sağlığımı Takipteyim'),
         backgroundColor: Colors.lightGreen,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.person),
+          TextButton.icon(
+            icon: const Icon(Icons.person, color: Colors.white),
+            label: const Text(
+              'Profil',
+              style: TextStyle(color: Colors.white),
+            ),
             onPressed: () {
               Navigator.push(
                 context,
@@ -612,7 +616,7 @@ class _BilgilendirmeSayfasiState extends State<BilgilendirmeSayfasi> {
                     MaterialPageRoute(builder: (context) => const Sayfa2()));
               },
               child: const Text(
-                "Diğer sayfa için tıklayınız",
+                "Diğer sayfa için ilerleyiniz",
                 style: TextStyle(color: Colors.white),
               ),
             ),
