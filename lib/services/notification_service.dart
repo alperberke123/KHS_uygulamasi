@@ -1,7 +1,7 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'dart:developer' as developer;
 
 class NotificationService {
@@ -107,7 +107,7 @@ class NotificationService {
 
     // Timezone verilerini yükle ve cihazın timezone'unu ayarla
     tz.initializeTimeZones();
-    final String deviceTimeZone = await FlutterNativeTimezone.getLocalTimezone();
+    final String deviceTimeZone = await FlutterTimezone.getLocalTimezone();
     tz.setLocalLocation(tz.getLocation(deviceTimeZone));
       
       developer.log('Bildirim servisi başlatıldı. Timezone: $deviceTimeZone');
@@ -473,6 +473,167 @@ class NotificationService {
       developer.log('Tüm özel gün bildirimleri planlandı');
     } catch (e) {
       developer.log('Özel gün bildirimleri planlanırken hata: $e');
+    }
+  }
+
+  // Background'da çalışan versiyon - UI'yi bloklamaz
+  void scheduleAllSpecialDaysInBackground() {
+    // Background thread'de çalıştır
+    Future.microtask(() async {
+      try {
+        developer.log('Özel gün bildirimleri background\'da planlanmaya başladı');
+        
+        // Bildirimleri batch halinde planla (UI'yi bloklamaz)
+        await _scheduleSpecialDaysInBatches();
+        
+        developer.log('Tüm özel gün bildirimleri background\'da planlandı');
+      } catch (e) {
+        developer.log('Background bildirim planlama hatası: $e');
+      }
+    });
+  }
+
+  // Bildirimleri küçük gruplar halinde planlar (UI blokajını önler)
+  Future<void> _scheduleSpecialDaysInBatches() async {
+    final now = tz.TZDateTime.now(tz.local);
+    
+    // Özel günleri batch'lere böl (her batch'te 5 bildirim)
+    const batchSize = 5;
+    final specialDays = _getSpecialDaysList(now.year);
+    
+    for (int i = 0; i < specialDays.length; i += batchSize) {
+      final batch = specialDays.skip(i).take(batchSize);
+      
+      // Her batch'i planla
+      await _scheduleBatch(batch.toList(), now);
+      
+      // UI thread'e nefes verme süresi (1ms)
+      await Future.delayed(const Duration(milliseconds: 1));
+    }
+    
+    // Süreli özel günleri de planla
+    await _scheduleSpecialPeriods(now);
+  }
+
+  // Batch bildirimlerini planlar
+  Future<void> _scheduleBatch(List<Map<String, dynamic>> batch, tz.TZDateTime now) async {
+    final futures = <Future>[];
+    
+    for (var day in batch) {
+      futures.add(_scheduleSpecialDayAsync(day, now));
+    }
+    
+    // Paralel olarak planla
+    await Future.wait(futures);
+  }
+
+  // Tek bir özel günü asenkron olarak planlar
+  Future<void> _scheduleSpecialDayAsync(Map<String, dynamic> day, tz.TZDateTime now) async {
+    try {
+      DateTime scheduledDate = day['date'] as DateTime;
+      if (scheduledDate.isBefore(now)) {
+        scheduledDate = DateTime(now.year + 1, scheduledDate.month, scheduledDate.day);
+      }
+
+      final notificationDate = tz.TZDateTime(
+        tz.local,
+        scheduledDate.year,
+        scheduledDate.month,
+        scheduledDate.day,
+        9, 0,
+      );
+
+      await flutterLocalNotificationsPlugin.zonedSchedule(
+        _notificationId++,
+        day['title'] as String,
+        day['message'] as String,
+        notificationDate,
+        const NotificationDetails(
+          android: AndroidNotificationDetails(
+            'special_days_channel',
+            'Özel Günler',
+            channelDescription: 'Özel günler için bildirimler',
+            importance: Importance.high,
+            priority: Priority.high,
+            enableVibration: true,
+            playSound: true,
+          ),
+        ),
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+      );
+      
+      developer.log('${day['title']} bildirimi planlandı: $notificationDate');
+    } catch (e) {
+      developer.log('${day['title']} bildirimi planlanırken hata: $e');
+    }
+  }
+
+  // Özel günler listesini döndürür
+  List<Map<String, dynamic>> _getSpecialDaysList(int year) {
+    return [
+      {'date': DateTime(year, 2, 4), 'title': 'Dünya Kanser Günü', 'message': '4 Şubat Dünya Kanser Günü!'},
+      {'date': DateTime(year, 2, 9), 'title': 'Sigarayı Bırakma Günü', 'message': '9 Şubat Sigarayı Bırakma Günü!'},
+      {'date': DateTime(year, 3, 3), 'title': 'Dünya Kulak ve İşitme Günü', 'message': '3 Mart Dünya Kulak ve İşitme Günü!'},
+      {'date': DateTime(year, 3, 4), 'title': 'Dünya Obezite Günü', 'message': '4 Mart Dünya Obezite Günü!'},
+      {'date': DateTime(year, 3, 24), 'title': 'Dünya Tüberküloz Günü', 'message': '24 Mart Dünya Tüberküloz Günü!'},
+      {'date': DateTime(year, 4, 2), 'title': 'Dünya Otizm Farkındalık Günü', 'message': '2 Nisan Dünya Otizm Farkındalık Günü!'},
+      {'date': DateTime(year, 4, 15), 'title': 'Büyümenin İzlenmesi Günü', 'message': '15 Nisan Büyümenin İzlenmesi Günü!'},
+      {'date': DateTime(year, 4, 17), 'title': 'Dünya Hemofili Günü', 'message': '17 Nisan Dünya Hemofili Günü!'},
+      {'date': DateTime(year, 5, 8), 'title': 'Dünya Talasemi Günü', 'message': '8 Mayıs Dünya Talasemi Günü!'},
+      {'date': DateTime(year, 5, 10), 'title': 'Dünya Sağlık İçin Hareket Et Günü', 'message': '10 Mayıs Dünya Sağlık İçin Hareket Et Günü!'},
+      {'date': DateTime(year, 5, 17), 'title': 'Dünya Hipertansiyon Günü', 'message': '17 Mayıs Dünya Hipertansiyon Günü!'},
+      {'date': DateTime(year, 5, 31), 'title': 'Dünya Tütünsüz Günü', 'message': '31 Mayıs Dünya Tütünsüz Günü!'},
+      {'date': DateTime(year, 6, 1), 'title': 'Ulusal Fenilketonüri Günü', 'message': '1 Haziran Ulusal Fenilketonüri Günü!'},
+      {'date': DateTime(year, 6, 26), 'title': 'Dünya Uyuşturucu Kullanımı ve Kaçakçılığı ile Mücadele Günü', 'message': '26 Haziran Dünya Uyuşturucu Kullanımı ve Kaçakçılığı ile Mücadele Günü!'},
+      {'date': DateTime(year, 7, 28), 'title': 'Dünya Hepatit Günü', 'message': '28 Temmuz Dünya Hepatit Günü!'},
+      {'date': DateTime(year, 9, 10), 'title': 'Dünya İntiharı Önleme Günü', 'message': '10 Eylül Dünya İntiharı Önleme Günü!'},
+      {'date': DateTime(year, 9, 26), 'title': 'Dünya Doğum Kontrol Günü', 'message': '26 Eylül Dünya Doğum Kontrol Günü!'},
+      {'date': DateTime(year, 9, 27), 'title': 'Dünya Okul Süt Günü', 'message': '27 Eylül Dünya Okul Süt Günü!'},
+      {'date': DateTime(year, 9, 28), 'title': 'Dünya Kuduz Günü', 'message': '28 Eylül Dünya Kuduz Günü!'},
+      {'date': DateTime(year, 9, 29), 'title': 'Dünya Kalp Günü', 'message': '29 Eylül Dünya Kalp Günü!'},
+      {'date': DateTime(year, 10, 1), 'title': 'Dünya Yaşlılar Günü', 'message': '1 Ekim Dünya Yaşlılar Günü!'},
+      {'date': DateTime(year, 10, 3), 'title': 'Dünya Yürüyüş Günü', 'message': '3 Ekim Dünya Yürüyüş Günü!'},
+      {'date': DateTime(year, 10, 10), 'title': 'Dünya Ruh Sağlığı Günü', 'message': '10 Ekim Dünya Ruh Sağlığı Günü!'},
+      {'date': DateTime(year, 10, 13), 'title': 'Uluslararası Afet Risklerinin Azaltılması Günü', 'message': '13 Ekim Uluslararası Afet Risklerinin Azaltılması Günü!'},
+      {'date': DateTime(year, 10, 15), 'title': 'Dünya El Yıkama Günü', 'message': '15 Ekim Dünya El Yıkama Günü!'},
+      {'date': DateTime(year, 11, 14), 'title': 'Dünya Diyabet Günü', 'message': '14 Kasım Dünya Diyabet Günü!'},
+      {'date': DateTime(year, 11, 18), 'title': 'Avrupa Antibiyotik Farkındalık Günü', 'message': '18 Kasım Avrupa Antibiyotik Farkındalık Günü!'},
+      {'date': DateTime(year, 12, 1), 'title': 'Dünya AIDS Günü', 'message': '1 Aralık Dünya AIDS Günü!'},
+      {'date': DateTime(year, 12, 3), 'title': 'Dünya Engelliler Günü', 'message': '3 Aralık Dünya Engelliler Günü!'},
+    ];
+  }
+
+  // Süreli özel günleri planlar
+  Future<void> _scheduleSpecialPeriods(tz.TZDateTime now) async {
+    final specialPeriods = [
+      {
+        'startMonth': 1, 'startDay': 1, 'endMonth': 1, 'endDay': 31,
+        'title': 'Rahim Ağzı (Serviks) Kanseri Farkındalık Ayı',
+        'message': '1-31 Ocak boyunca Serviks Kanseri Farkındalığı!'
+      },
+      {
+        'startMonth': 3, 'startDay': 1, 'endMonth': 3, 'endDay': 7,
+        'title': 'Yeşilay Haftası',
+        'message': '1-7 Mart Yeşilay Haftası!'
+      },
+    ];
+
+    for (var period in specialPeriods) {
+      final startDate = DateTime(now.year, period['startMonth'] as int, period['startDay'] as int);
+      final endDate = DateTime(now.year, period['endMonth'] as int, period['endDay'] as int);
+
+      if (endDate.isBefore(now)) {
+        final nextYearStart = DateTime(now.year + 1, period['startMonth'] as int, period['startDay'] as int);
+        final nextYearEnd = DateTime(now.year + 1, period['endMonth'] as int, period['endDay'] as int);
+
+        await _schedulePeriodNotification(nextYearStart, period['title'] as String, '${period['title']} başladı!');
+        await _schedulePeriodNotification(nextYearEnd, period['title'] as String, '${period['title']} sona eriyor!');
+      } else if (startDate.isAfter(now)) {
+        await _schedulePeriodNotification(startDate, period['title'] as String, '${period['title']} başladı!');
+        await _schedulePeriodNotification(endDate, period['title'] as String, '${period['title']} sona eriyor!');
+      }
     }
   }
 
@@ -1021,4 +1182,5 @@ class NotificationService {
       channelDescription: 'Hamilelik sürecindeki kontroller',
     );
   }
+
 } 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ksh_uygulamasi/SuggestionsPage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class DepressionQuiz extends StatefulWidget {
   const DepressionQuiz({Key? key}) : super(key: key);
@@ -26,7 +28,7 @@ class _DepressionQuizState extends State<DepressionQuiz> {
     // Tüm sorular yanıtlandıysa puanı hesapla ve sonucu göster
     int totalScore = scores
         .where((score) => score != null)
-        .fold(0, (sum, score) => sum + (score ?? 0));
+        .fold(0, (total, score) => total + (score ?? 0));
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -90,20 +92,126 @@ class _DepressionQuizState extends State<DepressionQuiz> {
   }
 }
 
-class QuizResultPage extends StatelessWidget {
+class QuizResultPage extends StatefulWidget {
   final int totalScore;
 
   const QuizResultPage({Key? key, required this.totalScore}) : super(key: key);
 
+  @override
+  _QuizResultPageState createState() => _QuizResultPageState();
+}
+
+class _QuizResultPageState extends State<QuizResultPage> {
+  bool _isSaving = false;
+  bool _isSaved = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _saveTestResult();
+  }
+
   String getResultMessage() {
-    if (totalScore <= 9) {
+    if (widget.totalScore <= 9) {
       return "Depresyon belirtileri göstermiyorsunuz.";
-    } else if (totalScore <= 16) {
+    } else if (widget.totalScore <= 16) {
       return "Hafif depresyon belirtileriniz olabilir.";
-    } else if (totalScore <= 29) {
+    } else if (widget.totalScore <= 29) {
       return "Orta derecede depresyon belirtileriniz var.";
     } else {
       return "Şiddetli depresyon belirtileriniz var. Profesyonel destek almanız önerilir.";
+    }
+  }
+
+  String getResultCategory() {
+    if (widget.totalScore <= 9) {
+      return "Normal";
+    } else if (widget.totalScore <= 16) {
+      return "Hafif Depresyon";
+    } else if (widget.totalScore <= 29) {
+      return "Orta Depresyon";
+    } else {
+      return "Şiddetli Depresyon";
+    }
+  }
+
+  Future<void> _saveTestResult() async {
+    setState(() {
+      _isSaving = true;
+    });
+
+    try {
+      final User? user = FirebaseAuth.instance.currentUser;
+      
+      if (user != null) {
+        // Firestore'a test sonucunu kaydet
+        await FirebaseFirestore.instance
+            .collection('depression_test_results')
+            .add({
+          'userId': user.uid,
+          'totalScore': widget.totalScore,
+          'resultCategory': getResultCategory(),
+          'resultMessage': getResultMessage(),
+          'testDate': FieldValue.serverTimestamp(),
+          'createdAt': DateTime.now().toIso8601String(),
+        });
+
+        // Kullanıcının genel test geçmişine de ekle
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .collection('test_history')
+            .add({
+          'testType': 'Depression Test',
+          'score': widget.totalScore,
+          'category': getResultCategory(),
+          'completedAt': FieldValue.serverTimestamp(),
+        });
+
+        setState(() {
+          _isSaved = true;
+        });
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Test sonucu başarıyla kaydedildi!'),
+              backgroundColor: Colors.green,
+              duration: Duration(seconds: 2),
+            ),
+          );
+        }
+      } else {
+        // Kullanıcı giriş yapmamışsa anonymous olarak kaydet
+        await FirebaseFirestore.instance
+            .collection('anonymous_depression_test_results')
+            .add({
+          'totalScore': widget.totalScore,
+          'resultCategory': getResultCategory(),
+          'resultMessage': getResultMessage(),
+          'testDate': FieldValue.serverTimestamp(),
+          'createdAt': DateTime.now().toIso8601String(),
+        });
+
+        setState(() {
+          _isSaved = true;
+        });
+      }
+    } catch (e) {
+      print('Test sonucu kaydedilirken hata: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Test sonucu kaydedilirken bir hata oluştu.'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+          ),
+        );
+      }
+    } finally {
+      setState(() {
+        _isSaving = false;
+      });
     }
   }
 
@@ -121,11 +229,56 @@ class QuizResultPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              if (_isSaving)
+                const Column(
+                  children: [
+                    CircularProgressIndicator(),
+                    SizedBox(height: 10),
+                    Text('Test sonucu kaydediliyor...'),
+                    SizedBox(height: 20),
+                  ],
+                ),
+              if (_isSaved && !_isSaving)
+                const Column(
+                  children: [
+                    Icon(
+                      Icons.check_circle,
+                      color: Colors.green,
+                      size: 30,
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      'Test sonucu kaydedildi!',
+                      style: TextStyle(
+                        color: Colors.green,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                  ],
+                ),
               Text(
-                'Toplam Puanınız: $totalScore',
+                'Toplam Puanınız: ${widget.totalScore}',
                 style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                  color: _getScoreColor().withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: _getScoreColor()),
+                ),
+                child: Text(
+                  getResultCategory(),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: _getScoreColor(),
+                  ),
                 ),
               ),
               const SizedBox(height: 20),
@@ -138,30 +291,87 @@ class QuizResultPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 30),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('Başa Dön'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  // Belgeyi gösteren sayfaya yönlendirme
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          const SuggestionsPage(), // Yeni öneri sayfasına yönlendirme
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(Icons.home),
+                    label: const Text('Ana Sayfa'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.grey[600],
+                      foregroundColor: Colors.white,
                     ),
-                  );
-                },
-                child: const Text('Psikolojik Sağlamlık ve Öneriler'),
-              )
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      // Belgeyi gösteren sayfaya yönlendirme
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const SuggestionsPage(), // Yeni öneri sayfasına yönlendirme
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.psychology),
+                    label: const Text('Öneriler'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blueAccent,
+                      foregroundColor: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              if (widget.totalScore > 16)
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  margin: const EdgeInsets.only(top: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.orange.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.orange),
+                  ),
+                  child: const Column(
+                    children: [
+                      Icon(
+                        Icons.info,
+                        color: Colors.orange,
+                        size: 24,
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'Önemli Not: Bu test sonuçları sadece bilgilendirme amaçlıdır. Profesyonel bir değerlendirme için mutlaka bir uzmana başvurunuz.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.orange,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Color _getScoreColor() {
+    if (widget.totalScore <= 9) {
+      return Colors.green;
+    } else if (widget.totalScore <= 16) {
+      return Colors.orange;
+    } else if (widget.totalScore <= 29) {
+      return Colors.red;
+    } else {
+      return Colors.red[900]!;
+    }
   }
 }
 

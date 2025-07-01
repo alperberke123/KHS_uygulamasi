@@ -12,30 +12,71 @@ import 'package:ksh_uygulamasi/services/purchase_service.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Firebase'i başlat
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  
-  // Firebase Authentication'ı başlat
-  await FirebaseAuth.instance.signInAnonymously();
-  
-  // Bildirim servisini başlat
-  final notificationService = NotificationService();
-  await notificationService.init();
-  
-  // Tüm bildirimleri planla
-  await notificationService.scheduleAllSpecialDays();
+  try {
+    // Firebase'i başlat
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    
+    // Firebase Authentication'ı başlat
+    await FirebaseAuth.instance.signInAnonymously();
+    
+    // Uygulamayı başlat
+    runApp(const MyApp());
+    
+    // Diğer servisleri background'da başlat
+    _initializeServicesInBackground();
+  } catch (e) {
+    print('Firebase başlatma hatası: $e');
+    // Hata durumunda bile uygulamayı başlat
+    runApp(const MyApp());
+  }
+}
 
-  // Reklam servisini başlat
-  final adService = AdService();
-  await adService.initialize();
+// Servisleri background'da başlatan fonksiyon
+void _initializeServicesInBackground() async {
+  try {
+    // Servisleri paralel olarak başlat
+    final futures = <Future>[
+      _initializeNotificationService(),
+      _initializeAdService(),
+      _initializePurchaseService(),
+    ];
+    
+    await Future.wait(futures);
+  } catch (e) {
+    print('Servis başlatma hatası: $e');
+  }
+}
 
-  // Satın alma servisini başlat
-  final purchaseService = PurchaseService();
-  await purchaseService.initialize();
-  
-  runApp(const MyApp());
+Future<void> _initializeNotificationService() async {
+  try {
+    final notificationService = NotificationService();
+    await notificationService.init();
+    
+    // Bildirimleri background'da planla
+    notificationService.scheduleAllSpecialDaysInBackground();
+  } catch (e) {
+    print('Bildirim servisi hatası: $e');
+  }
+}
+
+Future<void> _initializeAdService() async {
+  try {
+    final adService = AdService();
+    await adService.initialize();
+  } catch (e) {
+    print('Reklam servisi hatası: $e');
+  }
+}
+
+Future<void> _initializePurchaseService() async {
+  try {
+    final purchaseService = PurchaseService();
+    await purchaseService.initialize();
+  } catch (e) {
+    print('Satın alma servisi hatası: $e');
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -100,7 +141,15 @@ class _BilgilendirmeSayfasiState extends State<BilgilendirmeSayfasi> {
   @override
   void initState() {
     super.initState();
-    checkSpecialDays(); // Özel gün kontrolünü başlat
+    // Özel gün kontrolünü background'da yap
+    _checkSpecialDaysInBackground();
+  }
+
+  // Özel gün kontrolünü background'da yapar
+  void _checkSpecialDaysInBackground() {
+    Future.microtask(() {
+      checkSpecialDays();
+    });
   }
 
   // Yardımcı fonksiyonlar
