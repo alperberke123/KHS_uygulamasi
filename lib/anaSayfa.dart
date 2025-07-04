@@ -439,41 +439,6 @@ class _AnasayfaState extends State<Anasayfa> {
                               return null;
                             },
                           ),
-                          if (showPregnancyField)
-                            CheckboxListTile(
-                              title: const Text('Hamileyseniz tıklayınız.'),
-                              activeColor: Colors.lightGreen,
-                              value: _isPregnant,
-                              onChanged: (value) {
-                                setState(() {
-                                  _isPregnant = value!;
-                                });
-                              },
-                            ),
-                          if (showMarriageField)
-                            CheckboxListTile(
-                              title: const Text(
-                                  'Evlilik başvurunuz varsa tıklayınız.'),
-                              activeColor: Colors.lightGreen,
-                              value: _isMarriageApplicant,
-                              onChanged: (value) {
-                                setState(() {
-                                  _isMarriageApplicant = value!;
-                                });
-                              },
-                            ),
-                          if (showSigaraField)
-                            CheckboxListTile(
-                              title:
-                                  const Text('Sigara içiyorsanız tıklayınız'),
-                              activeColor: Colors.lightGreen,
-                              value: _isSmoking,
-                              onChanged: (value) {
-                                setState(() {
-                                  _isSmoking = value!;
-                                });
-                              },
-                            ),
                         ],
                       ),
                     ),

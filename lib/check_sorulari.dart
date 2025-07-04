@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ksh_uygulamasi/sonuc_ekrani.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class CheckSorulari extends StatefulWidget {
   final String? gender;
@@ -86,6 +87,19 @@ class _CheckSorulariState extends State<CheckSorulari> {
         'isGoingToTravel': _isGoingToTravel,
         'isSmoking': _isSmoking,
       });
+
+      // --- EKLENDİ: Kullanıcı profilini daima güncelle ---
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+          'isPregnant': _isPregnant,
+          'isMarriageApplicant': _isMarriageApplicant,
+          'isGoingToHajjUmrah': _isGoingToHajjUmrah,
+          'isGoingToMilitary': _isGoingToMilitary,
+          'isGoingToTravel': _isGoingToTravel,
+          'isSmoking': _isSmoking,
+        }, SetOptions(merge: true));
+      }
 
       if (!mounted) return;
 
